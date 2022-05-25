@@ -21,6 +21,8 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox';
 
 import { messageFetch } from '../../store/agreement/messageInAction.js'
 import { messageFetch as contractPaymentOmsFetch } from '../../store/agreement/contractPaymentOmsAction.js'
+import { messageFetch as contractFinancialSupportOmsFetch } from '../../store/agreement/contractFinancialSupportOmsAction.js'
+import { messageFetch as agreementFinSalariesFetch } from '../../store/agreement/agreementFinSalariesAction.js'
 //import { periodFetch } from '../../store/period/periodAction.js'
 import { organizationFetch } from '../../store/organization/organizationAction.js'
 import { billFilterPeriodSet, billFilterStatusSet, billFilterOrganizationSet } from '../../store/filters/bill/billFiltersAction.js'
@@ -236,6 +238,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
   if (type === 'contract-payment-oms') {
       f = contractPaymentOmsFetch;
+  }
+  if (type === 'contract-financial-support-oms') {
+      f = contractFinancialSupportOmsFetch;
+  }
+  if (type === 'agreement-fin-salaries') {
+      f = agreementFinSalariesFetch;
   }
   return {
     fetchMessages: (page, perPage, status = [], period = [], org = []) => {

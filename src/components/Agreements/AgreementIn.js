@@ -90,6 +90,14 @@ class AgreementsInMessage extends React.Component {
             c = `Договоры на оказание и оплату медицинской помощи по ОМС`;
             m = `Договор на оказание и оплату медицинской помощи по ОМС`;
         }
+        if (type === 'contract-financial-support-oms') {
+            c = `Договоры о финансовом обеспечении ОМС`;
+            m = `Договор о финансовом обеспечении ОМС`;
+        }
+        if (type === 'agreement-fin-salaries') {
+            c = `Соглашения о софинансировании заработной платы медицинских работников`;
+            m = `Соглашение о софинансировании заработной платы медицинских работников`;
+        }
         
         this.setState({
             title: c,
@@ -109,15 +117,23 @@ class AgreementsInMessage extends React.Component {
       
       if (prevProps.match.params.type !== this.props.match.params.type) {
         const type = this.props.match.params.type;
-        let c = `Соглашение`;
+        let c = `Соглашения`;
         let m = 'Соглашение';
         if (type === 'agreement-fin') {
-            c = `Соглашение`;
+            c = `Соглашения`;
             m = 'Соглашение';
         }
         if (type === 'contract-payment-oms') {
             c = `Договоры на оказание и оплату медицинской помощи по ОМС`;
             m = `Договор на оказание и оплату медицинской помощи по ОМС`;
+        }
+        if (type === 'contract-financial-support-oms') {
+            c = `Договоры о финансовом обеспечении ОМС`;
+            m = `Договор о финансовом обеспечении ОМС`;
+        }
+        if (type === 'agreement-fin-salaries') {
+            c = `Соглашения о софинансировании заработной платы медицинских работников`;
+            m = `Соглашение о софинансировании заработной платы медицинских работников`;
         }
         
         this.setState({
@@ -208,6 +224,12 @@ const mapStateToProps = function(store, ownProps) {
   }
   if (type === 'contract-payment-oms') {
       c = store.agreementReducer.contractPaymentOms;
+  }
+  if (type === 'contract-financial-support-oms') {
+      c = store.agreementReducer.contractFinancialSupportOms;
+  }
+  if (type === 'agreement-fin-salaries') {
+      c = store.agreementReducer.agreementFinSalaries;
   }
   return {
       items: c.items, 

@@ -157,7 +157,7 @@ export default function StartPage() {
                     { card.text }
                     </Typography>
                     <Typography color="secondary">
-                    НОВОЕ: Договоры на оказание и оплату медицинской помощи по ОМС
+                    НОВОЕ: Соглашения о софинансировании заработной платы медицинских работников
                     </Typography>
                   </CardContent>
                   {/*
