@@ -9,7 +9,7 @@ export class medicalInstitutionService {
             headers: authHeader(),
         };
 
-        let url = new URL(`${process.env.REACT_APP_APIURL}/medical-institution`);
+        const url = new URL('medical-institution', process.env.REACT_APP_APIURL);
         url.searchParams.append('page', (page + 1));
         url.searchParams.append('per_page', per_page);
         return fetch(url, requestOptions).then(medicalInstitutionService.handleResponse);

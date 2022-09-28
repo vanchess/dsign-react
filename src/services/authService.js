@@ -18,15 +18,17 @@ export class authService {
           }
         }
         
+        const url = new URL('auth/register', process.env.REACT_APP_APIURL);
         return axios
-          .post(new URL(`${process.env.REACT_APP_APIURL}/auth/register`), JSON.stringify(user), config)
+          .post(url, JSON.stringify(user), config)
           .then(apiService.handleAxiosResponse, apiService.handleAxiosError);
     }
     
     static login(email, password)
     {
+        const url = new URL('auth/login', process.env.REACT_APP_APIURL);
         return axios
-          .post(new URL(`${process.env.REACT_APP_APIURL}/auth/login`), {
+          .post(url, {
                 email: email,
                 password: password
             })

@@ -14,7 +14,7 @@ export class fileService {
             body: formData
         };
 
-        let url = new URL(`${process.env.REACT_APP_APIURL}/upload-file`);
+        const url = new URL('upload-file', process.env.REACT_APP_APIURL);
         return fetch(url, requestOptions).then(apiService.handleResponse);
     }
     
@@ -32,7 +32,7 @@ export class fileService {
             body: formData
         };
 
-        let url = new URL(`${process.env.REACT_APP_APIURL}/upload-file-multiple`);
+        const url = new URL('upload-file-multiple', process.env.REACT_APP_APIURL);
         return fetch(url, requestOptions).then(apiService.handleResponse);
     }
     
@@ -51,7 +51,7 @@ export class fileService {
             headers: authHeader()
         };
         
-        let url = new URL(`${process.env.REACT_APP_APIURL}/download-file/${id}`);
+        const url = new URL(`download-file/${id}`, process.env.REACT_APP_APIURL);
         return fetch(url, requestOptions).then(apiService.handleBlobResponse);
     }
     
@@ -61,7 +61,7 @@ export class fileService {
             headers: authHeader()
         };
         
-        let url = new URL(`${process.env.REACT_APP_APIURL}/download-file-stamped/${id}`);
+        const url = new URL(`download-file-stamped/${id}`, process.env.REACT_APP_APIURL);
         return fetch(url, requestOptions).then(apiService.handleBlobResponseWithFilename);
     }
     
@@ -77,7 +77,7 @@ export class fileService {
             body: JSON.stringify(sign)
         };
 
-        let url = new URL(`${process.env.REACT_APP_APIURL}/file/${file_id}/sign`);
+        const url = new URL(`file/${file_id}/sign`, process.env.REACT_APP_APIURL);
         return fetch(url, requestOptions).then(apiService.handleResponse);
     }
     
@@ -87,7 +87,7 @@ export class fileService {
             headers: authHeader(),
         };
 
-        let url = new URL(`${process.env.REACT_APP_APIURL}/file/${file_id}/sign`);
+        const url = new URL(`file/${file_id}/sign`, process.env.REACT_APP_APIURL);
         return fetch(url, requestOptions).then(apiService.handleResponse);
     }
     

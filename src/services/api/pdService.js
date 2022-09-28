@@ -9,7 +9,7 @@ export class pdService {
             headers: authHeader(),
         };
 
-        let url = new URL(`${process.env.REACT_APP_APIURL}/pd/${code}`);
+        const url = new URL(`pd/${code}`, process.env.REACT_APP_APIURL);
         return fetch(url, requestOptions).then(apiService.handleResponse);
     }
     
@@ -24,7 +24,7 @@ export class pdService {
             body: JSON.stringify(data)
         };
 
-        let url = new URL(`${process.env.REACT_APP_APIURL}/pd/${code}`);
+        const url = new URL(`pd/${code}`, process.env.REACT_APP_APIURL);
         return fetch(url, requestOptions).then(apiService.handleResponse);
     }
 

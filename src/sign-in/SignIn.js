@@ -6,6 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
+import {List, ListItem, Divider, ListItemAvatar, ListItemText } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -32,6 +33,8 @@ import { login as signin } from '../store/auth/authAction.js'
 import axios from 'axios';
 
 import { authService } from '../services';
+import { Card, CardContent, CardMedia } from '@material-ui/core';
+import Paper from '@material-ui/core/Paper';
 
 const defaultFormButtonText = 'Войти';
 const disabledFormButtonText = 'Загрузка...';
@@ -44,6 +47,7 @@ const styles = theme => ({
   },
   paper: {
     marginTop: theme.spacing(8),
+    padding: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -61,8 +65,23 @@ const styles = theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  card: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  cardMedia: {
+    paddingTop: '56.25%', // 16:9
+  },
+  cardContent: {
+    flexGrow: 1,
+  },
 });
 
+const cardsOut= [
+  {id:3, title:'Учет направлений на госпитализацию', text:''/*'Персонифицированная база данных по учету направлений на госпитализацию и информирований о необходимости прохождения профессиональных осмотров'*/, image:"/images/doctor.jpg", to:'http://192.168.12.1:8080/iso/f?p=101' },
+  {id:4, title:'Учет обращений граждан (для СМО)', text:'', image:"/images/callcenter.jpg", to:'http://192.168.12.1:8082/adv/backend/web' },
+];
 
 class SignIn extends React.Component {
   
@@ -103,88 +122,116 @@ class SignIn extends React.Component {
       const { classes, disabled } = this.props;
       
       return (
-        <Container component="main" maxWidth="xs">
+        <>
+        <Container component="main" maxWidth="md" spacing={2}>
           <CssBaseline />
-          <div className={classes.paper}>
-            <Avatar className={classes.avatar} src="/tfoms.png" />
-            <Typography component="h1" variant="h5">
-              Войти в систему
-            </Typography>
-            <form className={classes.form} onSubmit={this.handleSubmit}>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                type="email"
-                fullWidth
-                id="email"
-                label="Email адрес"
-                name="email"
-                autoComplete="email"
-                value={this.state.login}
-                onChange={this.handleChangeLogin}
-                autoFocus
-              />
-              <FormControl fullWidth margin="normal" variant="outlined">
-                <InputLabel htmlFor="outlined-adornment-password">Пароль</InputLabel>
-                  <OutlinedInput
+            <Grid container>
+              <Grid item xs={12} sm={12} md={6}>
+                <div className={classes.paper}>
+                <Avatar className={classes.avatar} src="/tfoms.png" />
+                <Typography component="h1" variant="h5">
+                  Войти в систему
+                </Typography>
+                <form className={classes.form} onSubmit={this.handleSubmit}>
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
                     required
-                    
-                    name="password"
-                    type={this.state.showPassword ? 'text' : 'password'}
-                    id="password"
-                    autoComplete="current-password"
-                    value={this.state.password}
-                    onChange={this.handleChangePassword}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={this.handleClickShowPassword}
-                        >
-                          {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                    labelWidth={60}
+                    type="email"
+                    fullWidth
+                    id="email"
+                    label="Email адрес"
+                    name="email"
+                    autoComplete="email"
+                    value={this.state.login}
+                    onChange={this.handleChangeLogin}
+                    autoFocus
                   />
-              </FormControl>
-              {/*
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
-               />
-               */}
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-                disabled={disabled}
-              >
-                {disabled ? disabledFormButtonText : defaultFormButtonText}
-              </Button>
-              <Grid container>
-                {/*
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
-                */}
-              </Grid>
-            </form>
-          </div>
-          <Box mt={5}>
-            
-          </Box>
+                  <FormControl fullWidth margin="normal" variant="outlined">
+                    <InputLabel htmlFor="outlined-adornment-password">Пароль</InputLabel>
+                      <OutlinedInput
+                        required
+                        
+                        name="password"
+                        type={this.state.showPassword ? 'text' : 'password'}
+                        id="password"
+                        autoComplete="current-password"
+                        value={this.state.password}
+                        onChange={this.handleChangePassword}
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={this.handleClickShowPassword}
+                            >
+                              {this.state.showPassword ? <Visibility /> : <VisibilityOff />}
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                        labelWidth={60}
+                      />
+                  </FormControl>
+                  {/*
+                  <FormControlLabel
+                    control={<Checkbox value="remember" color="primary" />}
+                    label="Remember me"
+                  />
+                  */}
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                    disabled={disabled}
+                  >
+                    {disabled ? disabledFormButtonText : defaultFormButtonText}
+                  </Button>
+                  <Grid container>
+                    {/*
+                    <Grid item xs>
+                      <Link href="#" variant="body2">
+                        Forgot password?
+                      </Link>
+                    </Grid>
+                    <Grid item>
+                      <Link href="#" variant="body2">
+                        {"Don't have an account? Sign Up"}
+                      </Link>
+                    </Grid>
+                    */}
+                  </Grid>
+                </form>
+              </div>
+            </Grid>
+            <Grid item xs={12} sm={12} md={6}>
+              <Paper elevation={3} variant="outlined" className={classes.paper}>
+                Другие информационные системы:
+                <List className={classes.root}>
+                  {cardsOut.map((card) => (
+                    <>
+                      <ListItem alignItems="flex-start" component={Link} href={ card.to } target="_blank" rel="noopener noreferrer" color="inherit" underline="none">
+                        <ListItemAvatar>
+                          <Avatar alt={card.title} src={card.image} />
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={card.title}
+                          secondary={
+                            <React.Fragment>
+                              {card.text}
+                            </React.Fragment>
+                          }
+                        />
+                      </ListItem>
+                      <Divider variant="inset" component="li" />
+                    </>
+                  ))} 
+                </List>
+              </Paper>
+            </Grid>
+          </Grid>
         </Container>
+        </>
       );
   }
 }
@@ -194,7 +241,6 @@ SignIn.propTypes = {
 };
 
 const mapStateToProps = function(store) {
-  console.log(store);
   return {
       disabled: store.authReducer.loading,
     };

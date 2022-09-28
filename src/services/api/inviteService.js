@@ -9,7 +9,7 @@ export class inviteService {
             headers: authHeader(),
         };
 
-        let url = new URL(`${process.env.REACT_APP_APIURL}/invite/${code}`);
+        const url = new URL(`invite/${code}`, process.env.REACT_APP_APIURL);
         return fetch(url, requestOptions).then(apiService.handleResponse);
     }
     

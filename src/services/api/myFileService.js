@@ -9,7 +9,7 @@ export class myFileService {
             headers: authHeader(),
         };
 
-        let url = new URL(`${process.env.REACT_APP_APIURL}/my-files`);
+        const url = new URL('my-files', process.env.REACT_APP_APIURL);
         url.searchParams.append('page', (page + 1));
         url.searchParams.append('per_page', per_page);
         return fetch(url, requestOptions).then(myFileService.handleResponse);

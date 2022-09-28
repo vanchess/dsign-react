@@ -32,7 +32,7 @@ export const createColumns = (statuses, onClick) => {
         field: 'category',
         headerName: 'Категория',
         description: 'Категория',
-        renderCell: (params: GridCellParams) => {
+        renderCell: (params) => {
             return ( params.value.map( (c) => 
                 (<Chip key={c.name} label={c.short_title}/>)
             ))
@@ -49,7 +49,7 @@ export const createColumns = (statuses, onClick) => {
         field: 'createdAt',
         headerName: 'Дата',
         type: 'date',
-        valueFormatter: (params: ValueFormatterParams) =>
+        valueFormatter: (params) =>
           moment(params.value, "YYYY-MM-DDTHH:mm:ss.SSSSSSZ").local().format("DD.MM.YYYY HH:mm"),
         width: 150,
         //filterable: false
@@ -58,7 +58,7 @@ export const createColumns = (statuses, onClick) => {
         field: 'status',
         headerName: 'Статус',
         description: 'Статус',
-        renderCell: (params: GridCellParams) => (
+        renderCell: (params) => (
             <StatusIcon label={params.value.lable} name={params.value.name} />
         ),
         filterOperators: [inOperator(statuses), notInOperator(statuses)],

@@ -1,0 +1,1 @@
+export const authPermissionsSelector = store => store.authReducer.user.permissions;

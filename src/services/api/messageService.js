@@ -9,7 +9,7 @@ export class messageService {
             headers: authHeader(),
         };
 
-        let url = new URL(`${process.env.REACT_APP_APIURL}/msg/${id}`);
+        const url = new URL(`msg/${id}`, process.env.REACT_APP_APIURL);
         return fetch(url, requestOptions).then(apiService.handleResponse);
     }
     
@@ -19,7 +19,7 @@ export class messageService {
             headers: authHeader(),
         };
 
-        let url = new URL(`${process.env.REACT_APP_APIURL}/msg`);
+        const url = new URL('msg', process.env.REACT_APP_APIURL);
         url.searchParams.append('page', (page + 1));
         url.searchParams.append('per_page', per_page);
         url.searchParams.append('in', incoming);
@@ -50,7 +50,7 @@ export class messageService {
             body: JSON.stringify(msg)
         };
 
-        let url = new URL(`${process.env.REACT_APP_APIURL}/msg`);
+        const url = new URL('msg', process.env.REACT_APP_APIURL);
         return fetch(url, requestOptions).then(apiService.handleResponse);
     }
     
@@ -60,7 +60,7 @@ export class messageService {
             headers: authHeader(),
         };
 
-        let url = new URL(`${process.env.REACT_APP_APIURL}/msg/${id}/to-users`);
+        const url = new URL(`msg/${id}/to-users`, process.env.REACT_APP_APIURL);
         return fetch(url, requestOptions).then(apiService.handleResponse);
     }
     
@@ -70,7 +70,7 @@ export class messageService {
             headers: authHeader(),
         };
 
-        let url = new URL(`${process.env.REACT_APP_APIURL}/msg/${id}/files`);
+        const url = new URL(`msg/${id}/files`, process.env.REACT_APP_APIURL);
         return fetch(url, requestOptions).then(apiService.handleResponse);
     }
     
@@ -81,7 +81,7 @@ export class messageService {
             body: JSON.stringify({status: statusName})
         };
 
-        let url = new URL(`${process.env.REACT_APP_APIURL}/msg/${msgId}/status`);
+        const url = new URL(`msg/${msgId}/status`, process.env.REACT_APP_APIURL);
         return fetch(url, requestOptions).then(apiService.handleResponse);
     }
 }

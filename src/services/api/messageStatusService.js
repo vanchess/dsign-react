@@ -9,7 +9,7 @@ export class messageStatusService {
             headers: authHeader(),
         };
 
-        let url = new URL(`${process.env.REACT_APP_APIURL}/msg-status/${id}`);
+        const url = new URL(`msg-status/${id}`, process.env.REACT_APP_APIURL);
         return fetch(url, requestOptions).then(apiService.handleResponse);
     }
     
@@ -20,7 +20,7 @@ export class messageStatusService {
             //headers:{'Accept': 'application/json'}
         };
 
-        let url = new URL(`${process.env.REACT_APP_APIURL}/msg-status`);
+        const url = new URL('msg-status', process.env.REACT_APP_APIURL);
         url.searchParams.append('page', (page + 1));
         url.searchParams.append('per_page', per_page);
         

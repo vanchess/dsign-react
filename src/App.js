@@ -13,6 +13,7 @@ import SignUp from './sign-in/SignUp.js'
 import FramePage from './FramePage.js'
 import FramePage2 from './FramePage2.js'
 import PD from './pd/PD.js'
+import AdminHome from './AdminHome';
 
 class App extends React.Component {
     constructor(props){
@@ -30,6 +31,7 @@ class App extends React.Component {
               <PrivateRoute path='/expertise'  component={ExpertiseHome}/>
               <PrivateRoute path='/registers'  component={RegistersHome}/>
               <PrivateRoute path='/agreements' component={AgreementsHome}/>
+              <PrivateRoute path='/admin'      component={AdminHome}/>
               <Route exact path='/sign-up/:invite' component={SignUp}/>
               <PrivateRoute path='/f1' component={FramePage}/>
               <PrivateRoute path='/f2' component={FramePage2}/>

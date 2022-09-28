@@ -9,7 +9,7 @@ export class periodService {
             headers: {...authHeader(), ...{'Accept': 'application/json'}},
         };
 
-        let url = new URL(`${process.env.REACT_APP_APIURL}/period`);
+        const url = new URL('period', process.env.REACT_APP_APIURL);
         url.searchParams.append('page', (page + 1));
         url.searchParams.append('per_page', per_page);
         
@@ -22,7 +22,7 @@ export class periodService {
             headers: {...authHeader(), ...{'Accept': 'application/json'}},
         };
 
-        let url = new URL(`${process.env.REACT_APP_APIURL}/period/${id}`);
+        const url = new URL(`period/${id}`, process.env.REACT_APP_APIURL);
         return fetch(url, requestOptions).then(apiService.handleResponse);
     }
 

@@ -9,7 +9,7 @@ export class organizationService {
             headers: authHeader(),
         };
 
-        let url = new URL(`${process.env.REACT_APP_APIURL}/organization/${id}`);
+        const url = new URL(`organization/${id}`, process.env.REACT_APP_APIURL);
         return fetch(url, requestOptions).then(apiService.handleResponse);
     }
     
@@ -20,7 +20,7 @@ export class organizationService {
             headers:{'Accept': 'application/json'}
         };
 
-        let url = new URL(`${process.env.REACT_APP_APIURL}/organization`);
+        const url = new URL('organization', process.env.REACT_APP_APIURL);
         url.searchParams.append('page', (page + 1));
         url.searchParams.append('per_page', per_page);
         
