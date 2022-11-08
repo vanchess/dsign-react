@@ -40,12 +40,12 @@ const UserShow = (props) => {
 
     const assignRole = (userId, role) => {
         userRoleService.assignRole(userId, role).then(
-            () => {dispatch(userFetch(0,-1))}
+            () => {dispatch(userFetch(0,-1, 'roles'))}
         )
     }
     const removeRole = (userId, role) => {
         userRoleService.removeRole(userId, role).then(
-            () => {dispatch(userFetch(0,-1))}
+            () => {dispatch(userFetch(0,-1, 'roles'))}
         )
     }
 

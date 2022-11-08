@@ -206,10 +206,9 @@ class SignIn extends React.Component {
             </Grid>
             <Grid item xs={12} sm={12} md={6}>
               <Paper elevation={3} variant="outlined" className={classes.paper}>
-                Другие информационные системы:
                 <List className={classes.root}>
                   {cardsOut.map((card) => (
-                    <>
+                    <React.Fragment key={card.id}>
                       <ListItem alignItems="flex-start" component={Link} href={ card.to } target="_blank" rel="noopener noreferrer" color="inherit" underline="none">
                         <ListItemAvatar>
                           <Avatar alt={card.title} src={card.image} />
@@ -224,7 +223,7 @@ class SignIn extends React.Component {
                         />
                       </ListItem>
                       <Divider variant="inset" component="li" />
-                    </>
+                    </React.Fragment>
                   ))} 
                 </List>
               </Paper>

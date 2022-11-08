@@ -13,11 +13,11 @@ export const userGetFailure = (data) => {
   return { type: USER_GET_FAILURE, error: data }
 };
 
-export const userFetch = (page, perPage) => {
+export const userFetch = (page, perPage, include = null) => {
   return (dispatch) => {
     dispatch(userGetRequest());
     
-    userService.getAll(page, perPage).then(
+    userService.getAll(page, perPage, include).then(
         itemCollection => {
             itemCollection.data = itemCollection.data.reduce((arr, item) => {arr[item.id] = item;return arr;}, []);
             dispatch(userGetSuccess(itemCollection));

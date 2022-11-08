@@ -3,7 +3,7 @@ import { authService } from '../../services';
 
 export class userService {
 
-    static getAll(page = 0, per_page = 20) {
+    static getAll(page = 0, per_page = 20, include = null) {
         const requestOptions = {
             method: 'GET',
             headers: authHeader(),
@@ -12,6 +12,9 @@ export class userService {
         let url = new URL('users', process.env.REACT_APP_APIURL);
         url.searchParams.append('page', (page + 1));
         url.searchParams.append('per_page', per_page);
+        if (include) {
+            url.searchParams.append('include', include);
+        }
         return fetch(url, requestOptions).then(userService.handleResponse);
     }
     

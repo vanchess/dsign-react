@@ -21,7 +21,7 @@ export default function Admin(props) {
 
     useEffect(() => {
         props.setTitle(title);
-        dispatch(userFetch(0,-1))
+        dispatch(userFetch(0, -1, 'roles'));
     }, [dispatch]);
 
 

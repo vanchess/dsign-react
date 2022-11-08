@@ -65,6 +65,22 @@ class RegisterShowMessage extends React.Component {
 
       return (
         <div>
+          {(this.props.permission && this.props.permission.includes('reject ' + this.props.match.params.type)) ?
+            (<Container maxWidth="lg" className={classes.container}>
+                <Grid container spacing={3}>
+                  {/* Recent Orders */}
+                  <Grid item xs={12}>
+                    <Paper className={classes.paper}>
+                        <Button 
+                          variant="contained"
+                          color="primary"
+                          startIcon={<ThumbDownAltOutlinedIcon />}
+                          onClick={this.handleReject}>Скрыть сообщение</Button>
+                    </Paper>
+                  </Grid>
+                </Grid>
+            </Container>):null
+          }
           <ShowMessage setTitle={this.props.setTitle} />
         </div>
       );
