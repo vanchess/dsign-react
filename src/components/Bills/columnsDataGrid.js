@@ -43,8 +43,7 @@ export const createColumns = (statuses, onClick) => {
         sortable: false,
         filterable: false
       },
-      { field: 'subject', headerName: 'Тема', width: 250 },
-      
+      { field: 'period', headerName: 'Период', width: 140 },
       {
         field: 'createdAt',
         headerName: 'Дата',

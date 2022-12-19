@@ -52,6 +52,7 @@ import { fileDownload, textFileDownload } from '../../_helpers';
 import CertDialog from '../Dialog/CertDialog';
 
 import moment from 'moment';
+import { periodFetch } from '../../store/period/periodAction';
 
 const styles = theme => ({
   container: {
@@ -122,8 +123,8 @@ class BillsNewMessage extends React.Component {
       
       let period = moment().subtract(1, 'months').local().format("MM.YYYY");
       this.state = {
-        msgSubject: `Счета за ${period}`,
         msgText: '',
+        msgPeriod: '',
         // TODO Получать список msgTo с сервера ИЛИ подстановка на сервере на основе типа сообщения
         msgTo: [11], // Сахатский
         msgFiles: [],
@@ -143,19 +144,43 @@ class BillsNewMessage extends React.Component {
       };
       
       this.handleChangeMsgText = this.handleChangeMsgText.bind(this);
-      this.handleChangeMsgSubject = this.handleChangeMsgSubject.bind(this);
+      this.handleChangePeriod = this.handleChangePeriod.bind(this);
       this.handleOnUploadFile = this.handleOnUploadFile.bind(this);
       this.handleChangeMsgCategoryPs = this.handleChangeMsgCategoryPs.bind(this);
       this.handleChangeMsgCategoryMedCareType = this.handleChangeMsgCategoryMedCareType.bind(this);
       this._handleSubmit = this._handleSubmit.bind(this);
-      this.props.setTitle('Новое сообщение');
+      this.props.setTitle('Отправка счетов');
     }
     
     componentDidMount(){
         // this.props.fetchMyFiles(this.props.page, this.props.perPage);
         this.props.fetchUsers(0, -1);
+        this.props.fetchPeriod();
     }
     
+    componentDidUpdate(prevProps, prevState) {
+      if (prevState.msgPeriod === '' && this.props.periodList.length) {
+        let previousMonth = new Date();
+        previousMonth.setDate(0);
+
+        let period = this.props.periodList.find((elem, index, arr) => {
+            if (elem === undefined) {
+                return false;
+            }
+            let dtFrom = new Date(elem.attributes.from);
+            let dtTo   = new Date(elem.attributes.to)
+            if (dtFrom <= previousMonth && previousMonth <= dtTo)
+            {
+                return true;
+            }
+            return false;
+        });
+        this.setState({
+            msgPeriod: period.id
+        });
+      }
+    }
+
     handleChangeMsgText(e){
         e.preventDefault();
 
@@ -163,16 +188,6 @@ class BillsNewMessage extends React.Component {
         
         this.setState({
             msgText: msgText
-        });
-    }
-    
-    handleChangeMsgSubject(e){
-        e.preventDefault();
-
-        let msgSubject = e.target.value;
-        
-        this.setState({
-            msgSubject: msgSubject
         });
     }
     
@@ -191,6 +206,13 @@ class BillsNewMessage extends React.Component {
             msgCategoryMedCareType: e.target.value
         });
     };
+
+    handleChangePeriod = (e) => {
+      e.preventDefault();
+      this.setState({
+          msgPeriod: e.target.value
+      });
+  }
     
     handleOnUploadFile(file){
         this.setState(state => {
@@ -262,13 +284,6 @@ class BillsNewMessage extends React.Component {
         this.setState({
             msgSending: true
         });
-        if(!this.state.msgSubject) {
-            alert("Укажите тему сообщения");
-            this.setState({
-                msgSending: false
-            });
-            return;
-        }
         if(!this.state.msgCategoryPs) {
             alert("Выберите категорию (Астрамед/Капитал/МТР)");
             this.setState({
@@ -276,6 +291,13 @@ class BillsNewMessage extends React.Component {
             });
             return;
         }
+        if(!this.state.msgPeriod) {
+          alert("Укажите период");
+          this.setState({
+              msgSending: false
+          });
+          return;
+      }
         if(!this.state.msgCategoryMedCareType) {
             alert("Выберите вид помощи");
             this.setState({
@@ -293,11 +315,12 @@ class BillsNewMessage extends React.Component {
         
         
         let msg = {};
-        msg.subject = this.state.msgSubject;
+        msg.subject = "Счета";
         msg.text    = this.state.msgText;
         msg.to      = this.state.msgTo;
         msg.attach  = this.state.msgFiles.map(item => item.id);
         msg.type    = 'bill';
+        msg.period  = this.state.msgPeriod;
         msg.category = [this.state.msgCategoryPs, this.state.msgCategoryMedCareType]
 
         console.log(msg);
@@ -321,6 +344,14 @@ class BillsNewMessage extends React.Component {
   render() {
       const { classes } = this.props;
       //const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+      const periodList = this.props.periodList.slice().sort(function(a, b) {
+        if (a.attributes.from < b.attributes.from) {
+          return 1; }
+        if (a.attributes.from > b.attributes.from) {
+          return -1; }
+        return 0;
+      });
 
       return (
         <div>
@@ -350,20 +381,7 @@ class BillsNewMessage extends React.Component {
                         <Grid item xs={12}> 
                         <form onSubmit={(e)=>this._handleSubmit(e)}>
                           <Grid container>
-                              <Grid item xs={12}>
-                              <TextField
-                                fullWidth
-                                required
-                                label="Тема"
-                                id="msg-subject"
-                                value={this.state.msgSubject}
-                                onChange={this.handleChangeMsgSubject}
-                                
-                                helperText=""
-                                margin="normal"
-                              />
-                              </Grid>
-                              <Grid item xs={12} sm={6}>
+                              <Grid item xs={12} sm={4}>
                               <FormControl component="fieldset" className={classes.comboboxFormControl}>
 
                                   <RadioGroup aria-label="category" name="msgCategoryPs" value={ this.state.msgCategoryPs } onChange={ this.handleChangeMsgCategoryPs } row>
@@ -373,7 +391,23 @@ class BillsNewMessage extends React.Component {
                                   </RadioGroup>
                               </FormControl>
                               </Grid>
-                              <Grid item xs={12} sm={6}>
+                              <Grid item xs={12} sm={4}>
+                                  <FormControl fullWidth className={classes.comboboxFormControl}>
+                                    <InputLabel id='msg-period-label' >Период</InputLabel>
+                                    <Select
+                                      fullWidth
+                                      labelId="msg-period-label"
+                                      id="msg-period"
+                                      value={ this.state.msgPeriod }
+                                      onChange={ this.handleChangePeriod }
+                                    >
+                                      { periodList && (periodList).map( (item) => (
+                                        <MenuItem key={ item.id } value={ item.id }>{ item.attributes.name }</MenuItem>
+                                      ))}
+                                    </Select>
+                                  </FormControl>
+                              </Grid>
+                              <Grid item xs={12} sm={4}>
                                   <FormControl fullWidth className={classes.comboboxFormControl}>
                                     <InputLabel id='msg-category-med-care-type-label' >Вид помощи</InputLabel>
                                     <Select
@@ -389,6 +423,7 @@ class BillsNewMessage extends React.Component {
                                     </Select>
                                   </FormControl>
                               </Grid>
+                              
                               <Grid item xs={12}>
                                     <TextField
                                       fullWidth
@@ -471,6 +506,7 @@ const mapStateToProps = function(store) {
   console.log(store);
   return {
       users: store.userReducer.items,
+      periodList: store.periodReducer.items,
       usersLoading: store.userReducer.loading,
     };
 }
@@ -489,6 +525,9 @@ const mapDispatchToProps = dispatch => {
     },*/
     fetchUsers: (page, perPage) => {
         dispatch(userFetch(page, perPage));
+    },
+    fetchPeriod: () => {
+      dispatch(periodFetch(0, -1));
     },
     fetchCert: () => {
         dispatch(cadesCertFetch());

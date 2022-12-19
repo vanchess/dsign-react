@@ -4,22 +4,15 @@ import {
     getGridNumericColumnOperators
 } from '@material-ui/data-grid';
 
-import { makeStyles } from '@material-ui/core/styles';
-
 import CustomToolbar from '../DataGrid/CustomToolbar';
 import CustomNoRowsOverlay from '../DataGrid/CustomNoRowsOverlay';
 import CustomLoadingOverlay from '../DataGrid/CustomLoadingOverlay';
 import CustomPagination from '../DataGrid/CustomPagination';
-
-
-
-const useStyles = makeStyles((theme) => ({
-  root: {},
-}));
-
+import { useSelector } from 'react-redux';
 
 export default function BillList(props) {
- 
+  const periodList = useSelector(store => store.periodReducer.items);
+console.log(periodList);
   return (
     <div style={{ minHeight: '400px', height: 'calc(100vh - 128px)',width: '100%' }}>
       
@@ -40,6 +33,12 @@ export default function BillList(props) {
                         res[c.id] = {name: c.attributes.name, short_title: c.attributes.short_title};
                         return res;
                       }, []),
+                    'period': periodList.find(item => {
+                      //console.log(item?.id);
+                      //console.log(msg.attributes.period_id);
+                      
+                      return Number(item?.id) === msg.attributes.period_id;
+                    })?.attributes.name,
                 });
             })
         } 
