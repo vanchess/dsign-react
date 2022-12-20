@@ -383,7 +383,6 @@ class BillsNewMessage extends React.Component {
                           <Grid container>
                               <Grid item xs={12} sm={4}>
                               <FormControl component="fieldset" className={classes.comboboxFormControl}>
-
                                   <RadioGroup aria-label="category" name="msgCategoryPs" value={ this.state.msgCategoryPs } onChange={ this.handleChangeMsgCategoryPs } row>
                                     { categoryPs && (categoryPs).map( (item) => (
                                         <FormControlLabel key={ item.id } value={ item.id } control={<Radio />} label={ item.title } />

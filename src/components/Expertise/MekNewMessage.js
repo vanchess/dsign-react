@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from "react-router-dom";
 //import clsx from 'clsx';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import Backdrop from '@material-ui/core/Backdrop';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
@@ -36,6 +36,7 @@ import { connect } from 'react-redux';
 // import { myFileFetch } from '../../store/my-file/myFileAction.js'
 import { userFetch } from '../../store/user/userAction.js'
 import { cadesCertFetch } from '../../store/cadesplugin/cadespluginAction.js'
+import { periodFetch } from '../../store/period/periodAction.js'
 
 import { fileService } from '../../services';
 import { cadespluginService } from '../../services';
@@ -46,6 +47,8 @@ import { fileDownload, textFileDownload } from '../../_helpers';
 import CertDialog from '../Dialog/CertDialog';
 
 import moment from 'moment';
+import { FormControlLabel, MenuItem, Radio, RadioGroup, Select } from '@material-ui/core';
+import { organizationFetch } from '../../store/organization/organizationAction';
 
 const styles = theme => ({
   container: {
@@ -93,10 +96,25 @@ const styles = theme => ({
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
+const categoryPs = [
+  {id:2, name:'asm', title:'Астрамед'},
+  {id:1, name:'kms', title:'Капитал МС'},	 
+  {id:3, name:'mtr', title:'МТР'}
+]
+
 const titleByType = {
     'mek':'Отправка актов МЭК',
     'mee':'Отправка актов МЭЭ',
 };
+
+const subjectByType = {
+  'mek':'МЭК',
+  'mee':'Акт МЭЭ №',
+}
+
+const filterOrganizationOptions = createFilterOptions({
+  stringify: (option) => option.attributes.short_name + option.attributes.name,
+});
 
 class MekNewMessage extends React.Component {
     
@@ -107,12 +125,15 @@ class MekNewMessage extends React.Component {
     
     constructor(props){
       super(props);
-      
-      let period = moment().subtract(1, 'months').local().format("MM.YYYY");
+
       this.state = {
-        msgSubject: `${period}`,
+        msgTo: [11],
+        msgToOrg: null,
+        msgType: this.props.match.params.type,
+        msgSubject: subjectByType[this.props.match.params.type],
+        msgPeriod: '',
         msgText: '',
-        msgTo: [],
+        msgCategoryPs: null,
         msgFiles: [],
         msgSending: false,
         loading: false,
@@ -125,6 +146,8 @@ class MekNewMessage extends React.Component {
         fileSign: [],
       };
       
+      this.handleChangeMsgCategoryPs = this.handleChangeMsgCategoryPs.bind(this);
+      this.handleChangePeriod = this.handleChangePeriod.bind(this);
       this.handleChangeMsgText = this.handleChangeMsgText.bind(this);
       this.handleChangeMsgSubject = this.handleChangeMsgSubject.bind(this);
       this.handleChangeMsgTo = this.handleChangeMsgTo.bind(this);
@@ -132,6 +155,7 @@ class MekNewMessage extends React.Component {
       this._handleSubmit = this._handleSubmit.bind(this);
       this.handleSelectItem = this.handleSelectItem.bind(this);
       this.handleSelectAllClick = this.handleSelectAllClick.bind(this);
+      this.handleChangeMsgToOrg = this.handleChangeMsgToOrg.bind(this);
       
       this.props.setTitle(titleByType[this.props.match.params.type]);
     }
@@ -139,11 +163,37 @@ class MekNewMessage extends React.Component {
     componentDidMount(){
         // this.props.fetchMyFiles(this.props.page, this.props.perPage);
         this.props.fetchUsers(0, -1);
+        this.props.fetchPeriod();
+        this.props.fetchOrganization();
     }
     
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState) {
+      if (prevState.msgPeriod === '' && this.props.periodList.length) {
+        let previousMonth = new Date();
+        previousMonth.setDate(0);
+
+        let period = this.props.periodList.find((elem, index, arr) => {
+            if (elem === undefined) {
+                return false;
+            }
+            let dtFrom = new Date(elem.attributes.from);
+            let dtTo   = new Date(elem.attributes.to)
+            if (dtFrom <= previousMonth && previousMonth <= dtTo)
+            {
+                return true;
+            }
+            return false;
+        });
+        this.setState({
+            msgPeriod: period.id
+        });
+      }
       if (this.props.match.params.type !== prevProps.match.params.type) {
-            this.props.setTitle(titleByType[this.props.match.params.type]);
+          this.setState({
+            msgType: this.props.match.params.type,
+            msgSubject: subjectByType[this.props.match.params.type]
+          })
+          this.props.setTitle(titleByType[this.props.match.params.type]);
       }
     }
     
@@ -156,12 +206,28 @@ class MekNewMessage extends React.Component {
             msgText: msgText
         });
     }
+
+    handleChangeMsgCategoryPs(e) {
+      e.preventDefault();
+      let msgCategoryPs = Number.parseInt(e.target.value)
+      
+      this.setState({
+          msgCategoryPs: msgCategoryPs
+      });
+    };
     
     handleChangeMsgTo(e, newValue){
         e.preventDefault();      
         this.setState({
             msgTo: newValue
         });
+    }
+
+    handleChangeMsgToOrg(e, newValue){
+      e.preventDefault();      
+      this.setState({
+          msgToOrg: newValue
+      });
     }
     
     handleChangeMsgSubject(e){
@@ -285,6 +351,13 @@ class MekNewMessage extends React.Component {
         )
     };
     
+    handleChangePeriod = (e) => {
+        e.preventDefault();
+        this.setState({
+            msgPeriod: e.target.value
+        });
+    }
+
     sendMsg = (msg) => {
         messageService.sendMsg(msg);
     }
@@ -293,19 +366,34 @@ class MekNewMessage extends React.Component {
         this.setState({
             msgSending: true
         });
-        if(!this.state.msgSubject) {
+        let msgType = this.state.msgType;
+        if(!this.state.msgSubject && msgType == 'mee') {
             alert("Укажите тему сообщения");
             this.setState({
                 msgSending: false
             });
             return;
         }
-        if(!this.state.msgTo.length) {
-            alert("Добавьте получателей");
+        if(!this.state.msgCategoryPs && msgType == 'mek') {
+          alert("Выберите категорию (Астрамед/Капитал/МТР)");
+          this.setState({
+              msgSending: false
+          });
+          return;
+        }
+        if(!this.state.msgPeriod && msgType == 'mek') {
+            alert("Укажите период");
             this.setState({
                 msgSending: false
             });
             return;
+        }
+        if(!this.state.msgToOrg) {
+          alert("Добавьте получателя");
+          this.setState({
+              msgSending: false
+          });
+          return;
         }
         if(!this.state.msgFiles.length && !this.state.msgText) {
             alert("Введите текст сообщения или добавьте файлы");
@@ -315,14 +403,19 @@ class MekNewMessage extends React.Component {
             return;
         }
         
-        let msgType = this.props.match.params.type;
+        
         
         let msg = {};
         msg.subject = this.state.msgSubject;
         msg.text    = this.state.msgText;
-        msg.to      = this.state.msgTo.map(item => item.id);
+        msg.to      = this.state.msgTo;
+        msg.toOrg   = [this.state.msgToOrg.id];
         msg.attach  = this.state.msgFiles.map(item => item.id);
         msg.type    = msgType;
+        if (this.state.msgType == 'mek') {
+          msg.category = [this.state.msgCategoryPs]
+          msg.period  = this.state.msgPeriod;
+        }
         //console.log(msg);
         messageService.sendMsg(msg).then(
             () => { 
@@ -377,6 +470,14 @@ class MekNewMessage extends React.Component {
       const { classes } = this.props;
       //const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
+      const periodList = this.props.periodList.slice().sort(function(a, b) {
+        if (a.attributes.from < b.attributes.from) {
+          return 1; }
+        if (a.attributes.from > b.attributes.from) {
+          return -1; }
+        return 0;
+      });
+
       return (
           <div>
             <Backdrop className={classes.backdrop} open={this.state.signInProcess}>
@@ -405,6 +506,7 @@ class MekNewMessage extends React.Component {
                         <Grid item xs={12}>
                         <form onSubmit={(e)=>this._handleSubmit(e)}>
                           <Grid container>
+                            { this.state.msgType == 'mee' ? (
                             <Grid item xs={12}>
                               <TextField
                                 fullWidth
@@ -418,29 +520,52 @@ class MekNewMessage extends React.Component {
                                 margin="normal"
                               />
                             </Grid>
+                            ) : null }
+                            { this.state.msgType == 'mek' ? (
+                              <Grid item xs={12} sm={4}>
+                              <FormControl component="fieldset" className={classes.comboboxFormControl}>
+                                  <RadioGroup aria-label="category" name="msgCategoryPs" value={ this.state.msgCategoryPs } onChange={ this.handleChangeMsgCategoryPs } row>
+                                    { categoryPs && (categoryPs).map( (item) => (
+                                        <FormControlLabel key={ item.id } value={ item.id } control={<Radio />} label={ item.title } />
+                                    ))}
+                                  </RadioGroup>
+                              </FormControl>
+                              </Grid>
+                            ) : null }
+                            { this.state.msgType == 'mek' ? (
+                            <Grid item xs={12} sm={4}>
+                                <FormControl fullWidth className={classes.comboboxFormControl}>
+                                  <InputLabel id='msg-period-label' >Период</InputLabel>
+                                  <Select
+                                    fullWidth
+                                    labelId="msg-period-label"
+                                    id="msg-period"
+                                    value={ this.state.msgPeriod }
+                                    onChange={ this.handleChangePeriod }
+                                  >
+                                    { periodList && (periodList).map( (item) => (
+                                      <MenuItem key={ item.id } value={ item.id }>{ item.attributes.name }</MenuItem>
+                                    ))}
+                                  </Select>
+                                </FormControl>
+                            </Grid>
+                            ) : null }
                             <Grid item xs={12}>
                                 <Autocomplete
                                   fullWidth
-                                  multiple
                                   required
-                                  id="msg-to"
-                                  options={this.props.users}
-                                  disableCloseOnSelect
-                                  getOptionLabel={(option) => option.attributes.name}
-                                  onChange={this.handleChangeMsgTo}
+                                  id="msg-to-org"
+                                  options={this.props.organizationList.sort((a,b) => { if (a.attributes.short_name > b.attributes.short_name) return 1;  if (a.attributes.short_name < b.attributes.short_name) return -1; return 0;})}
+                                  getOptionLabel={(option) => (option.attributes.short_name)}
+                                  filterOptions={filterOrganizationOptions}
+                                  onChange={this.handleChangeMsgToOrg}
                                   renderOption={(option, { selected }) => (
                                     <React.Fragment>
-                                      <Checkbox
-                                        icon={icon}
-                                        checkedIcon={checkedIcon}
-                                        style={{ marginRight: 8 }}
-                                        checked={selected}
-                                      />
-                                      {option.attributes.name} ({option.attributes.branch}) ({option.attributes.job_title})
+                                      {option.attributes.short_name}
                                     </React.Fragment>
                                   )}
                                   renderInput={(params) => (
-                                    <TextField {...params} label="Кому" placeholder="Начните вводить имя получателя" />
+                                    <TextField {...params} label="Куда" placeholder="Начните вводить название организации" />
                                   )}
                                 />
                             </Grid>
@@ -541,6 +666,8 @@ const mapStateToProps = function(store) {
   return {
       users: store.userReducer.items,
       usersLoading: store.userReducer.loading,
+      periodList: store.periodReducer.items,
+      organizationList: store.organizationReducer.items,
     };
 }
 const mapDispatchToProps = dispatch => {
@@ -558,6 +685,12 @@ const mapDispatchToProps = dispatch => {
     },*/
     fetchUsers: (page, perPage) => {
         dispatch(userFetch(page, perPage));
+    },
+    fetchPeriod: () => {
+      dispatch(periodFetch(0, -1));
+    },
+    fetchOrganization: () => {
+      dispatch(organizationFetch(0, -1));
     },
     fetchCert: () => {
         dispatch(cadesCertFetch());
