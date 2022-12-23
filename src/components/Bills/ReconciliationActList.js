@@ -10,6 +10,7 @@ import CustomToolbar from '../DataGrid/CustomToolbar';
 import CustomNoRowsOverlay from '../DataGrid/CustomNoRowsOverlay';
 import CustomLoadingOverlay from '../DataGrid/CustomLoadingOverlay';
 import CustomPagination from '../DataGrid/CustomPagination';
+import { useSelector } from 'react-redux';
 
 
 
@@ -19,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function ReconciliationActList(props) {
- 
+  const periodList = useSelector(store => store.periodReducer.items);
   return (
     <div style={{ minHeight: '400px', height: 'calc(100vh - 128px)',width: '100%' }}>
       
@@ -40,6 +41,10 @@ export default function ReconciliationActList(props) {
                         res[c.id] = {name: c.attributes.name, short_title: c.attributes.short_title};
                         return res;
                       }, []),
+                    'period': periodList.find(item => {
+                      return Number(item?.id) === msg.attributes.period_id;
+                    })?.attributes.name,
+                    'organization': msg.relationships.organization.data.attributes.short_name,
                 });
             })
         } 

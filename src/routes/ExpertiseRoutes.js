@@ -13,6 +13,7 @@ import MekShowMessage from  '../components/Expertise/MekShowMessage.js'
 import MekInMessage   from  '../components/Expertise/MekInMessage.js'
 import MekOutMessage  from  '../components/Expertise/MekOutMessage.js'
 import MeeInMessage   from  '../components/Expertise/MeeInMessage.js'
+import MekIn from '../components/Expertise/MekIn'
 
 class Routes extends React.Component {
 
@@ -26,6 +27,8 @@ class Routes extends React.Component {
               <PrivateRoute path={`${path}/msg/:type/:id`} component={MekShowMessage}  handleSetTitle={(title) => this.props.handleSetTitle(title)} />
               <PrivateRoute path={`${path}/msg/mee`} component={MeeInMessage} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
               <PrivateRoute path={`${path}/msg/mek`} component={MekInMessage}  handleSetTitle={(title) => this.props.handleSetTitle(title)} />
+              <PrivateRoute path={`${path}/list/:type/:id`} component={MekIn} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
+              <PrivateRoute path={`${path}/list/:type`} component={MekIn} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
               <PrivateRoute component={Dashboard} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
             </Switch>
       );

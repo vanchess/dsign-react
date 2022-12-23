@@ -143,6 +143,7 @@ class RegisterNewMessage extends React.Component {
         handleAddFileSign: null
       };
       
+      this.handleChangePeriod = this.handleChangePeriod.bind(this);
       this.handleChangeMsgText = this.handleChangeMsgText.bind(this);
       this.handleOnUploadFile = this.handleOnUploadFile.bind(this);
       this.handleChangeMsgCategoryPs = this.handleChangeMsgCategoryPs.bind(this);

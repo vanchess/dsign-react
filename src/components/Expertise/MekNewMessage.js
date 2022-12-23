@@ -422,7 +422,7 @@ class MekNewMessage extends React.Component {
                 this.setState({
                     msgSending: false
                 });
-                this.props.history.push('/expertise/msg/' + msgType) 
+                this.props.history.push('/expertise/list/' + msgType) 
             },
             (err) => { 
                 alert(err.error);

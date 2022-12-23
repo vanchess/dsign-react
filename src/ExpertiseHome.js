@@ -46,8 +46,8 @@ class ExpertiseHome extends React.Component {
         }
     }
     let sidebarMainListItems = [
-        {'key':1, 'title':'МЭК', 'to':`${path}msg/mek`, 'tooltip':'Акты МЭК', 'icon': <MailIcon />},
-        {'key':2, 'title':'МЭЭ', 'to':`${path}msg/mee`, 'tooltip':'Акты МЭЭ', 'icon': <MailIcon />},
+        {'key':1, 'title':'МЭК', 'to':`${path}list/mek`, 'tooltip':'Акты МЭК', 'icon': <MailIcon />},
+        {'key':2, 'title':'МЭЭ', 'to':`${path}list/mee`, 'tooltip':'Акты МЭЭ', 'icon': <MailIcon />},
     ];
     
     return (  

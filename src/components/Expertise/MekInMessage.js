@@ -147,5 +147,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-
 export default connect(mapStateToProps,mapDispatchToProps)(withRouter(withStyles(styles)(InMessage)));
