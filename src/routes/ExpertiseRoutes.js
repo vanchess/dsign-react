@@ -1,17 +1,12 @@
 import React from 'react';
-import { Switch, withRouter } from 'react-router-dom';
-
+import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 
 import { PrivateRoute } from '../_components';
 
-
 import Dashboard  from '../dashboard/Dashboard.js'
-import MedicalInstitution from  '../components/MedicalInstitution/MedicalInstitution.js'
-import MyFiles    from  '../components/UploadFile/MyFiles.js'
 import MekNewMessage  from  '../components/Expertise/MekNewMessage.js'
 import MekShowMessage from  '../components/Expertise/MekShowMessage.js'
 import MekInMessage   from  '../components/Expertise/MekInMessage.js'
-import MekOutMessage  from  '../components/Expertise/MekOutMessage.js'
 import MeeInMessage   from  '../components/Expertise/MeeInMessage.js'
 import MekIn from '../components/Expertise/MekIn'
 
@@ -22,7 +17,9 @@ class Routes extends React.Component {
       let path = this.props.match.path;
       return (
             <Switch>
-              <PrivateRoute exact path={`${path}`} component={MekInMessage} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
+              <Route exact path={`${path}`} >
+                <Redirect to={`${path}/list/mek`} />
+              </Route>
               <PrivateRoute path={`${path}/msg/:type/new`} component={MekNewMessage} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
               <PrivateRoute path={`${path}/msg/:type/:id`} component={MekShowMessage}  handleSetTitle={(title) => this.props.handleSetTitle(title)} />
               <PrivateRoute path={`${path}/msg/mee`} component={MeeInMessage} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
