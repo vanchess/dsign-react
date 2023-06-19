@@ -80,12 +80,13 @@ const cards = [
     {id:4, title:'Реестры', text:'Отправка подписанных электронной подписью реестров', image:"/images/tfoms.png", to:'/registers' },
     {id:5, title:'Соглашения', text:'Подписание соглашений и договоров', image:"/images/dogovor.jpg", to:'/agreements' },
     {id:6, title:'Админ', text:'', image:"/images/tfoms.png", to:'/admin', permission:'assign-role mo-lider' },
+    {id:8, title:'Подписать файлы ЭП', text:'', image:"/images/tfoms.png", to:'/eissoi', permission:'service file-dsign' },
 ];
 const cardsNew = [
     
 ];
 const cards2 = [
-    {id:7, title:'Мониторинг', text:'Мониторинг приема реестров', image:"/images/monitoring.png", to:'/f1' }, 
+    {id:8, title:'Мониторинг', text:'Мониторинг приема реестров', image:"/images/monitoring.png", to:'/f1' }, 
 ];
 const cardsOut= [
     {id:3, title:'Учет направлений на госпитализацию', text:''/*'Персонифицированная база данных по учету направлений на госпитализацию и информирований о необходимости прохождения профессиональных осмотров'*/, image:"/images/doctor.jpg", to:'http://192.168.12.1:8080/iso/f?p=101' },

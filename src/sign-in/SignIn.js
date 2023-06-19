@@ -78,6 +78,10 @@ const styles = theme => ({
   },
 });
 
+const cards = [
+  {id:1, title:'Подписать файлы ЭП', text:'', image:"/images/tfoms.png", to:'/eissoi' },
+];
+
 const cardsOut= [
   {id:3, title:'Учет направлений на госпитализацию', text:''/*'Персонифицированная база данных по учету направлений на госпитализацию и информирований о необходимости прохождения профессиональных осмотров'*/, image:"/images/doctor.jpg", to:'http://192.168.12.1:8080/iso/f?p=101' },
   {id:4, title:'Учет обращений граждан (для СМО)', text:'', image:"/images/callcenter.jpg", to:'http://192.168.12.1:8082/adv/backend/web' },
@@ -210,6 +214,24 @@ class SignIn extends React.Component {
                   {cardsOut.map((card) => (
                     <React.Fragment key={card.id}>
                       <ListItem alignItems="flex-start" component={Link} href={ card.to } target="_blank" rel="noopener noreferrer" color="inherit" underline="none">
+                        <ListItemAvatar>
+                          <Avatar alt={card.title} src={card.image} />
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={card.title}
+                          secondary={
+                            <React.Fragment>
+                              {card.text}
+                            </React.Fragment>
+                          }
+                        />
+                      </ListItem>
+                      <Divider variant="inset" component="li" />
+                    </React.Fragment>
+                  ))} 
+                  {cards.map((card) => (
+                    <React.Fragment key={card.id}>
+                      <ListItem alignItems="flex-start" component={Link} href={ card.to } color="inherit" underline="none">
                         <ListItemAvatar>
                           <Avatar alt={card.title} src={card.image} />
                         </ListItemAvatar>
