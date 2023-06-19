@@ -49,7 +49,7 @@ export const createColumns = (statuses, onClick, msgType = 'mek') => {
       columns.push({ field: 'period', headerName: 'Период', width: 80 });
     }
 
-    columns.push({ field: 'organization', headerName: 'Организация', width: 255 });
+    columns.push({ field: 'organization', headerName: 'Организация', width: 257 });
     if (msgType === 'mee') {
       columns.push({ field: 'subject', headerName: 'Тема', width: 250 });
     }

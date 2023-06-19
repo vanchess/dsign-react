@@ -143,7 +143,7 @@ class MekNewMessage extends React.Component {
         signInProcess: false,
         
         selectedMsgFilesIds: [],
-        fileSign: [],
+        fileSign: {},
       };
       
       this.handleChangeMsgCategoryPs = this.handleChangeMsgCategoryPs.bind(this);
@@ -303,7 +303,7 @@ class MekNewMessage extends React.Component {
     
     addFileSign(fileId, sign) {
         this.setState((state) => {
-            let newFileSignArr = state.fileSign;
+            let newFileSignArr = {...(state.fileSign)};
             if (state.fileSign[fileId]) {
                 newFileSignArr[fileId]=[...(state.fileSign[fileId]), sign];
             } else {

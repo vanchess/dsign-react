@@ -114,16 +114,12 @@ export default function Eissoi() {
 
     const addFileSign = (fileId, sign) => {
       setFileSignArray((fileSign) => {
-        console.log(fileSign);
-        console.log(fileId);
           let newFileSignArr = {...fileSign};
-          console.log(newFileSignArr);
           if (fileSign[fileId]) {
               newFileSignArr[fileId]=[...(fileSign[fileId]), sign];
           } else {
               newFileSignArr[fileId]=[sign];
           }
-          console.log(newFileSignArr);
           return newFileSignArr;
         });
     }

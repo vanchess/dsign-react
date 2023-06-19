@@ -28,7 +28,7 @@ class TempTODOTempTempFilesList extends React.Component {
           super(props);
           
           this.state = {
-                fileSign: [],
+                fileSign: {},
           };
         }
         
@@ -37,7 +37,7 @@ class TempTODOTempTempFilesList extends React.Component {
                 fileService.getFileSign(item.id).then((sign) =>
                     {
                         this.setState((state) => {
-                            let newFileSignArr = state.fileSign;
+                            let newFileSignArr = { ...(state.fileSign) };
                             newFileSignArr[item.id]=sign.data;
                             return {fileSign: newFileSignArr}
                           });
@@ -52,7 +52,7 @@ class TempTODOTempTempFilesList extends React.Component {
                     fileService.getFileSign(item.id).then((sign) =>
                         {
                             this.setState((state) => {
-                                let newFileSignArr = state.fileSign;
+                                let newFileSignArr = { ...(state.fileSign) };
                                 newFileSignArr[item.id]=sign.data;
                                 return {fileSign: newFileSignArr}
                               });
@@ -69,7 +69,7 @@ class TempTODOTempTempFilesList extends React.Component {
         addFileSign(file_id, sign) {
             this.setState((state) => {
                 console.log(state.fileSign);
-                let newFileSignArr = state.fileSign;
+                let newFileSignArr = { ...(state.fileSign) };
                 if (state.fileSign[file_id]) {
                     newFileSignArr[file_id]=[...(state.fileSign[file_id]), sign];
                 } else {

@@ -122,7 +122,7 @@ class ShowMessage extends React.Component {
         signInProcess: false,
         
         selectedMsgFilesIds: [],
-        fileSign: [],
+        fileSign: {},
       };
       
       this.handleSelectItem = this.handleSelectItem.bind(this);
@@ -154,7 +154,7 @@ class ShowMessage extends React.Component {
                             fileService.getFileSign(item.id).then((sign) =>
                                 {
                                     this.setState((state) => {
-                                        let newFileSignArr = state.fileSign;
+                                        let newFileSignArr = { ...(state.fileSign) };
                                         newFileSignArr[item.id]=sign.data;
                                         return {fileSign: newFileSignArr}
                                       });
@@ -258,7 +258,7 @@ class ShowMessage extends React.Component {
     
     addFileSign(fileId, sign) {
         this.setState((state) => {
-            let newFileSignArr = state.fileSign;
+            let newFileSignArr = { ...(state.fileSign) };
             if (state.fileSign[fileId]) {
                 newFileSignArr[fileId]=[...(state.fileSign[fileId]), sign];
             } else {

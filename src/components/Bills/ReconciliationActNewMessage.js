@@ -126,7 +126,7 @@ class ReconciliationActNewMessage extends React.Component {
         signInProcess: false,
         
         selectedMsgFilesIds: [],
-        fileSign: [],
+        fileSign: {},
       };
       
       this.handleChangeMsgText = this.handleChangeMsgText.bind(this);
@@ -268,7 +268,7 @@ class ReconciliationActNewMessage extends React.Component {
     
     addFileSign(fileId, sign) {
         this.setState((state) => {
-            let newFileSignArr = state.fileSign;
+            let newFileSignArr = { ...(state.fileSign) };
             if (state.fileSign[fileId]) {
                 newFileSignArr[fileId]=[...(state.fileSign[fileId]), sign];
             } else {
