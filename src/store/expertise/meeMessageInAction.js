@@ -13,11 +13,11 @@ export const messageGetFailure = (data) => {
   return { type: MEE_MESSAGE_IN_GET_FAILURE, error: data }
 };
 
-export const messageFetch = (page, perPage) => {
+export const messageFetch = (page, perPage, status = [], period = [], org = []) => {
   return (dispatch) => {
     dispatch(messageGetRequest());
     
-    messageService.getAll(page, perPage, 1, ['mee']).then(
+    messageService.getAll(page, perPage, 1, ['mee'], status, [], org).then(
         itemCollection => dispatch(messageGetSuccess(itemCollection)), 
         error => dispatch(messageGetFailure(error))
       );
