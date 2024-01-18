@@ -1,4 +1,4 @@
-import { CADESCOM_CADES_BES, CAPICOM_CURRENT_USER_STORE, CAPICOM_MY_STORE, CAPICOM_STORE_OPEN_MAXIMUM_ALLOWED, CAPICOM_CERTIFICATE_FIND_SUBJECT_NAME, CADESCOM_BASE64_TO_BINARY } from '../constants/cadespluginConstants.js'
+import { CADESCOM_CADES_BES, CAPICOM_CURRENT_USER_STORE, CAPICOM_MY_STORE, CAPICOM_STORE_OPEN_MAXIMUM_ALLOWED, CAPICOM_CERTIFICATE_FIND_SUBJECT_NAME, CADESCOM_BASE64_TO_BINARY, CADESCOM_HASH_ALGORITHM_CP_GOST_3411_2012_256 } from '../constants/cadespluginConstants.js'
 import { CertificateAdjuster } from '../_helpers';
 
 export class cadespluginService {
@@ -34,6 +34,10 @@ export class cadespluginService {
     static SignCreate(certificate, dataToSign) {
         return new Promise(function(resolve, reject){
             cadesplugin.async_spawn(function *(args) {
+                let certificate = args[0];
+                let dataToSign = args[1];
+                let resolve = args[2];
+                let reject = args[3];
                 try {
                     let oSigner = yield cadesplugin.CreateObjectAsync("CAdESCOM.CPSigner");
                     yield oSigner.propset_Certificate(certificate);
@@ -45,38 +49,131 @@ export class cadespluginService {
 
                     let sSignedMessage = yield oSignedData.SignCades(oSigner, CADESCOM_CADES_BES, true);
 
-                    args[2](sSignedMessage);
+                    resolve(sSignedMessage);
                 }
                 catch (e)
                 {
-                    args[3]("Failed to create signature. Error: " + cadesplugin.getLastError(e));
+                    reject("Failed to create signature. Error: " + cadesplugin.getLastError(e));
                 }
             }, certificate, dataToSign, resolve, reject);
         });
     }
     
-    
-    
-    static FileSignCreate(certificate, blob) {
-        return cadespluginService.FileSignCreateUseFileReader(certificate, blob).then(
-            (event) => cadespluginService.readerOnload(event, certificate)
-        )
-    }
-    
-    static FileSignCreateUseFileReader(certificate, blob) {
+    static CheckFileReader() {
         // Проверяем, работает ли File API
         if (window.FileReader) {
             // Браузер поддерживает File API.
         } else {
             return Promise.reject('The File APIs are not fully supported in this browser.');
         }
-        
+
         let reader = new FileReader();
         
-        if (typeof(reader.readAsDataURL)!="function") {
+        if (typeof(reader.readAsDataURL) != "function") {
             return Promise.reject("Method readAsDataURL() is not supported in FileReader.");
         }
-        
+    }
+    
+    static async FileSignCreate(certificate, blob) {
+        await cadespluginService.CheckFileReader();
+        let e = await cadespluginService.FileSignCreateUseFileReader(certificate, blob);
+        return cadespluginService.readerOnload(e, certificate);
+    }
+
+    /// Подписание файла с чтением по частям
+    static async FileSignCreateReadingFileInChunks(certificate, file) {
+        await cadespluginService.CheckFileReader();
+        return new Promise(function(resolve, reject) {
+            cadesplugin.async_spawn(function* (args) {
+                let oCertificate = args[0];
+                let oFile = args[1];
+                let resolve = args[2];
+                let reject = args[3];
+
+                let blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice;
+                let chunkSize = 3 * 1024 * 1024; // 3MB
+                let chunks = Math.ceil(oFile.size / chunkSize);
+                let currentChunk = 0;
+
+                let oHashedData = yield cadesplugin.CreateObjectAsync("CAdESCOM.HashedData");
+                yield oHashedData.propset_Algorithm(CADESCOM_HASH_ALGORITHM_CP_GOST_3411_2012_256);
+                yield oHashedData.propset_DataEncoding(CADESCOM_BASE64_TO_BINARY);
+
+                let frOnload = function (e) {
+                    let header = ";base64,";
+                    let sFileData = e.target.result;
+                    let sBase64Data = sFileData.substr(sFileData.indexOf(header) + header.length);
+
+                    oHashedData.Hash(sBase64Data);
+
+                    // Increase the progress bar length.
+                    // let percentLoaded = Math.round((currentChunk / chunks) * 100);
+                    // if (percentLoaded <= 100) {
+                    //     progress.style.width = percentLoaded + '%';
+                    //    progress.textContent = percentLoaded + '%';
+                    // }
+
+                    currentChunk++;
+
+                    if (currentChunk < chunks) {
+                        loadNext();
+                    }
+                    else {
+                        cadesplugin.async_spawn(function* (args) {
+                            let oSigner = yield cadesplugin.CreateObjectAsync("CAdESCOM.CPSigner");
+                            yield oSigner.propset_Certificate(oCertificate);
+                            yield oSigner.propset_CheckCertificate(true);
+
+                            let oSignedData = yield cadesplugin.CreateObjectAsync("CAdESCOM.CadesSignedData");
+                            oSignedData.propset_ContentEncoding(CADESCOM_BASE64_TO_BINARY);
+
+                            let sSignedMessage;
+                            try {
+                                sSignedMessage = yield oSignedData.SignHash(oHashedData, oSigner, CADESCOM_CADES_BES);
+                                resolve(sSignedMessage);
+                            } catch (err) {
+                                reject("Ошибка создания подписи. Ошибка: " + cadesplugin.getLastError(err));
+                                return;
+                            }
+
+                            // Проверим подпись
+                            /*
+                            let oSignedData2 = yield cadesplugin.CreateObjectAsync("CAdESCOM.CadesSignedData");
+                            try {
+                                yield oSignedData2.VerifyHash(oHashedData, sSignedMessage, CADESCOM_CADES_BES);
+                                alert("Signature verified");
+                            } catch (err) {
+                                alert("Failed to verify signature. Error: " + cadesplugin.getLastError(err));
+                                return;
+                            }
+                            */
+                        });
+                    }
+                };
+
+                let frOnerror = function () {
+                    reject("File load error.");
+                };
+
+                function loadNext() {
+                    let fileReader = new FileReader();
+                    fileReader.onload = frOnload;
+                    fileReader.onerror = frOnerror;
+
+                    let start = currentChunk * chunkSize,
+                        end = ((start + chunkSize) >= oFile.size) ? oFile.size : start + chunkSize;
+
+                    fileReader.readAsDataURL(blobSlice.call(oFile, start, end));
+                };
+
+                loadNext();
+            }, certificate, file, resolve, reject);
+        });
+    }
+    
+    static async FileSignCreateUseFileReader(certificate, blob) {
+        let reader = new FileReader();
+
         reader.readAsDataURL(blob);
         return new Promise(function(resolve, reject){
             reader.onload = (event) => resolve(event, certificate);

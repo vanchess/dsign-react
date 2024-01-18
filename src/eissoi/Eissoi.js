@@ -127,7 +127,7 @@ export default function Eissoi() {
     const fileSignCreate = () => {
       setSignInProcess(true);  
 
-      cadespluginService.FileSignCreate(certDialogSelectedValue.cert, signFile.file).then(
+      cadespluginService.FileSignCreateReadingFileInChunks(certDialogSelectedValue.cert, signFile.file).then(
             (result) => {
                 addFileSign(signFile.id, {name: certDialogSelectedValue.name, base64:result, id: new Date().getTime() + certDialogSelectedValue.thumbprint});
                 setSignInProcess(false);
@@ -136,6 +136,7 @@ export default function Eissoi() {
             (error) => {
               setSignInProcess(false);
                 console.log(`Error: ${error}`);
+                alert(`Error: ${error}`);
             });
         
     };
