@@ -53,7 +53,7 @@ export default function Eissoi() {
     let [files, setFiles] = useState([]);
     let [certDialogOpen, setCertDialogOpen] = useState(false);
     let [fileSignArray, setFileSignArray] = useState({});
-    let loading = false;
+    let [loading, setLoading] = useState(false);
     let certDialogSelectedValue = {};
     let [signFile, setSignFile] = useState(null);
     let [signInProcess, setSignInProcess] = useState(false)
@@ -63,6 +63,7 @@ export default function Eissoi() {
     let i = 1;
 
     const getZipOms = (file) => {
+        setLoading(true);
         var zip = new JSZip();
         zip.file(file.name, file.file, {base64: true});
         if (fileSignArray[file.id]) {
@@ -70,9 +71,13 @@ export default function Eissoi() {
               zip.file(file.name + '.sig', sign.base64, {base64: true});
            })
         }
-        zip.generateAsync({type:"blob"})
+        zip.generateAsync({type:"blob", compression: "DEFLATE"})
         .then(function(content) {
             fileDownload(content, file.name.replace(".xml", "") + ".oms");
+            setLoading(false);
+        }).catch(function(err) {
+          alert(err);
+          setLoading(false);
         });
     }
 
@@ -178,7 +183,13 @@ export default function Eissoi() {
                         <TableCell>
                         {fileSignArray[row.id] && (
                           <Tooltip title="Скачать архив с подписью">
-                            <IconButton aria-label="zip" onClick={ () => { getZipOms(row) } } ><ArchiveIcon /></IconButton>
+                            <div className={classes.wrapper}>
+                              <IconButton aria-label="zip" 
+                                onClick={ () => { getZipOms(row) } } 
+                                disabled={ loading }
+                              ><ArchiveIcon /></IconButton>
+                              {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                            </div>
                           </Tooltip>
                         )}
                         </TableCell>
