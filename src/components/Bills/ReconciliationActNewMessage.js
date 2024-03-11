@@ -447,15 +447,15 @@ class ReconciliationActNewMessage extends React.Component {
                         <form onSubmit={(e)=>this._handleSubmit(e)}>
                           <Grid container>
                             <Grid item xs={12} sm={4}>
-                                <FormControl fullWidth className={classes.comboboxFormControl}>
+                                <FormControl variant="standard" fullWidth className={classes.comboboxFormControl}>
                                   <InputLabel id='msg-period-label' >Период</InputLabel>
                                   <Select
-                                    fullWidth
-                                    labelId="msg-period-label"
-                                    id="msg-period"
-                                    value={ this.state.msgPeriod }
-                                    onChange={ this.handleChangePeriod }
-                                  >
+                                      variant="standard"
+                                      fullWidth
+                                      labelId="msg-period-label"
+                                      id="msg-period"
+                                      value={ this.state.msgPeriod }
+                                      onChange={ this.handleChangePeriod }>
                                     { periodList && (periodList).map( (item) => (
                                       <MenuItem key={ item.id } value={ item.id }>{ item.attributes.name }</MenuItem>
                                     ))}
@@ -477,7 +477,11 @@ class ReconciliationActNewMessage extends React.Component {
                                     </React.Fragment>
                                   )}
                                   renderInput={(params) => (
-                                    <TextField {...params} label="Организация" placeholder="Начните вводить название организации" />
+                                    <TextField
+                                        variant="standard"
+                                        {...params}
+                                        label="Организация"
+                                        placeholder="Начните вводить название организации" />
                                   )}
                                 />
                             </Grid>

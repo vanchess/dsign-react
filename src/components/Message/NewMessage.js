@@ -392,16 +392,15 @@ class NewMessage extends React.Component {
                           <Grid container>
                             <Grid item xs={12}>
                               <TextField
-                                fullWidth
-                                required
-                                label="Тема"
-                                id="msg-subject"
-                                value={this.state.msgSubject}
-                                onChange={this.handleChangeMsgSubject}
-                                
-                                helperText=""
-                                margin="normal"
-                              />
+                                  variant="standard"
+                                  fullWidth
+                                  required
+                                  label="Тема"
+                                  id="msg-subject"
+                                  value={this.state.msgSubject}
+                                  onChange={this.handleChangeMsgSubject}
+                                  helperText=""
+                                  margin="normal" />
                             </Grid>
                             <Grid item xs={12}>
                                 <Autocomplete
@@ -425,7 +424,11 @@ class NewMessage extends React.Component {
                                     </React.Fragment>
                                   )}
                                   renderInput={(params) => (
-                                    <TextField {...params} label="Кому" placeholder="Начните вводить имя получателя" />
+                                    <TextField
+                                        variant="standard"
+                                        {...params}
+                                        label="Кому"
+                                        placeholder="Начните вводить имя получателя" />
                                   )}
                                 />
                             </Grid>

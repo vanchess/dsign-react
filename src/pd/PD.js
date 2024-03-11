@@ -310,6 +310,7 @@ export default function PD(props) {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
+                variant="standard"
                 id="p-date"
                 label="Дата выдачи"
                 type="date"
@@ -317,8 +318,7 @@ export default function PD(props) {
                 onChange={(e) => setPDate(e.target.value)}
                 InputLabelProps={{
                   shrink: true,
-                }}
-              />
+                }} />
             </Grid>
             
           </Grid>

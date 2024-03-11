@@ -380,7 +380,10 @@ class RegisterNewMessage extends React.Component {
                           <form onSubmit={(e)=>this._handleSubmit(e)}>
                             <Grid container>
                                 <Grid item xs={12} sm={4}>
-                                <FormControl component="fieldset" className={classes.comboboxFormControl}>
+                                <FormControl
+                                    variant="standard"
+                                    component="fieldset"
+                                    className={classes.comboboxFormControl}>
                                     <RadioGroup aria-label="category" name="msgCategoryPs" value={ this.state.msgCategoryPs } onChange={ this.handleChangeMsgCategoryPs } row>
                                       { categoryPs && (categoryPs).map( (item) => (
                                           <FormControlLabel key={ item.id } value={ item.id } control={<Radio />} label={ item.title } />
@@ -389,15 +392,15 @@ class RegisterNewMessage extends React.Component {
                                 </FormControl>
                                 </Grid>
                                 <Grid item xs={12} sm={4}>
-                                    <FormControl fullWidth className={classes.comboboxFormControl}>
+                                    <FormControl variant="standard" fullWidth className={classes.comboboxFormControl}>
                                       <InputLabel id='msg-period-label' >Период</InputLabel>
                                       <Select
-                                        fullWidth
-                                        labelId="msg-period-label"
-                                        id="msg-period"
-                                        value={ this.state.msgPeriod }
-                                        onChange={ this.handleChangePeriod }
-                                      >
+                                          variant="standard"
+                                          fullWidth
+                                          labelId="msg-period-label"
+                                          id="msg-period"
+                                          value={ this.state.msgPeriod }
+                                          onChange={ this.handleChangePeriod }>
                                         { periodList && (periodList).map( (item) => (
                                           <MenuItem key={ item.id } value={ item.id }>{ item.attributes.name }</MenuItem>
                                         ))}
@@ -405,15 +408,15 @@ class RegisterNewMessage extends React.Component {
                                     </FormControl>
                                 </Grid>
                                 <Grid item xs={12} sm={4}>
-                                    <FormControl fullWidth className={classes.comboboxFormControl}>
+                                    <FormControl variant="standard" fullWidth className={classes.comboboxFormControl}>
                                       <InputLabel id='msg-category-med-care-type-label' >Вид помощи</InputLabel>
                                       <Select
-                                        fullWidth
-                                        labelId="msg-category-med-care-type-label"
-                                        id="msg-category-med-care-type"
-                                        value={ this.state.msgCategoryMedCareType }
-                                        onChange={ this.handleChangeMsgCategoryMedCareType }
-                                      >
+                                          variant="standard"
+                                          fullWidth
+                                          labelId="msg-category-med-care-type-label"
+                                          id="msg-category-med-care-type"
+                                          value={ this.state.msgCategoryMedCareType }
+                                          onChange={ this.handleChangeMsgCategoryMedCareType }>
                                         { medCareType && (medCareType).map( (item) => (
                                           <MenuItem key={ item.id } value={ item.id }>{ item.title }</MenuItem>
                                         ))}

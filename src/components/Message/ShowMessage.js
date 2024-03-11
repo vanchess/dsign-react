@@ -358,15 +358,13 @@ class ShowMessage extends React.Component {
                       <Grid container>
                           <Grid item xs={10}>
                               <TextField
-                                fullWidth
-                                readOnly
-                                label="Тема"
-                                id="msg-subject"
-                                value={this.state.msgSubject}
-                                
-                                helperText=""
-                               
-                              />
+                                  variant="standard"
+                                  fullWidth
+                                  readOnly
+                                  label="Тема"
+                                  id="msg-subject"
+                                  value={this.state.msgSubject}
+                                  helperText="" />
                           </Grid>
                           <Grid item xs={2}>
                             <Typography variant="body2" align="left" color='textSecondary'>

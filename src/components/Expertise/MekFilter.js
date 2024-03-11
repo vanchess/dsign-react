@@ -195,7 +195,7 @@ const periodList = props.periodList.slice().sort(function(a, b) {
                             </React.Fragment>
                           )}
                           renderInput={(params) => (
-                            <TextField {...params} label="Периоды" placeholder="" />
+                            <TextField variant="standard" {...params} label="Периоды" placeholder="" />
                           )}
                         />
                     <Autocomplete
@@ -224,7 +224,11 @@ const periodList = props.periodList.slice().sort(function(a, b) {
                             </React.Fragment>
                           )}
                           renderInput={(params) => (
-                            <TextField {...params} label="Организации" placeholder="Начните вводить название организации" />
+                            <TextField
+                              variant="standard"
+                              {...params}
+                              label="Организации"
+                              placeholder="Начните вводить название организации" />
                           )}
                         />
                     <Autocomplete
@@ -252,7 +256,7 @@ const periodList = props.periodList.slice().sort(function(a, b) {
                             </React.Fragment>
                           )}
                           renderInput={(params) => (
-                            <TextField {...params} label="Статусы" placeholder="" />
+                            <TextField variant="standard" {...params} label="Статусы" placeholder="" />
                           )}
                         />
                 </Grid>

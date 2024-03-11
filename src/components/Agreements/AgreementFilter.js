@@ -163,7 +163,11 @@ function BillsFilter(props) {
                             </React.Fragment>
                           )}
                           renderInput={(params) => (
-                            <TextField {...params} label="Организации" placeholder="Начните вводить название организации" />
+                            <TextField
+                              variant="standard"
+                              {...params}
+                              label="Организации"
+                              placeholder="Начните вводить название организации" />
                           )}
                         />
                     <Autocomplete
@@ -191,7 +195,7 @@ function BillsFilter(props) {
                             </React.Fragment>
                           )}
                           renderInput={(params) => (
-                            <TextField {...params} label="Статусы" placeholder="" />
+                            <TextField variant="standard" {...params} label="Статусы" placeholder="" />
                           )}
                         />
                 </Grid>

@@ -509,21 +509,23 @@ class MekNewMessage extends React.Component {
                             { this.state.msgType == 'mee' ? (
                             <Grid item xs={12}>
                               <TextField
-                                fullWidth
-                                required
-                                label="Тема"
-                                id="msg-subject"
-                                value={this.state.msgSubject}
-                                onChange={this.handleChangeMsgSubject}
-                                
-                                helperText=""
-                                margin="normal"
-                              />
+                                  variant="standard"
+                                  fullWidth
+                                  required
+                                  label="Тема"
+                                  id="msg-subject"
+                                  value={this.state.msgSubject}
+                                  onChange={this.handleChangeMsgSubject}
+                                  helperText=""
+                                  margin="normal" />
                             </Grid>
                             ) : null }
                             { this.state.msgType == 'mek' ? (
                               <Grid item xs={12} sm={4}>
-                              <FormControl component="fieldset" className={classes.comboboxFormControl}>
+                              <FormControl
+                                  variant="standard"
+                                  component="fieldset"
+                                  className={classes.comboboxFormControl}>
                                   <RadioGroup aria-label="category" name="msgCategoryPs" value={ this.state.msgCategoryPs } onChange={ this.handleChangeMsgCategoryPs } row>
                                     { categoryPs && (categoryPs).map( (item) => (
                                         <FormControlLabel key={ item.id } value={ item.id } control={<Radio />} label={ item.title } />
@@ -534,15 +536,15 @@ class MekNewMessage extends React.Component {
                             ) : null }
                             { this.state.msgType == 'mek' ? (
                             <Grid item xs={12} sm={4}>
-                                <FormControl fullWidth className={classes.comboboxFormControl}>
+                                <FormControl variant="standard" fullWidth className={classes.comboboxFormControl}>
                                   <InputLabel id='msg-period-label' >Период</InputLabel>
                                   <Select
-                                    fullWidth
-                                    labelId="msg-period-label"
-                                    id="msg-period"
-                                    value={ this.state.msgPeriod }
-                                    onChange={ this.handleChangePeriod }
-                                  >
+                                      variant="standard"
+                                      fullWidth
+                                      labelId="msg-period-label"
+                                      id="msg-period"
+                                      value={ this.state.msgPeriod }
+                                      onChange={ this.handleChangePeriod }>
                                     { periodList && (periodList).map( (item) => (
                                       <MenuItem key={ item.id } value={ item.id }>{ item.attributes.name }</MenuItem>
                                     ))}
@@ -565,7 +567,11 @@ class MekNewMessage extends React.Component {
                                     </React.Fragment>
                                   )}
                                   renderInput={(params) => (
-                                    <TextField {...params} label="Куда" placeholder="Начните вводить название организации" />
+                                    <TextField
+                                        variant="standard"
+                                        {...params}
+                                        label="Куда"
+                                        placeholder="Начните вводить название организации" />
                                   )}
                                 />
                             </Grid>

@@ -25,19 +25,19 @@ function createStatusInputValue(statuses) {
 
       return (
         <div>
-           <FormControl >
+           <FormControl variant="standard">
                 <InputLabel shrink htmlFor="select-multiple-native">
                   Выбрать несколько: Ctrl
                 </InputLabel>
                 <Select
+                  variant="standard"
                   multiple
                   native
                   value={item.value}
                   onChange={handleFilterChangeNative}
                   inputProps={{
                     id: 'select-multiple-native',
-                  }}
-                >
+                  }}>
                   {statuses.map((s) => (
                     <option key={s.attributes.name} value={s.attributes.name}>
                       {s.attributes.lable}
@@ -47,7 +47,7 @@ function createStatusInputValue(statuses) {
             </FormControl>
         </div>
       );
-    }
+    };
 }
 
 
