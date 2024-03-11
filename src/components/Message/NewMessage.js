@@ -412,8 +412,8 @@ class NewMessage extends React.Component {
                                   disableCloseOnSelect
                                   getOptionLabel={(option) => option.attributes.name}
                                   onChange={this.handleChangeMsgTo}
-                                  renderOption={(option, { selected }) => (
-                                    <React.Fragment>
+                                  renderOption={(props, option, { selected }) => (
+                                    <li {...props}>
                                       <Checkbox
                                         icon={icon}
                                         checkedIcon={checkedIcon}
@@ -421,7 +421,7 @@ class NewMessage extends React.Component {
                                         checked={selected}
                                       />
                                       {option.attributes.name} ({option.attributes.branch}) ({option.attributes.job_title})
-                                    </React.Fragment>
+                                    </li>
                                   )}
                                   renderInput={(params) => (
                                     <TextField

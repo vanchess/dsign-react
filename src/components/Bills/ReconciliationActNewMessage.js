@@ -471,10 +471,10 @@ class ReconciliationActNewMessage extends React.Component {
                                   getOptionLabel={(option) => (option.attributes.short_name)}
                                   filterOptions={filterOrganizationOptions}
                                   onChange={this.handleChangeMsgToOrg}
-                                  renderOption={(option, { selected }) => (
-                                    <React.Fragment>
+                                  renderOption={(props, option, { selected }) => (
+                                    <li {...props}>
                                       {option.attributes.short_name}
-                                    </React.Fragment>
+                                    </li>
                                   )}
                                   renderInput={(params) => (
                                     <TextField

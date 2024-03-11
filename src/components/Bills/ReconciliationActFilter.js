@@ -1,14 +1,12 @@
 import React, { useEffect }  from 'react';
 import makeStyles from '@mui/styles/makeStyles';
 import { connect } from 'react-redux';
-import clsx from 'clsx';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionActions from '@mui/material/AccordionActions';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Chip from '@mui/material/Chip';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
@@ -184,8 +182,8 @@ function ReconciliationActFilter(props) {
                           disableCloseOnSelect
                           getOptionLabel={(option) => option.attributes.name}
                           onChange={handleChangePeriod}
-                          renderOption={(option, { selected }) => (
-                            <React.Fragment>
+                          renderOption={(props, option, { selected }) => (
+                            <li {...props}>
                               <Checkbox
                                 icon={icon}
                                 checkedIcon={checkedIcon}
@@ -193,7 +191,7 @@ function ReconciliationActFilter(props) {
                                 checked={selected}
                               />
                               {option.attributes.name}
-                            </React.Fragment>
+                            </li>
                           )}
                           renderInput={(params) => (
                             <TextField variant="standard" {...params} label="Периоды" placeholder="" />
@@ -213,8 +211,8 @@ function ReconciliationActFilter(props) {
                           getOptionLabel={(option) => option.attributes.short_name}
                           filterOptions={filterOrganizationOptions}
                           onChange={handleChangeOrganization}
-                          renderOption={(option, { selected }) => (
-                            <React.Fragment>
+                          renderOption={(props, option, { selected }) => (
+                            <li {...props}>
                               <Checkbox
                                 icon={icon}
                                 checkedIcon={checkedIcon}
@@ -222,7 +220,7 @@ function ReconciliationActFilter(props) {
                                 checked={selected}
                               />
                               {option.attributes.short_name}
-                            </React.Fragment>
+                            </li>
                           )}
                           renderInput={(params) => (
                             <TextField
@@ -245,8 +243,8 @@ function ReconciliationActFilter(props) {
                           disableCloseOnSelect
                           getOptionLabel={(option) => option.attributes.lable}
                           onChange={handleChangeStatus}
-                          renderOption={(option, { selected }) => (
-                            <React.Fragment>
+                          renderOption={(props, option, { selected }) => (
+                            <li {...props}>
                               <Checkbox
                                 icon={icon}
                                 checkedIcon={checkedIcon}
@@ -254,7 +252,7 @@ function ReconciliationActFilter(props) {
                                 checked={selected}
                               />
                               {option.attributes.lable}
-                            </React.Fragment>
+                            </li>
                           )}
                           renderInput={(params) => (
                             <TextField variant="standard" {...params} label="Статусы" placeholder="" />

@@ -183,8 +183,8 @@ function BillsFilter(props) {
                           disableCloseOnSelect
                           getOptionLabel={(option) => option.attributes.name}
                           onChange={handleChangePeriod}
-                          renderOption={(option, { selected }) => (
-                            <React.Fragment>
+                          renderOption={(props, option, { selected }) => (
+                            <li {...props}>
                               <Checkbox
                                 icon={icon}
                                 checkedIcon={checkedIcon}
@@ -192,7 +192,7 @@ function BillsFilter(props) {
                                 checked={selected}
                               />
                               {option.attributes.name}
-                            </React.Fragment>
+                            </li>
                           )}
                           renderInput={(params) => (
                             <TextField variant="standard" {...params} label="Периоды" placeholder="" />
@@ -212,8 +212,8 @@ function BillsFilter(props) {
                           getOptionLabel={(option) => option.attributes.short_name}
                           filterOptions={filterOrganizationOptions}
                           onChange={handleChangeOrganization}
-                          renderOption={(option, { selected }) => (
-                            <React.Fragment>
+                          renderOption={(props, option, { selected }) => (
+                            <li {...props}>
                               <Checkbox
                                 icon={icon}
                                 checkedIcon={checkedIcon}
@@ -221,7 +221,7 @@ function BillsFilter(props) {
                                 checked={selected}
                               />
                               {option.attributes.short_name}
-                            </React.Fragment>
+                            </li>
                           )}
                           renderInput={(params) => (
                             <TextField
@@ -244,8 +244,8 @@ function BillsFilter(props) {
                           disableCloseOnSelect
                           getOptionLabel={(option) => option.attributes.lable}
                           onChange={handleChangeStatus}
-                          renderOption={(option, { selected }) => (
-                            <React.Fragment>
+                          renderOption={(props, option, { selected }) => (
+                            <li {...props}>
                               <Checkbox
                                 icon={icon}
                                 checkedIcon={checkedIcon}
@@ -253,7 +253,7 @@ function BillsFilter(props) {
                                 checked={selected}
                               />
                               {option.attributes.lable}
-                            </React.Fragment>
+                            </li>
                           )}
                           renderInput={(params) => (
                             <TextField variant="standard" {...params} label="Статусы" placeholder="" />
