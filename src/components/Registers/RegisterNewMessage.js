@@ -102,11 +102,9 @@ const checkedIcon = <CheckBoxIcon fontSize="small" />;
 const medCareType = [
     {id:4, name:'app', title:'Поликлиника'},
     {id:5, name:'dd', title:'Диспансеризация'},
-    {id:6, name:'fap', title:'Содержание ФАП'},
-    {id:7, name:'ks', title:'Круглосуточный стационар'},
+    {id:14, name:'ksds', title:'Круглосуточный и дневной стационары'},
     {id:8, name:'vmp', title:'Высокотехнологичная помощь'},
     {id:9, name:'mr', title:'Мед. реабилитация'},
-    {id:10, name:'szp', title:'Дневной стационар'},
     {id:11, name:'smp', title:'Скорая помощь'}
 ]
 
