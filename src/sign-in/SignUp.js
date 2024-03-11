@@ -311,7 +311,12 @@ export default function SignUp(props) {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="#" component={RouterLink} variant="body2" to={'/login'}>
+              <Link
+                href="#"
+                component={RouterLink}
+                variant="body2"
+                to={'/login'}
+                underline="hover">
                 Уже зарегистрированы? Войти
               </Link>
             </Grid>

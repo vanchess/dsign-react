@@ -20,7 +20,7 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="http://ktfoms.orbitel.ru/">
+      <Link color="inherit" href="http://ktfoms.orbitel.ru/" underline="hover">
         ТФ ОМС Курганской области
       </Link>{' '}
       2021-{new Date().getFullYear()}

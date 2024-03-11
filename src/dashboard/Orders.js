@@ -57,7 +57,7 @@ export default function Orders() {
         </TableBody>
       </Table>
       <div className={classes.seeMore}>
-        <Link color="primary" href="#">
+        <Link color="primary" href="#" underline="hover">
           See more orders
         </Link>
       </div>

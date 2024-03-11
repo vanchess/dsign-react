@@ -24,7 +24,7 @@ export default function Deposits() {
         on 15 March, 2019
       </Typography>
       <div>
-        <Link color="primary" href="#">
+        <Link color="primary" href="#" underline="hover">
           View balance
         </Link>
       </div>
