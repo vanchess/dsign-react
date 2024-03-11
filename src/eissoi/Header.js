@@ -1,16 +1,16 @@
 import React from 'react';
 
 import clsx from 'clsx';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import AppsIcon from '@material-ui/icons/Apps';
-import Typography from '@material-ui/core/Typography';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import Tooltip from '@material-ui/core/Tooltip';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import AppsIcon from '@mui/icons-material/Apps';
+import Typography from '@mui/material/Typography';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import Tooltip from '@mui/material/Tooltip';
 import { Link } from 'react-router-dom';
 
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
 const drawerWidth = 240;
 
@@ -49,33 +49,26 @@ class RawHeader extends React.Component {
       const { classes } = this.props;
       
       return (
-      <AppBar position="absolute" className={clsx(classes.appBar, this.props.open && classes.appBarShift)}>
-        <Toolbar className={classes.toolbar}>
-          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-              {this.props.title}
-          </Typography>
-          <Typography component="h1" variant="h6" color="inherit" noWrap >
-              {this.props.userName}
-          </Typography>
-          <Tooltip title="Перейти к выбору подсистемы">
-            <IconButton 
-              color="inherit"
-              component={Link} 
-              to={`/`}
-            >
-              <AppsIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Выход из системы">
-            <IconButton 
-              color="inherit"
-              onClick={() => this.props.logout()}
-            >
-              <ExitToAppIcon />
-            </IconButton>
-          </Tooltip>
-        </Toolbar>
-      </AppBar>
+        <AppBar position="absolute" className={clsx(classes.appBar, this.props.open && classes.appBarShift)}>
+          <Toolbar className={classes.toolbar}>
+            <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
+                {this.props.title}
+            </Typography>
+            <Typography component="h1" variant="h6" color="inherit" noWrap >
+                {this.props.userName}
+            </Typography>
+            <Tooltip title="Перейти к выбору подсистемы">
+              <IconButton color="inherit" component={Link} to={`/`} size="large">
+                <AppsIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Выход из системы">
+              <IconButton color="inherit" onClick={() => this.props.logout()} size="large">
+                <ExitToAppIcon />
+              </IconButton>
+            </Tooltip>
+          </Toolbar>
+        </AppBar>
       );
     }
 }

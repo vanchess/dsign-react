@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
-import Chip from '@material-ui/core/Chip';
+import Chip from '@mui/material/Chip';
 
-import ReportProblemIcon from '@material-ui/icons/ReportProblem';
-import Tooltip from '@material-ui/core/Tooltip';
-import { green, yellow } from '@material-ui/core/colors';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import AdjustIcon from '@material-ui/icons/Adjust';
-import NoSimIcon from '@material-ui/icons/NoSim';
-import ThumbDownAltOutlinedIcon from '@material-ui/icons/ThumbDownAltOutlined';
-import ComputerIcon from '@material-ui/icons/Computer';
-import CheckIcon from '@material-ui/icons/Check';
-// import DoneAllIcon from '@material-ui/icons/DoneAll';
-import SendIcon from '@material-ui/icons/Send';
+import ReportProblemIcon from '@mui/icons-material/ReportProblem';
+import Tooltip from '@mui/material/Tooltip';
+import { green, yellow } from '@mui/material/colors';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import AdjustIcon from '@mui/icons-material/Adjust';
+import NoSimIcon from '@mui/icons-material/NoSim';
+import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
+import ComputerIcon from '@mui/icons-material/Computer';
+import CheckIcon from '@mui/icons-material/Check';
+// import DoneAllIcon from '@mui/icons-material/DoneAll';
+import SendIcon from '@mui/icons-material/Send';
 
 const useStyles = makeStyles((theme) => ({
   /*

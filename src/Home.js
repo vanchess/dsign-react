@@ -1,20 +1,20 @@
 import React from 'react';
-// import Button from '@material-ui/core/Button';
-// import ThreeDRotation from '@material-ui/icons/ThreeDRotation';
-// import IconButton from '@material-ui/core/IconButton';
-//import SvgIcon from '@material-ui/core/SvgIcon';
+// import Button from '@mui/material/Button';
+// import ThreeDRotation from '@mui/icons-material/ThreeDRotation';
+// import IconButton from '@mui/material/IconButton';
+//import SvgIcon from '@mui/material/SvgIcon';
 import 'typeface-roboto';
 
-import CssBaseline from '@material-ui/core/CssBaseline';
+import CssBaseline from '@mui/material/CssBaseline';
 
 import { Header } from './components/Header'; 
 import { Sidebar } from './components/Sidebar'; 
 import { MainListItems, secondaryListItems } from './components/Sidebar/listItems';
 
-import Snackbar from '@material-ui/core/Snackbar';
-import Alert from '@material-ui/lab/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
 import { authService } from './services';
 

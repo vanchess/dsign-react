@@ -1,17 +1,17 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItem from '@material-ui/core/ListItem';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import CloseIcon from '@material-ui/icons/Close';
-import Slide from '@material-ui/core/Slide';
+import makeStyles from '@mui/styles/makeStyles';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import ListItemText from '@mui/material/ListItemText';
+import ListItem from '@mui/material/ListItem';
+import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import CloseIcon from '@mui/icons-material/Close';
+import Slide from '@mui/material/Slide';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -35,7 +35,12 @@ export default function FullScreenDialog(props) {
       <Dialog fullScreen open={props.open} onClose={props.onClose} TransitionComponent={Transition}>
         <AppBar className={classes.appBar}>
           <Toolbar>
-            <IconButton edge="start" color="inherit" onClick={props.onClose} aria-label="close">
+            <IconButton
+              edge="start"
+              color="inherit"
+              onClick={props.onClose}
+              aria-label="close"
+              size="large">
               <CloseIcon />
             </IconButton>
             <Typography variant="h6" className={classes.title}>

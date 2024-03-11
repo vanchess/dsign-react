@@ -1,15 +1,15 @@
 import React from 'react';
 //import clsx from 'clsx';
 
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import TablePagination from '@material-ui/core/TablePagination';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import TablePagination from '@mui/material/TablePagination';
 
 
 import MedicalInstitutionList from './MedicalInstitutionList';
 
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
 import { connect } from 'react-redux';
 
@@ -70,36 +70,36 @@ class MedicalInstitution extends React.Component {
       console.log('rerender ');
       
       return (
-          <main className={classes.content}>
-            <div className={classes.appBarSpacer} />
-            <Container maxWidth="lg" className={classes.container}>
-              <Grid container spacing={3}>
-                {/* Recent Orders */}
-                <Grid item xs={12}>
-                  <Paper className={classes.paper}>
-                    <MedicalInstitutionList medicalInstitutions={this.props.medicalInstitution} rowsPerPage={this.props.perPage} page={this.props.page} loading={this.props.loading} />
-                    { this.props.medicalInstitutionTotal ?
-                    <TablePagination
-                       rowsPerPageOptions={[10, 15, 20, 50, 100, {value: -1, label: 'All'}]}
-                       component="div"
-                       count= {this.props.medicalInstitutionTotal}
-                       rowsPerPage={this.props.perPage}
-                       page={this.props.page}
-                       backIconButtonProps={{
-                         'aria-label': 'Previous Page',
-                       }}
-                       nextIconButtonProps={{
-                         'aria-label': 'Next Page',
-                       }}
-                       
-                       onChangePage={this.handleChangePage}
-                       onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                    /> : null }
-                  </Paper>
-                </Grid>
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
+          <Container maxWidth="lg" className={classes.container}>
+            <Grid container spacing={3}>
+              {/* Recent Orders */}
+              <Grid item xs={12}>
+                <Paper className={classes.paper}>
+                  <MedicalInstitutionList medicalInstitutions={this.props.medicalInstitution} rowsPerPage={this.props.perPage} page={this.props.page} loading={this.props.loading} />
+                  { this.props.medicalInstitutionTotal ?
+                  <TablePagination
+                     rowsPerPageOptions={[10, 15, 20, 50, 100, {value: -1, label: 'All'}]}
+                     component="div"
+                     count= {this.props.medicalInstitutionTotal}
+                     rowsPerPage={this.props.perPage}
+                     page={this.props.page}
+                     backIconButtonProps={{
+                       'aria-label': 'Previous Page',
+                     }}
+                     nextIconButtonProps={{
+                       'aria-label': 'Next Page',
+                     }}
+                     
+                     onPageChange={this.handleChangePage}
+                     onRowsPerPageChange={this.handleChangeRowsPerPage}
+                  /> : null }
+                </Paper>
               </Grid>
-            </Container>
-          </main>
+            </Grid>
+          </Container>
+        </main>
       );
   }
 }

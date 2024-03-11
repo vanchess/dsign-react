@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { withStyles } from '@material-ui/core/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import withStyles from '@mui/styles/withStyles';
 import { Header } from './components/FrameHeader'; 
 import { authService } from './services';
 

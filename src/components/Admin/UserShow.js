@@ -1,15 +1,15 @@
 import React from 'react';
 import { withRouter } from "react-router-dom";
 //import clsx from 'clsx';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
 
-import AddIcon from '@material-ui/icons/Add';
-import RemoveIcon from '@material-ui/icons/Remove';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { authPermissionsSelector } from '../../store/auth/authSelectors';

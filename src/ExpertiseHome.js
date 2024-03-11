@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Snackbar from '@material-ui/core/Snackbar';
-import Alert from '@material-ui/lab/Alert';
-import MailIcon from '@material-ui/icons/Mail';
-import LabelImportantIcon from '@material-ui/icons/LabelImportant';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import MailIcon from '@mui/icons-material/Mail';
+import LabelImportantIcon from '@mui/icons-material/LabelImportant';
 
 import ExpertiseRoutes  from './routes/ExpertiseRoutes';
 import Home from './Home';

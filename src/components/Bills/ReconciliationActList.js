@@ -4,7 +4,7 @@ import {
     getGridNumericColumnOperators
 } from '@material-ui/data-grid';
 
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
 import CustomToolbar from '../DataGrid/CustomToolbar';
 import CustomNoRowsOverlay from '../DataGrid/CustomNoRowsOverlay';

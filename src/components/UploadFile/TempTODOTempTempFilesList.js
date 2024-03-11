@@ -1,23 +1,23 @@
 /* eslint-disable no-script-url */
 
 import React from 'react';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Tooltip from '@material-ui/core/Tooltip';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Tooltip from '@mui/material/Tooltip';
 
 import Title from '../../dashboard/Title';
 
-import Checkbox from '@material-ui/core/Checkbox';
+import Checkbox from '@mui/material/Checkbox';
 
-import Skeleton from '@material-ui/lab/Skeleton';
+import Skeleton from '@mui/material/Skeleton';
 
-import Link from '@material-ui/core/Link';
-import IconButton from '@material-ui/core/IconButton';
-import GetAppIcon from '@material-ui/icons/GetApp';
-import HowToRegIcon from '@material-ui/icons/HowToReg';
+import Link from '@mui/material/Link';
+import IconButton from '@mui/material/IconButton';
+import GetAppIcon from '@mui/icons-material/GetApp';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
 
 import { fileService } from '../../services';
 
@@ -105,7 +105,7 @@ class TempTODOTempTempFilesList extends React.Component {
         <React.Fragment>
           
             { this.props.loading ?
-             <Skeleton animation="wave" variant="rect" height={ skeletonHeight } />
+             <Skeleton animation="wave" variant="rectangular" height={ skeletonHeight } />
              :
               <Table size="small">
                 <TableHead>
@@ -151,12 +151,18 @@ class TempTODOTempTempFilesList extends React.Component {
                       <TableCell>{moment(row.attributes.created_at,"YYYY-MM-DDTHH:mm:ss.SSSSSSZ").local().format("DD.MM.YYYY HH:mm")}</TableCell>
                       <TableCell>
                         <Tooltip title="Скачать файл">
-                          <IconButton aria-label="download" onClick={ () => { this.props.getFile(row.attributes.link, row.attributes.name) } } ><GetAppIcon /></IconButton>
+                          <IconButton
+                            aria-label="download"
+                            onClick={ () => { this.props.getFile(row.attributes.link, row.attributes.name) } }
+                            size="large"><GetAppIcon /></IconButton>
                         </Tooltip>
                       </TableCell>
                       <TableCell>
                         <Tooltip title="Подписать файл электронной подписью">
-                          <IconButton aria-label="sign" onClick={ () => { this.props.fileSign(row, this.handleAddFileSign(row.id) ) } } ><HowToRegIcon /></IconButton>
+                          <IconButton
+                            aria-label="sign"
+                            onClick={ () => { this.props.fileSign(row, this.handleAddFileSign(row.id) ) } }
+                            size="large"><HowToRegIcon /></IconButton>
                         </Tooltip>
                       </TableCell>
                       <TableCell>
@@ -164,10 +170,16 @@ class TempTODOTempTempFilesList extends React.Component {
                             <p key={sign.id}>
                                 { this.props.users[sign.attributes.user_id].attributes.name } Дата: {moment(sign.attributes.created_at,"YYYY-MM-DDTHH:mm:ss.SSSSSSZ").local().format("DD.MM.YYYY HH:mm")}
                               <Tooltip title="Скачать файл электронной подписи в текстовом виде (BASE64)">
-                                <IconButton aria-label="download" onClick={ () => { this.props.saveFileSignAsBase64(sign.attributes.base64, row.attributes.name) } } ><GetAppIcon /></IconButton>
+                                <IconButton
+                                  aria-label="download"
+                                  onClick={ () => { this.props.saveFileSignAsBase64(sign.attributes.base64, row.attributes.name) } }
+                                  size="large"><GetAppIcon /></IconButton>
                               </Tooltip>
                               <Tooltip title="Скачать файл электронной подписи в бинарном виде">
-                                <IconButton aria-label="download" onClick={ () => { this.props.saveFileSignAsBin(sign.attributes.base64, row.attributes.name) } } ><GetAppIcon /></IconButton>
+                                <IconButton
+                                  aria-label="download"
+                                  onClick={ () => { this.props.saveFileSignAsBin(sign.attributes.base64, row.attributes.name) } }
+                                  size="large"><GetAppIcon /></IconButton>
                               </Tooltip>
                             </p>
                         ))}

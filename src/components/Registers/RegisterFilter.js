@@ -1,23 +1,23 @@
 import React, { useEffect }  from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { connect } from 'react-redux';
 import clsx from 'clsx';
-import Accordion from '@material-ui/core/Accordion';
-import AccordionDetails from '@material-ui/core/AccordionDetails';
-import AccordionSummary from '@material-ui/core/AccordionSummary';
-import AccordionActions from '@material-ui/core/AccordionActions';
-import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Chip from '@material-ui/core/Chip';
-import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
-import Grid from '@material-ui/core/Grid';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionActions from '@mui/material/AccordionActions';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Chip from '@mui/material/Chip';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
 
-import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
-import TextField from '@material-ui/core/TextField';
-import Checkbox from '@material-ui/core/Checkbox';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import Checkbox from '@mui/material/Checkbox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 import { messageFetch } from '../../store/register/messageInAction.js'
 import { periodFetch } from '../../store/period/periodAction.js'
@@ -177,7 +177,7 @@ function BillsFilter(props) {
                           required
                           id="period"
                           options={periodList}
-                          getOptionSelected={(option, value) => {return value.id == option.id;}}
+                          isOptionEqualToValue={(option, value) => {return value.id == option.id;}}
                           value={props.filterPeriod}
                           groupBy={(option) => option.attributes.year}
                           disableCloseOnSelect
@@ -205,7 +205,7 @@ function BillsFilter(props) {
                           required
                           id="organization"
                           options={props.organizationList}
-                          getOptionSelected={(option, value) => {return value.id == option.id;}}
+                          isOptionEqualToValue={(option, value) => {return value.id == option.id;}}
                           value={props.filterOrganization}
                           groupBy={(option) => option.attributes.year}
                           disableCloseOnSelect
@@ -234,7 +234,7 @@ function BillsFilter(props) {
                           required
                           id="status"
                           options={props.statusList}
-                          getOptionSelected={(option, value) => {return value.id == option.id;}}
+                          isOptionEqualToValue={(option, value) => {return value.id == option.id;}}
                           value={props.filterStatus}
                           groupBy={(option) => option.attributes.year}
                           disableCloseOnSelect

@@ -1,14 +1,14 @@
 /* eslint-disable no-script-url */
 
 import React from 'react';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import Title from '../../dashboard/Title';
 
-import Skeleton from '@material-ui/lab/Skeleton';
+import Skeleton from '@mui/material/Skeleton';
 
 
 class MedicalInstitutionList extends React.Component {
@@ -27,7 +27,7 @@ class MedicalInstitutionList extends React.Component {
         <React.Fragment>
           
             { this.props.loading ?
-             <Skeleton animation="wave" variant="rect" height={ skeletonHeight } />
+             <Skeleton animation="wave" variant="rectangular" height={ skeletonHeight } />
              :
               <Table size="small">
                 <TableHead>

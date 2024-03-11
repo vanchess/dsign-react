@@ -1,12 +1,25 @@
 import React, { useState } from "react";
 import FilesList from "../components/UploadFile/FilesList";
-import { Button, Chip, CssBaseline, IconButton, Table, TableBody, TableCell, TableHead, TableRow, Tooltip, Typography, makeStyles } from "@material-ui/core";
-import { green } from "@material-ui/core/colors";
-import CircularProgress from '@material-ui/core/CircularProgress';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import {
+    Button,
+    Chip,
+    CssBaseline,
+    IconButton,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    Tooltip,
+    Typography,
+} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
+import { green } from "@mui/material/colors";
+import CircularProgress from '@mui/material/CircularProgress';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CertDialogAllSnils from "../components/Dialog/CertDialogAllSnils";
-import HowToRegIcon from '@material-ui/icons/HowToReg';
-import ArchiveIcon from '@material-ui/icons/Archive';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import ArchiveIcon from '@mui/icons-material/Archive';
 import { useDispatch } from "react-redux";
 import { cadesCertFetch } from "../store/cadesplugin/cadespluginAction";
 import { authService, cadespluginService } from "../services";
@@ -184,10 +197,11 @@ export default function Eissoi() {
                         {fileSignArray[row.id] && (
                           <Tooltip title="Скачать архив с подписью">
                             <div className={classes.wrapper}>
-                              <IconButton aria-label="zip" 
-                                onClick={ () => { getZipOms(row) } } 
-                                disabled={ loading }
-                              ><ArchiveIcon /></IconButton>
+                              <IconButton
+                                  aria-label="zip"
+                                  onClick={ () => { getZipOms(row) } }
+                                  disabled={ loading }
+                                  size="large"><ArchiveIcon /></IconButton>
                               {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
                             </div>
                           </Tooltip>
@@ -197,9 +211,11 @@ export default function Eissoi() {
                           <Tooltip title="Подписать файл электронной подписью">
 
                             <div className={classes.wrapper}>
-                              <IconButton aria-label="sign" 
-                                disabled={( signInProcess || certDialogOpen)}
-                                onClick={ () => { handleClickSign(row) } } ><HowToRegIcon /></IconButton>
+                              <IconButton
+                                  aria-label="sign"
+                                  disabled={( signInProcess || certDialogOpen)}
+                                  onClick={ () => { handleClickSign(row) } }
+                                  size="large"><HowToRegIcon /></IconButton>
                               {signInProcess && <CircularProgress size={24} className={classes.buttonProgress} />}
                             </div>
                           </Tooltip>
@@ -241,5 +257,5 @@ export default function Eissoi() {
               </div>
             </main>
         </div>
-    )
+    );
 }

@@ -1,17 +1,17 @@
 import React from 'react';
 //import clsx from 'clsx';
 
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import TablePagination from '@material-ui/core/TablePagination';
-// import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import TablePagination from '@mui/material/TablePagination';
+// import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 import UploadFile from './UploadFile';
 import FilesList from './FilesList';
 
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
 import { connect } from 'react-redux';
 
@@ -170,8 +170,8 @@ class MyFiles extends React.Component {
                          'aria-label': 'Next Page',
                        }}
                        
-                       onChangePage={this.props.handleChangePage}
-                       onChangeRowsPerPage={this.props.handleChangeRowsPerPage}
+                       onPageChange={this.props.handleChangePage}
+                       onRowsPerPageChange={this.props.handleChangeRowsPerPage}
                     /> : null }
                     
                     <UploadFile 

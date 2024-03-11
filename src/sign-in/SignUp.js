@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Link from '@mui/material/Link';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
+import Container from '@mui/material/Container';
 
 import { useSelector, useDispatch  } from 'react-redux'
 import { organizationFetch } from '../store/organization/organizationAction.js'
@@ -220,7 +220,7 @@ export default function SignUp(props) {
                   onChange={(e, newValue) => setOrganization(newValue)}
                   options={organizations}
                   getOptionLabel={(option) => (option.attributes ? option.attributes.short_name : '')}
-                  getOptionSelected = {(option, value) => (value && option.id === value.id)}
+                  isOptionEqualToValue = {(option, value) => (value && option.id === value.id)}
                   filterOptions={
                       createFilterOptions({stringify: (option) => {return (option.attributes.short_name + option.attributes.name)}})
                   }
@@ -309,7 +309,7 @@ export default function SignUp(props) {
           >
           { formButtonText }
           </Button>
-          <Grid container justify="flex-end">
+          <Grid container justifyContent="flex-end">
             <Grid item>
               <Link href="#" component={RouterLink} variant="body2" to={'/login'}>
                 Уже зарегистрированы? Войти

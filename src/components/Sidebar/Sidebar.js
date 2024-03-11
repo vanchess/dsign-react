@@ -2,15 +2,15 @@ import React from 'react';
 
 import clsx from 'clsx';
 
-import Avatar from '@material-ui/core/Avatar';
-import Drawer from '@material-ui/core/Drawer';
-import IconButton from '@material-ui/core/IconButton';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import Divider from '@material-ui/core/Divider';
+import Avatar from '@mui/material/Avatar';
+import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import Divider from '@mui/material/Divider';
 
 import ActionButton from './ActionButton';
 
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
 const drawerWidth = 240;
 
@@ -57,28 +57,28 @@ class RawSidebar extends React.Component {
       const { classes } = this.props;
 
       return (
-          <Drawer
-            variant="permanent"
-            classes={{
-              paper: clsx(classes.drawerPaper, !this.props.open && classes.drawerPaperClose),
-            }}
-            open={this.props.open}
-          >
-            <div className={classes.toolbarIcon}>
-              <Avatar className={classes.avatar} src="/tfoms.png" />
-              <IconButton onClick={() => this.props.handleDrawerClose()}>
-                <ChevronLeftIcon />
-              </IconButton>
-            </div>
-            {this.props.actions.map(a =>
-                <ActionButton key={a.key} open={this.props.open} title={a.title} tooltip={a.tooltip} to={a.to} />
-            )}
-            <Divider />
-            {this.props.children}
-            <Divider />
-            {/*<List>{secondaryListItems}</List>*/}
-          </Drawer>
-          );
+        <Drawer
+          variant="permanent"
+          classes={{
+            paper: clsx(classes.drawerPaper, !this.props.open && classes.drawerPaperClose),
+          }}
+          open={this.props.open}
+        >
+          <div className={classes.toolbarIcon}>
+            <Avatar className={classes.avatar} src="/tfoms.png" />
+            <IconButton onClick={() => this.props.handleDrawerClose()} size="large">
+              <ChevronLeftIcon />
+            </IconButton>
+          </div>
+          {this.props.actions.map(a =>
+              <ActionButton key={a.key} open={this.props.open} title={a.title} tooltip={a.tooltip} to={a.to} />
+          )}
+          <Divider />
+          {this.props.children}
+          <Divider />
+          {/*<List>{secondaryListItems}</List>*/}
+        </Drawer>
+      );
     }
 }
 

@@ -1,19 +1,19 @@
 import React from 'react';
 import { withRouter } from "react-router-dom";
 //import clsx from 'clsx';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
 
-import ThumbDownAltOutlinedIcon from '@material-ui/icons/ThumbDownAltOutlined';
+import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
 
-import { withStyles } from '@material-ui/core/styles';
+import withStyles from '@mui/styles/withStyles';
 
 import { connect } from 'react-redux';
 
 import ShowMessage from '../Message/ShowMessage';
-import SendIcon from '@material-ui/icons/Send';
+import SendIcon from '@mui/icons-material/Send';
 
 import { messageService } from '../../services';
 

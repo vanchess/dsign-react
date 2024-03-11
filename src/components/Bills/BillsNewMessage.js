@@ -1,41 +1,41 @@
 import React from 'react';
 import { withRouter } from "react-router-dom";
 //import clsx from 'clsx';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import Backdrop from '@material-ui/core/Backdrop';
-import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
-import Checkbox from '@material-ui/core/Checkbox';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import Backdrop from '@mui/material/Backdrop';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import Checkbox from '@mui/material/Checkbox';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
 
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 
-import FormGroup from '@material-ui/core/FormGroup';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-import InputLabel from '@material-ui/core/InputLabel';
-import Input from '@material-ui/core/Input';
-import FormHelperText from '@material-ui/core/FormHelperText';
+import FormGroup from '@mui/material/FormGroup';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import InputLabel from '@mui/material/InputLabel';
+import Input from '@mui/material/Input';
+import FormHelperText from '@mui/material/FormHelperText';
 
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 import UploadFile from '../UploadFile/UploadFile';
 import FilesList from '../UploadFile/TempTODOTempTempFilesList';
 
-import { withStyles } from '@material-ui/core/styles';
-import { green } from '@material-ui/core/colors';
+import withStyles from '@mui/styles/withStyles';
+import { green } from '@mui/material/colors';
 
-import SendIcon from '@material-ui/icons/Send';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import SendIcon from '@mui/icons-material/Send';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 import { connect } from 'react-redux';
 
@@ -352,149 +352,149 @@ class BillsNewMessage extends React.Component {
       });
 
       return (
-        <div>
-            <Backdrop className={classes.backdrop} open={this.state.signInProcess}>
-              <CircularProgress color="inherit" />
-            </Backdrop>
-            <Container maxWidth="lg" className={classes.container}>
-              <Grid container spacing={3}>
-                {/* Recent Orders */}
-                <Grid item xs={12}>
-                  <Paper className={classes.paper}>
-                    <Grid container>
-                        <Grid item xs={12}>
-                        <div className={classes.buttonSendDiv} >
-                          <div className={classes.wrapper}>
-                              <Button 
-                                variant="contained"
-                                color="primary"
-                                type="submit" 
-                                disabled={this.state.msgSending}
-                                startIcon={<SendIcon />}
-                                onClick={(e)=>this._handleSubmit(e)}>Отправить</Button>
-                              {this.state.msgSending && <CircularProgress size={24} className={classes.buttonProgress} />}
-                          </div>
-                        </div>
-                        </Grid>
-                        <Grid item xs={12}> 
-                        <form onSubmit={(e)=>this._handleSubmit(e)}>
-                          <Grid container>
-                              <Grid item xs={12} sm={4}>
-                              <FormControl component="fieldset" className={classes.comboboxFormControl}>
-                                  <RadioGroup aria-label="category" name="msgCategoryPs" value={ this.state.msgCategoryPs } onChange={ this.handleChangeMsgCategoryPs } row>
-                                    { categoryPs && (categoryPs).map( (item) => (
-                                        <FormControlLabel key={ item.id } value={ item.id } control={<Radio />} label={ item.title } />
-                                    ))}
-                                  </RadioGroup>
-                              </FormControl>
-                              </Grid>
-                              <Grid item xs={12} sm={4}>
-                                  <FormControl fullWidth className={classes.comboboxFormControl}>
-                                    <InputLabel id='msg-period-label' >Период</InputLabel>
-                                    <Select
-                                      fullWidth
-                                      labelId="msg-period-label"
-                                      id="msg-period"
-                                      value={ this.state.msgPeriod }
-                                      onChange={ this.handleChangePeriod }
-                                    >
-                                      { periodList && (periodList).map( (item) => (
-                                        <MenuItem key={ item.id } value={ item.id }>{ item.attributes.name }</MenuItem>
-                                      ))}
-                                    </Select>
-                                  </FormControl>
-                              </Grid>
-                              <Grid item xs={12} sm={4}>
-                                  <FormControl fullWidth className={classes.comboboxFormControl}>
-                                    <InputLabel id='msg-category-med-care-type-label' >Вид помощи</InputLabel>
-                                    <Select
-                                      fullWidth
-                                      labelId="msg-category-med-care-type-label"
-                                      id="msg-category-med-care-type"
-                                      value={ this.state.msgCategoryMedCareType }
-                                      onChange={ this.handleChangeMsgCategoryMedCareType }
-                                    >
-                                      { medCareType && (medCareType).map( (item) => (
-                                        <MenuItem key={ item.id } value={ item.id }>{ item.title }</MenuItem>
-                                      ))}
-                                    </Select>
-                                  </FormControl>
-                              </Grid>
-                              
-                              <Grid item xs={12}>
-                                    <TextField
-                                      fullWidth
-                                      
-                                      id="msg-text"
-                                      label="Дополнительная информация (необязательно)"
-                                      multiline
-                                      rows = {4}
-                                      rowsMax={20}
-                                      value={this.state.msgText}
-                                      onChange={this.handleChangeMsgText}
-                                      variant="outlined"
-                                      margin="normal"
-                                    />
-                              </Grid>
-                              <Grid item xs={12}>
-                                <Typography variant="body1" align="left">
-                                  Прикрепленные файлы
-                                </Typography>                          
-                            
-                                <CertDialog selectedValue={this.state.certDialogSelectedValue} open={this.state.certDialogOpen} onClose={this.handleCloseCertDialog} />
-                                <FilesList 
-                                    items={this.state.msgFiles} 
-                                    rowsPerPage={this.state.msgFiles.length} 
-                                    page={0} 
-                                    loading={this.props.loading} 
-                                    getFile={ (url, filename) => { 
-                                        fileService.getFile(url).then(
-                                            fileBlob => fileDownload(fileBlob, filename),
-                                            error    => alert(`Файл не сформирован или доступ к файлу запрещён. Msg: ${error}`)
-                                        )}
-                                    }
-                                    saveFileSignAsBase64={ (result, signFileName) => {
-                                            // Скачиваем текстовый файл(base64)
-                                            textFileDownload(result,signFileName+'.sig');
-                                        }
-                                    }
-                                    saveFileSignAsBin={ (result, signFileName) => {
-                                            fetch('data:application/octet-stream;base64,'+result).then((response) => {
-                                                    response.blob().then(blob => {
-                                                            // Скачиваем бинарный файл
-                                                            fileDownload(blob,signFileName+'.sgn')
-                                                    })
-                                                })
-                                        }
-                                    }
-                                    fileSign={this.handleClickSign}
-                                    users={this.props.users}
-                                 />
-                              </Grid>
-                          </Grid>
-                        </form>
-                        </Grid>
-                        <Grid item xs={12}>
-                        <UploadFile onUploadFile={(result) => this.handleOnUploadFile(result)} />
-                        <div className={classes.buttonSendDiv} >
+          <div>
+              <Backdrop className={classes.backdrop} open={this.state.signInProcess}>
+                <CircularProgress color="inherit" />
+              </Backdrop>
+              <Container maxWidth="lg" className={classes.container}>
+                <Grid container spacing={3}>
+                  {/* Recent Orders */}
+                  <Grid item xs={12}>
+                    <Paper className={classes.paper}>
+                      <Grid container>
+                          <Grid item xs={12}>
+                          <div className={classes.buttonSendDiv} >
                             <div className={classes.wrapper}>
-                              <Button 
-                                variant="contained"
-                                color="primary"
-                                type="submit" 
-                                disabled={this.state.msgSending}
-                                startIcon={<SendIcon />}
-                                onClick={(e)=>this._handleSubmit(e)}>Отправить</Button>
-                              {this.state.msgSending && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                <Button 
+                                  variant="contained"
+                                  color="primary"
+                                  type="submit" 
+                                  disabled={this.state.msgSending}
+                                  startIcon={<SendIcon />}
+                                  onClick={(e)=>this._handleSubmit(e)}>Отправить</Button>
+                                {this.state.msgSending && <CircularProgress size={24} className={classes.buttonProgress} />}
                             </div>
-                        </div>
-                        </Grid>
-                    </Grid>
-                  </Paper>
+                          </div>
+                          </Grid>
+                          <Grid item xs={12}> 
+                          <form onSubmit={(e)=>this._handleSubmit(e)}>
+                            <Grid container>
+                                <Grid item xs={12} sm={4}>
+                                <FormControl component="fieldset" className={classes.comboboxFormControl}>
+                                    <RadioGroup aria-label="category" name="msgCategoryPs" value={ this.state.msgCategoryPs } onChange={ this.handleChangeMsgCategoryPs } row>
+                                      { categoryPs && (categoryPs).map( (item) => (
+                                          <FormControlLabel key={ item.id } value={ item.id } control={<Radio />} label={ item.title } />
+                                      ))}
+                                    </RadioGroup>
+                                </FormControl>
+                                </Grid>
+                                <Grid item xs={12} sm={4}>
+                                    <FormControl fullWidth className={classes.comboboxFormControl}>
+                                      <InputLabel id='msg-period-label' >Период</InputLabel>
+                                      <Select
+                                        fullWidth
+                                        labelId="msg-period-label"
+                                        id="msg-period"
+                                        value={ this.state.msgPeriod }
+                                        onChange={ this.handleChangePeriod }
+                                      >
+                                        { periodList && (periodList).map( (item) => (
+                                          <MenuItem key={ item.id } value={ item.id }>{ item.attributes.name }</MenuItem>
+                                        ))}
+                                      </Select>
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={12} sm={4}>
+                                    <FormControl fullWidth className={classes.comboboxFormControl}>
+                                      <InputLabel id='msg-category-med-care-type-label' >Вид помощи</InputLabel>
+                                      <Select
+                                        fullWidth
+                                        labelId="msg-category-med-care-type-label"
+                                        id="msg-category-med-care-type"
+                                        value={ this.state.msgCategoryMedCareType }
+                                        onChange={ this.handleChangeMsgCategoryMedCareType }
+                                      >
+                                        { medCareType && (medCareType).map( (item) => (
+                                          <MenuItem key={ item.id } value={ item.id }>{ item.title }</MenuItem>
+                                        ))}
+                                      </Select>
+                                    </FormControl>
+                                </Grid>
+                                
+                                <Grid item xs={12}>
+                                      <TextField
+                                        fullWidth
+                                        
+                                        id="msg-text"
+                                        label="Дополнительная информация (необязательно)"
+                                        multiline
+                                        rows = {4}
+                                        maxRows={20}
+                                        value={this.state.msgText}
+                                        onChange={this.handleChangeMsgText}
+                                        variant="outlined"
+                                        margin="normal"
+                                      />
+                                </Grid>
+                                <Grid item xs={12}>
+                                  <Typography variant="body1" align="left">
+                                    Прикрепленные файлы
+                                  </Typography>                          
+                              
+                                  <CertDialog selectedValue={this.state.certDialogSelectedValue} open={this.state.certDialogOpen} onClose={this.handleCloseCertDialog} />
+                                  <FilesList 
+                                      items={this.state.msgFiles} 
+                                      rowsPerPage={this.state.msgFiles.length} 
+                                      page={0} 
+                                      loading={this.props.loading} 
+                                      getFile={ (url, filename) => { 
+                                          fileService.getFile(url).then(
+                                              fileBlob => fileDownload(fileBlob, filename),
+                                              error    => alert(`Файл не сформирован или доступ к файлу запрещён. Msg: ${error}`)
+                                          )}
+                                      }
+                                      saveFileSignAsBase64={ (result, signFileName) => {
+                                              // Скачиваем текстовый файл(base64)
+                                              textFileDownload(result,signFileName+'.sig');
+                                          }
+                                      }
+                                      saveFileSignAsBin={ (result, signFileName) => {
+                                              fetch('data:application/octet-stream;base64,'+result).then((response) => {
+                                                      response.blob().then(blob => {
+                                                              // Скачиваем бинарный файл
+                                                              fileDownload(blob,signFileName+'.sgn')
+                                                      })
+                                                  })
+                                          }
+                                      }
+                                      fileSign={this.handleClickSign}
+                                      users={this.props.users}
+                                   />
+                                </Grid>
+                            </Grid>
+                          </form>
+                          </Grid>
+                          <Grid item xs={12}>
+                          <UploadFile onUploadFile={(result) => this.handleOnUploadFile(result)} />
+                          <div className={classes.buttonSendDiv} >
+                              <div className={classes.wrapper}>
+                                <Button 
+                                  variant="contained"
+                                  color="primary"
+                                  type="submit" 
+                                  disabled={this.state.msgSending}
+                                  startIcon={<SendIcon />}
+                                  onClick={(e)=>this._handleSubmit(e)}>Отправить</Button>
+                                {this.state.msgSending && <CircularProgress size={24} className={classes.buttonProgress} />}
+                              </div>
+                          </div>
+                          </Grid>
+                      </Grid>
+                    </Paper>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </Container>
-        </div>
+              </Container>
+          </div>
       );
   }
 }

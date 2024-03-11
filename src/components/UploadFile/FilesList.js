@@ -1,27 +1,27 @@
 /* eslint-disable no-script-url */
 
 import React from 'react';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import Title from '../../dashboard/Title';
-import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 
-import Chip from '@material-ui/core/Chip';
+import Chip from '@mui/material/Chip';
 
-import Checkbox from '@material-ui/core/Checkbox';
+import Checkbox from '@mui/material/Checkbox';
 
-import Skeleton from '@material-ui/lab/Skeleton';
+import Skeleton from '@mui/material/Skeleton';
 
-import Link from '@material-ui/core/Link';
-import IconButton from '@material-ui/core/IconButton';
-import GetAppIcon from '@material-ui/icons/GetApp';
-import HowToRegIcon from '@material-ui/icons/HowToReg';
-import PictureInPictureAltIcon from '@material-ui/icons/PictureInPictureAlt';
-import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
+import Link from '@mui/material/Link';
+import IconButton from '@mui/material/IconButton';
+import GetAppIcon from '@mui/icons-material/GetApp';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import PictureInPictureAltIcon from '@mui/icons-material/PictureInPictureAlt';
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
 import moment from 'moment';
 
@@ -50,7 +50,7 @@ class FilesList extends React.Component {
         <React.Fragment>
           
             { this.props.loading ?
-             <Skeleton animation="wave" variant="rect" height={ skeletonHeight } />
+             <Skeleton animation="wave" variant="rectangular" height={ skeletonHeight } />
              :
               <Table size="small">
                 <TableHead>
@@ -98,22 +98,34 @@ class FilesList extends React.Component {
                       </TableCell>
                       <TableCell>
                         <Tooltip title="Скачать файл">
-                          <IconButton aria-label="download" onClick={ () => { this.props.getFile(row.attributes.link, row.attributes.name) } } ><GetAppIcon /></IconButton>
+                          <IconButton
+                            aria-label="download"
+                            onClick={ () => { this.props.getFile(row.attributes.link, row.attributes.name) } }
+                            size="large"><GetAppIcon /></IconButton>
                         </Tooltip>
                         { this.props.fileSignArray[row.id] && (this.props.fileSignArray[row.id].length > 0) &&
                         <Tooltip title="Скачать копию файла в формате PDF">
-                          <IconButton aria-label="download" onClick={ () => { this.props.getFile(row.attributes.linkPdf, row.attributes.name + '.pdf') } } ><PictureAsPdfIcon /></IconButton>
+                          <IconButton
+                            aria-label="download"
+                            onClick={ () => { this.props.getFile(row.attributes.linkPdf, row.attributes.name + '.pdf') } }
+                            size="large"><PictureAsPdfIcon /></IconButton>
                         </Tooltip>
                         }
                         { (this.props.fileSignArray[row.id] && this.props.fileSignArray[row.id].length > 0) &&
                         <Tooltip title="Скачать копию файла с отметкой об электронной подписи">
-                          <IconButton aria-label="download" onClick={ () => { this.props.getFile(row.attributes.linkStamped, row.attributes.name + '.pdf') } } ><PictureInPictureAltIcon /></IconButton>
+                          <IconButton
+                            aria-label="download"
+                            onClick={ () => { this.props.getFile(row.attributes.linkStamped, row.attributes.name + '.pdf') } }
+                            size="large"><PictureInPictureAltIcon /></IconButton>
                         </Tooltip>
                         }
                       </TableCell>
                       <TableCell>
                         <Tooltip title="Подписать файл электронной подписью">
-                          <IconButton aria-label="sign" onClick={ () => { this.props.fileSign(row) } } ><HowToRegIcon /></IconButton>
+                          <IconButton
+                            aria-label="sign"
+                            onClick={ () => { this.props.fileSign(row) } }
+                            size="large"><HowToRegIcon /></IconButton>
                         </Tooltip>
                       </TableCell>
                       <TableCell>

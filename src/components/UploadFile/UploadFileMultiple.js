@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { withStyles } from '@material-ui/core/styles';
-import { green } from '@material-ui/core/colors';
+import withStyles from '@mui/styles/withStyles';
+import { green } from '@mui/material/colors';
 
-import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 import { fileService } from '../../services';
 

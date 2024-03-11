@@ -1,13 +1,12 @@
 import React from 'react';
 import { withRouter } from "react-router-dom";
-//import clsx from 'clsx';
-import { withStyles } from '@material-ui/core/styles';
-import { green } from '@material-ui/core/colors';
+import withStyles from '@mui/styles/withStyles';
+import { green } from '@mui/material/colors';
 
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import TablePagination from '@material-ui/core/TablePagination';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import TablePagination from '@mui/material/TablePagination';
 
 import BillList from './BillList';
 import BillsShowMessage from '../Bills/BillsShowMessage';

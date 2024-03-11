@@ -1,35 +1,35 @@
 import React from 'react';
 import { withRouter } from "react-router-dom";
 //import clsx from 'clsx';
-import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
-import Backdrop from '@material-ui/core/Backdrop';
-import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
-import Checkbox from '@material-ui/core/Checkbox';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
+import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
+import Backdrop from '@mui/material/Backdrop';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import Checkbox from '@mui/material/Checkbox';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
 
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Input from '@material-ui/core/Input';
-import FormHelperText from '@material-ui/core/FormHelperText';
+import FormGroup from '@mui/material/FormGroup';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Input from '@mui/material/Input';
+import FormHelperText from '@mui/material/FormHelperText';
 
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 import UploadFileMultiple from '../UploadFile/UploadFileMultiple';
 import FilesList from '../UploadFile/FilesList';
 
-import { withStyles } from '@material-ui/core/styles';
-import { green } from '@material-ui/core/colors';
+import withStyles from '@mui/styles/withStyles';
+import { green } from '@mui/material/colors';
 
-import SendIcon from '@material-ui/icons/Send';
-import HowToRegIcon from '@material-ui/icons/HowToReg';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
+import SendIcon from '@mui/icons-material/Send';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 import { connect } from 'react-redux';
 
@@ -47,7 +47,7 @@ import { fileDownload, textFileDownload } from '../../_helpers';
 import CertDialog from '../Dialog/CertDialog';
 
 import moment from 'moment';
-import { FormControlLabel, MenuItem, Radio, RadioGroup, Select } from '@material-ui/core';
+import { FormControlLabel, MenuItem, Radio, RadioGroup, Select } from '@mui/material';
 import { organizationFetch } from '../../store/organization/organizationAction';
 
 const styles = theme => ({
@@ -577,7 +577,7 @@ class MekNewMessage extends React.Component {
                                       label="Текст сообщения"
                                       multiline
                                       rows = {4}
-                                      rowsMax={20}
+                                      maxRows={20}
                                       value={this.state.msgText}
                                       onChange={this.handleChangeMsgText}
                                       variant="outlined"

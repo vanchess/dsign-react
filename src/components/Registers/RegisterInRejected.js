@@ -1,13 +1,12 @@
 import React from 'react';
 import { withRouter } from "react-router-dom";
-//import clsx from 'clsx';
-import { withStyles } from '@material-ui/core/styles';
-import { green } from '@material-ui/core/colors';
+import withStyles from '@mui/styles/withStyles';
+import { green } from '@mui/material/colors';
 
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import TablePagination from '@material-ui/core/TablePagination';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import TablePagination from '@mui/material/TablePagination';
 
 import MessageList from '../Message/MessageList';
 
@@ -78,46 +77,46 @@ class BillsInRejected extends React.Component {
       //const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
       return (
-          <div>
-            <Container maxWidth="lg" className={classes.container}>
-              <Grid container spacing={3}>
-                {/* Recent Orders */}
-                <Grid item xs={12}>
-                  <Paper className={classes.paper}>
+        <div>
+          <Container maxWidth="lg" className={classes.container}>
+            <Grid container spacing={3}>
+              {/* Recent Orders */}
+              <Grid item xs={12}>
+                <Paper className={classes.paper}>
 
-                    <MessageList 
-                        items={this.props.items} 
-                        rowsPerPage={this.props.perPage} 
-                        page={this.props.page} 
-                        loading={this.props.loading} 
-                        showItem={this.handleClickShowItem}
-                        displayColumnFrom={true}
-                        displayColumnTo={false}
-                        displayCategory={true}
-                     />
-                    { this.props.itemsTotal ?
-                    <TablePagination
-                       rowsPerPageOptions={[10, 15, 20, 50, 100, {value: -1, label: 'All'}]}
-                       component="div"
-                       count= {this.props.itemsTotal}
-                       rowsPerPage={this.props.perPage}
-                       page={this.props.page}
-                       backIconButtonProps={{
-                         'aria-label': 'Previous Page',
-                       }}
-                       nextIconButtonProps={{
-                         'aria-label': 'Next Page',
-                       }}
-                       
-                       onChangePage={this.props.handleChangePage}
-                       onChangeRowsPerPage={this.props.handleChangeRowsPerPage}
-                    /> : null }
+                  <MessageList 
+                      items={this.props.items} 
+                      rowsPerPage={this.props.perPage} 
+                      page={this.props.page} 
+                      loading={this.props.loading} 
+                      showItem={this.handleClickShowItem}
+                      displayColumnFrom={true}
+                      displayColumnTo={false}
+                      displayCategory={true}
+                   />
+                  { this.props.itemsTotal ?
+                  <TablePagination
+                     rowsPerPageOptions={[10, 15, 20, 50, 100, {value: -1, label: 'All'}]}
+                     component="div"
+                     count= {this.props.itemsTotal}
+                     rowsPerPage={this.props.perPage}
+                     page={this.props.page}
+                     backIconButtonProps={{
+                       'aria-label': 'Previous Page',
+                     }}
+                     nextIconButtonProps={{
+                       'aria-label': 'Next Page',
+                     }}
+                     
+                     onPageChange={this.props.handleChangePage}
+                     onRowsPerPageChange={this.props.handleChangeRowsPerPage}
+                  /> : null }
 
-                  </Paper>
-                </Grid>
+                </Paper>
               </Grid>
-            </Container>
-          </div>
+            </Grid>
+          </Container>
+        </div>
       );
   }
 }

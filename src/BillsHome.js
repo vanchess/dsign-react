@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Snackbar from '@material-ui/core/Snackbar';
-import Alert from '@material-ui/lab/Alert';
-import MailIcon from '@material-ui/icons/Mail';
-import LabelImportantIcon from '@material-ui/icons/LabelImportant';
-import ThumbDownAltOutlinedIcon from '@material-ui/icons/ThumbDownAltOutlined';
-import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import MailIcon from '@mui/icons-material/Mail';
+import LabelImportantIcon from '@mui/icons-material/LabelImportant';
+import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
+import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 
 import BillsRoutes from './routes/BillsRoutes';
 import Home from './Home';
