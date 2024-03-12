@@ -57,12 +57,12 @@ class RawHeader extends React.Component {
             <Typography component="h1" variant="h6" color="inherit" noWrap >
                 {this.props.userName}
             </Typography>
-            <Tooltip title="Перейти к выбору подсистемы">
+            <Tooltip title="Перейти к выбору подсистемы" disableInteractive>
               <IconButton color="inherit" component={Link} to={`/`} size="large">
                 <AppsIcon />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Выход из системы">
+            <Tooltip title="Выход из системы" disableInteractive>
               <IconButton color="inherit" onClick={() => this.props.logout()} size="large">
                 <ExitToAppIcon />
               </IconButton>

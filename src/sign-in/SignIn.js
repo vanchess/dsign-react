@@ -171,7 +171,7 @@ class SignIn extends React.Component {
                           </IconButton>
                         </InputAdornment>
                       }
-                      labelWidth={60}
+                      label="Пароль"
                     />
                 </FormControl>
                 {/*

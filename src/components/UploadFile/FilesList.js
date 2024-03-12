@@ -6,7 +6,6 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Title from '../../dashboard/Title';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
@@ -16,7 +15,6 @@ import Checkbox from '@mui/material/Checkbox';
 
 import Skeleton from '@mui/material/Skeleton';
 
-import Link from '@mui/material/Link';
 import IconButton from '@mui/material/IconButton';
 import GetAppIcon from '@mui/icons-material/GetApp';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
@@ -92,19 +90,19 @@ class FilesList extends React.Component {
                     }
                       <TableCell>{i++}</TableCell>
                       <TableCell>
-                        <Tooltip title={'Дата загрузки в систему: '+moment(row.attributes.created_at,"YYYY-MM-DDTHH:mm:ss.SSSSSSZ").local().format("DD.MM.YYYY HH:mm")}>
+                        <Tooltip title={'Дата загрузки в систему: '+moment(row.attributes.created_at,"YYYY-MM-DDTHH:mm:ss.SSSSSSZ").local().format("DD.MM.YYYY HH:mm")} disableInteractive>
                             <Typography variant="body2" component="span">{row.attributes.name}</Typography>
                         </Tooltip>
                       </TableCell>
                       <TableCell>
-                        <Tooltip title="Скачать файл">
+                        <Tooltip title="Скачать файл" disableInteractive>
                           <IconButton
                             aria-label="download"
                             onClick={ () => { this.props.getFile(row.attributes.link, row.attributes.name) } }
                             size="large"><GetAppIcon /></IconButton>
                         </Tooltip>
                         { this.props.fileSignArray[row.id] && (this.props.fileSignArray[row.id].length > 0) &&
-                        <Tooltip title="Скачать копию файла в формате PDF">
+                        <Tooltip title="Скачать копию файла в формате PDF" disableInteractive>
                           <IconButton
                             aria-label="download"
                             onClick={ () => { this.props.getFile(row.attributes.linkPdf, row.attributes.name + '.pdf') } }
@@ -112,7 +110,7 @@ class FilesList extends React.Component {
                         </Tooltip>
                         }
                         { (this.props.fileSignArray[row.id] && this.props.fileSignArray[row.id].length > 0) &&
-                        <Tooltip title="Скачать копию файла с отметкой об электронной подписи">
+                        <Tooltip title="Скачать копию файла с отметкой об электронной подписи" disableInteractive>
                           <IconButton
                             aria-label="download"
                             onClick={ () => { this.props.getFile(row.attributes.linkStamped, row.attributes.name + '.pdf') } }
@@ -121,7 +119,7 @@ class FilesList extends React.Component {
                         }
                       </TableCell>
                       <TableCell>
-                        <Tooltip title="Подписать файл электронной подписью">
+                        <Tooltip title="Подписать файл электронной подписью" disableInteractive>
                           <IconButton
                             aria-label="sign"
                             onClick={ () => { this.props.fileSign(row) } }
@@ -131,7 +129,7 @@ class FilesList extends React.Component {
                       <TableCell>
                         {this.props.fileSignArray[row.id] && (this.props.fileSignArray[row.id]).map((sign) => (
                             <div key={sign.id} >
-                              <Tooltip title={ moment(sign.attributes.created_at,"YYYY-MM-DDTHH:mm:ss.SSSSSSZ").local().format("DD.MM.YYYY HH:mm") + (sign.attributes.verified_on_server_error_srt ? ' ! Ошибка при проверке подписи: ' + sign.attributes.verified_on_server_error_srt : '') }>
+                              <Tooltip title={ moment(sign.attributes.created_at,"YYYY-MM-DDTHH:mm:ss.SSSSSSZ").local().format("DD.MM.YYYY HH:mm") + (sign.attributes.verified_on_server_error_srt ? ' ! Ошибка при проверке подписи: ' + sign.attributes.verified_on_server_error_srt : '') } disableInteractive>
                                 <Chip 
                                     style = {{cursor: 'pointer'}}
                                     label={ this.props.users[sign.attributes.user_id] ? this.props.users[sign.attributes.user_id].attributes.name : '<имя пользователя не загружено>' } 

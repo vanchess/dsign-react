@@ -2,7 +2,6 @@ import React from 'react';
 // import Button from '@mui/material/Button';
 // import ThreeDRotation from '@mui/icons-material/ThreeDRotation';
 // import IconButton from '@mui/material/IconButton';
-//import SvgIcon from '@mui/material/SvgIcon';
 import 'typeface-roboto';
 
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,9 +9,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { Header } from './components/Header'; 
 import { Sidebar } from './components/Sidebar'; 
 import { MainListItems, secondaryListItems } from './components/Sidebar/listItems';
-
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
 
 import withStyles from '@mui/styles/withStyles';
 

@@ -150,7 +150,7 @@ class TempTODOTempTempFilesList extends React.Component {
                       <TableCell>{row.attributes.name}</TableCell>
                       <TableCell>{moment(row.attributes.created_at,"YYYY-MM-DDTHH:mm:ss.SSSSSSZ").local().format("DD.MM.YYYY HH:mm")}</TableCell>
                       <TableCell>
-                        <Tooltip title="Скачать файл">
+                        <Tooltip title="Скачать файл" disableInteractive>
                           <IconButton
                             aria-label="download"
                             onClick={ () => { this.props.getFile(row.attributes.link, row.attributes.name) } }
@@ -158,7 +158,7 @@ class TempTODOTempTempFilesList extends React.Component {
                         </Tooltip>
                       </TableCell>
                       <TableCell>
-                        <Tooltip title="Подписать файл электронной подписью">
+                        <Tooltip title="Подписать файл электронной подписью" disableInteractive>
                           <IconButton
                             aria-label="sign"
                             onClick={ () => { this.props.fileSign(row, this.handleAddFileSign(row.id) ) } }
@@ -169,13 +169,13 @@ class TempTODOTempTempFilesList extends React.Component {
                         {this.state.fileSign[row.id] && (this.state.fileSign[row.id]).map((sign) => (
                             <p key={sign.id}>
                                 { this.props.users[sign.attributes.user_id].attributes.name } Дата: {moment(sign.attributes.created_at,"YYYY-MM-DDTHH:mm:ss.SSSSSSZ").local().format("DD.MM.YYYY HH:mm")}
-                              <Tooltip title="Скачать файл электронной подписи в текстовом виде (BASE64)">
+                              <Tooltip title="Скачать файл электронной подписи в текстовом виде (BASE64)" disableInteractive>
                                 <IconButton
                                   aria-label="download"
                                   onClick={ () => { this.props.saveFileSignAsBase64(sign.attributes.base64, row.attributes.name) } }
                                   size="large"><GetAppIcon /></IconButton>
                               </Tooltip>
-                              <Tooltip title="Скачать файл электронной подписи в бинарном виде">
+                              <Tooltip title="Скачать файл электронной подписи в бинарном виде" disableInteractive>
                                 <IconButton
                                   aria-label="download"
                                   onClick={ () => { this.props.saveFileSignAsBin(sign.attributes.base64, row.attributes.name) } }

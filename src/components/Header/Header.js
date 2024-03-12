@@ -7,8 +7,6 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import AppsIcon from '@mui/icons-material/Apps';
 import Typography from '@mui/material/Typography';
-import Badge from '@mui/material/Badge';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import Tooltip from '@mui/material/Tooltip';
 import { Link } from 'react-router-dom';
@@ -76,12 +74,12 @@ class RawHeader extends React.Component {
             <Typography component="h1" variant="h6" color="inherit" noWrap >
                 {this.props.userName}
             </Typography>
-            <Tooltip title="Перейти к выбору подсистемы">
+            <Tooltip title="Перейти к выбору подсистемы" disableInteractive>
               <IconButton color="inherit" component={Link} to={`/`} size="large">
                 <AppsIcon />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Выход из системы">
+            <Tooltip title="Выход из системы" disableInteractive>
               <IconButton color="inherit" onClick={() => this.props.logout()} size="large">
                 <ExitToAppIcon />
               </IconButton>

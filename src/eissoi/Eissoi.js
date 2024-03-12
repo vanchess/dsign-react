@@ -195,7 +195,7 @@ export default function Eissoi() {
                         </TableCell>
                         <TableCell>
                         {fileSignArray[row.id] && (
-                          <Tooltip title="Скачать архив с подписью">
+                          <Tooltip title="Скачать архив с подписью" disableInteractive>
                             <div className={classes.wrapper}>
                               <IconButton
                                   aria-label="zip"
@@ -208,7 +208,7 @@ export default function Eissoi() {
                         )}
                         </TableCell>
                         <TableCell>
-                          <Tooltip title="Подписать файл электронной подписью">
+                          <Tooltip title="Подписать файл электронной подписью" disableInteractive>
 
                             <div className={classes.wrapper}>
                               <IconButton

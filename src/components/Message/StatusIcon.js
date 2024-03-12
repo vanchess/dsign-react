@@ -33,7 +33,7 @@ export default function StatusIcon(props) {
   if(props.name == 'sent')
   {
     return (
-        <Tooltip title={props.label} aria-label={props.label}>
+        <Tooltip title={props.label} aria-label={props.label} disableInteractive>
             <ReportProblemIcon color="secondary" />
         </Tooltip>
     );
@@ -41,7 +41,7 @@ export default function StatusIcon(props) {
   if(props.name == 'signed_by_specialist')
   {
     return (
-        <Tooltip title={props.label} aria-label={props.label}>
+        <Tooltip title={props.label} aria-label={props.label} disableInteractive>
             <AdjustIcon color="secondary" />
         </Tooltip>
     );
@@ -49,7 +49,7 @@ export default function StatusIcon(props) {
   if(props.name == 'ready')
   {
       return (
-        <Tooltip title={props.label} aria-label={props.label}>
+        <Tooltip title={props.label} aria-label={props.label} disableInteractive>
             <CheckIcon style={{ color: green[500] }} />
         </Tooltip>
       );
@@ -57,7 +57,7 @@ export default function StatusIcon(props) {
   if(props.name == 'no_files')
   {
       return (
-        <Tooltip title={props.label} aria-label={props.label}>
+        <Tooltip title={props.label} aria-label={props.label} disableInteractive>
             <NoSimIcon color="primary" />
         </Tooltip>
       );
@@ -65,7 +65,7 @@ export default function StatusIcon(props) {
   if(props.name == 'rejected' || props.name == 'rejected_flc')
   {
       return (
-        <Tooltip title={props.label} aria-label={props.label}>
+        <Tooltip title={props.label} aria-label={props.label} disableInteractive>
             <ThumbDownAltOutlinedIcon color="secondary" />
         </Tooltip>
       );
@@ -73,7 +73,7 @@ export default function StatusIcon(props) {
   if(props.name == 'signed_mo')
   {
     return (
-        <Tooltip title={props.label} aria-label={props.label}>
+        <Tooltip title={props.label} aria-label={props.label} disableInteractive>
             <CheckCircleIcon style={{ color: yellow[500] }} />
         </Tooltip>
     );
@@ -81,7 +81,7 @@ export default function StatusIcon(props) {
   if(props.name == 'in_progress')
   {
       return (
-        <Tooltip title={props.label} aria-label={props.label}>
+        <Tooltip title={props.label} aria-label={props.label} disableInteractive>
             <ComputerIcon style={{ color: yellow[500] }} />
         </Tooltip>
       );
@@ -89,7 +89,7 @@ export default function StatusIcon(props) {
   if(props.name == 'loaded')
   {
       return (
-        <Tooltip title={props.label} aria-label={props.label}>
+        <Tooltip title={props.label} aria-label={props.label} disableInteractive>
             <ComputerIcon style={{ color: green[500] }} />
         </Tooltip>
       );
@@ -97,7 +97,7 @@ export default function StatusIcon(props) {
   if(props.name == 'sent-to-smo')
   {
       return (
-        <Tooltip title={props.label} aria-label={props.label}>
+        <Tooltip title={props.label} aria-label={props.label} disableInteractive>
             <SendIcon style={{ color: green[500] }} />
         </Tooltip>
       );
@@ -105,7 +105,7 @@ export default function StatusIcon(props) {
   
   
    return (
-        <Tooltip title={props.label} aria-label={props.label}>
+        <Tooltip title={props.label} aria-label={props.label} disableInteractive>
             <AdjustIcon style={{ color: yellow[500] }} />
         </Tooltip>
    );

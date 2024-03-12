@@ -21,7 +21,7 @@ export default function ActionButton(props) {
   const classes = useStyles();
   
   return (
-    <Tooltip title={ props.tooltip }>
+    <Tooltip title={ props.tooltip } disableInteractive>
         <Fab component={Link} to={ props.to }
             variant={props.open?'extended':'round'}
             color="secondary"
