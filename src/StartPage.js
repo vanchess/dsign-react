@@ -20,7 +20,7 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="http://ktfoms.orbitel.ru/" underline="hover">
+      <Link color="inherit" href="https://ktfoms.orbitel.ru/" underline="hover">
         ТФ ОМС Курганской области
       </Link>{' '}
       2021-{new Date().getFullYear()}
@@ -164,7 +164,7 @@ export default function StartPage() {
                     { card.text }
                     </Typography>
                     <Typography color="secondary">
-                    НОВОЕ: Соглашения о софинансировании заработной платы медицинских работников
+                    НОВОЕ
                     </Typography>
                   </CardContent>
                   {/*
