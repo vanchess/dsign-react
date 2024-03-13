@@ -14,6 +14,7 @@
     "@mui/lab": "^5.0.0-alpha.167",
     "@mui/material": "^5.15.12",
     "@mui/styles": "^5.15.12",
+    "@mui/x-data-grid": "^5.15.12",
     "axios": "^0.21.1",
     "fontsource-roboto": "^4.0.0",
     "jszip": "^3.10.1",

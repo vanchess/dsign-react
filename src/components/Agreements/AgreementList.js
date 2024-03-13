@@ -1,8 +1,5 @@
 import * as React from 'react';
-import { 
-    DataGrid, 
-    getGridNumericColumnOperators
-} from '@material-ui/data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 
 import makeStyles from '@mui/styles/makeStyles';
 

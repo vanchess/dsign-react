@@ -1,4 +1,4 @@
-import { useGridSlotComponentProps  } from '@material-ui/data-grid';
+import { useGridApiContext  } from '@mui/x-data-grid';
 import makeStyles from '@mui/styles/makeStyles';
 import Pagination from '@mui/material/Pagination';
 
@@ -9,7 +9,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function CustomPagination() {
-  const { state, apiRef } = useGridSlotComponentProps();
+  const apiRef = useGridApiContext();
+  const state = apiRef.current.state;
   const classes = useStyles();
 
   return (

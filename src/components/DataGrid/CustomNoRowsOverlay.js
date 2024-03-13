@@ -1,4 +1,4 @@
-import { GridOverlay } from '@material-ui/data-grid';
+import { GridOverlay } from '@mui/x-data-grid';
 import makeStyles from '@mui/styles/makeStyles';
 
 const useStyles = makeStyles((theme) => ({

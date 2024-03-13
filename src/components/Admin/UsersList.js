@@ -1,4 +1,4 @@
-import { DataGrid } from "@material-ui/data-grid";
+import { DataGrid } from '@mui/x-data-grid';
 import React from "react";
 import CustomLoadingOverlay from "../DataGrid/CustomLoadingOverlay";
 import CustomNoRowsOverlay from "../DataGrid/CustomNoRowsOverlay";
@@ -18,7 +18,7 @@ export default function UserList(props) {
                 rows={
                     items.map((item) => {
                         return ({
-                            'id': item.id, 
+                            id: item.id, 
                             'name': item.attributes.name,
                             'fio': `${item.attributes.last_name} ${item.attributes.first_name} ${item.attributes.middle_name}`,
                             'job_title_branch': `${item.attributes.job_title} (${item.attributes.branch})`,
@@ -35,7 +35,7 @@ export default function UserList(props) {
                                 return res;
                               }, []),
                         });
-                    })
+                    }).filter(item => item != null)
                 } 
                 columns={props.columns} 
                 /*

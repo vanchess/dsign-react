@@ -3,8 +3,7 @@ import {
     GridToolbarDensitySelector, 
     GridToolbarColumnsButton,
     GridToolbarFilterButton,
-    getGridNumericColumnOperators
-} from '@material-ui/data-grid';
+} from '@mui/x-data-grid';
 
 
 export default function CustomToolbar() {
