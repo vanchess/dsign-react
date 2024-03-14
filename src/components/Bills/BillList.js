@@ -11,7 +11,7 @@ export default function BillList(props) {
   const periodList = useSelector(store => store.periodReducer.items);
 console.log(periodList);
   return (
-    <div style={{ minHeight: '400px', height: 'calc(100vh - 128px)',width: '100%' }}>
+    <div style={{ minHeight: '400px', height: 'calc(100vh - 128px)', width: '100%' }}>
       
       <DataGrid 
         pagination 
