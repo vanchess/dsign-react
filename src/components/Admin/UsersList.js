@@ -14,7 +14,7 @@ export default function UserList(props) {
                 pagination 
                 density="compact"
                 loading = {props.loading}
-                rowsPerPageOptions={[5, 10, 20]}
+                pageSizeOptions={[5, 10, 20]}
                 rows={
                     items.map((item) => {
                         return ({

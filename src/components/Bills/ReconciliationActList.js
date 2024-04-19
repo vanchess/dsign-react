@@ -25,7 +25,7 @@ export default function ReconciliationActList(props) {
         pagination 
         density="compact"
         loading = {props.loading}
-        rowsPerPageOptions={[5, 10, 20]}
+        pageSizeOptions={[5, 10, 20]}
         rows={
             props.items.map((msg) => {
                 return ({
