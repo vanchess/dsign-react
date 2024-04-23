@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles';
-import { ruRU } from '@mui/x-data-grid';
+import { ruRU } from '@mui/x-data-grid/locales';
 import './index.css';
 import App from './App';
 //import * as serviceWorker from './serviceWorker';
