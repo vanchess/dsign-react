@@ -135,7 +135,7 @@ export default function PD(props) {
         error  => (history.push('/'))
       )
   },[]);
-  console.log(pDate);
+  // console.log(pDate);
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />

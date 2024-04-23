@@ -120,7 +120,7 @@ class MekOutMessage extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  console.log(store);
+  // console.log(store);
   return {
       items: store.expertiseReducer.outgoing.items, 
       page: store.paginationReducer.expertise.outgoing.page, 

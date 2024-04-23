@@ -42,13 +42,13 @@ class UploadFile extends React.Component {
   _handleSubmit(e) {
     e.preventDefault();
 
-    console.log('handle uploading-', this.state.file);
+    // console.log('handle uploading-', this.state.file);
     this.setState({
         uploading: true
       });
     fileService.upload(this.state.file).then(
         result => {
-            console.log(result);
+            // console.log(result);
             this.setState({
                 file: '',
                 uploading: false,

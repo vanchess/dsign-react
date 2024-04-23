@@ -161,7 +161,7 @@ class BillsInMessage extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  console.log(store);
+  // console.log(store);
   return {
       items: store.billReducer.incoming.items, 
       // page: store.paginationReducer.bill.incoming.page, 

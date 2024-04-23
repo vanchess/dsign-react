@@ -64,7 +64,7 @@ class ExpertiseHome extends React.Component {
 
 
 const mapStateToProps = function(store) {
-  console.log(store);
+  // console.log(store);
   return {
         permission: store.authReducer.user.permissions,
     };

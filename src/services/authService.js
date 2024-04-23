@@ -92,7 +92,7 @@ export class authService {
             msg = `Ошибка! ${error}`;
         }
 
-        console.log(msg);
+        // console.log(msg);
         return Promise.reject(msg);
     }
 }

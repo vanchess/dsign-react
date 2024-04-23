@@ -162,7 +162,7 @@ class RegisterInMessage extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  console.log(store);
+  // console.log(store);
   return {
       items: store.registerReducer.incoming.items, 
       // page: store.paginationReducer.bill.incoming.page, 

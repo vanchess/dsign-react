@@ -162,7 +162,7 @@ class ReconciliationActIn extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  console.log(store);
+  // console.log(store);
   return {
       items: store.billReducer.reconciliationAct.items, 
       // page: store.paginationReducer.bill.incoming.page, 

@@ -189,7 +189,7 @@ class MyFiles extends React.Component {
 
 
 const mapStateToProps = function(store) {
-  console.log(store);
+  // console.log(store);
   return {
       items: store.myFileReducer.items, 
       page: store.paginationReducer.myFile.page, 

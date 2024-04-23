@@ -315,7 +315,7 @@ class RegisterNewMessage extends React.Component {
         msg.category = [this.state.msgCategoryPs, this.state.msgCategoryMedCareType]
         msg.period  = this.state.msgPeriod;
         
-        console.log(msg);
+        // console.log(msg);
         messageService.sendMsg(msg).then(
             () => { 
                 this.setState({
@@ -496,7 +496,7 @@ class RegisterNewMessage extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  console.log(store);
+  // console.log(store);
   return {
       users: store.userReducer.items,
       usersLoading: store.userReducer.loading,

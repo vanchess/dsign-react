@@ -68,7 +68,7 @@ class TempTODOTempTempFilesList extends React.Component {
         
         addFileSign(file_id, sign) {
             this.setState((state) => {
-                console.log(state.fileSign);
+                // console.log(state.fileSign);
                 let newFileSignArr = { ...(state.fileSign) };
                 if (state.fileSign[file_id]) {
                     newFileSignArr[file_id]=[...(state.fileSign[file_id]), sign];

@@ -67,7 +67,7 @@ class MedicalInstitution extends React.Component {
       //const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
       //this.props.handleSetTitle('123');
       
-      console.log('rerender ');
+      //console.log('rerender ');
       
       return (
         <main className={classes.content}>
@@ -105,7 +105,7 @@ class MedicalInstitution extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  console.log(store);
+  // console.log(store);
   return {
       medicalInstitution: store.medicalInstitutionReducer.medicalInstitutions, 
       page: store.paginationReducer.medicalInstitution.page, 

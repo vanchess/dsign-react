@@ -41,13 +41,13 @@ class UploadFileMultiple extends React.Component {
   _handleSubmit(e) {
     e.preventDefault();
 
-    console.log('handle uploading-', this.state.attachment);
+    // console.log('handle uploading-', this.state.attachment);
     this.setState({
         uploading: true
       });
     fileService.uploadMultiple(this.state.attachment).then(
         result => {
-            console.log(result);
+            // console.log(result);
             this.setState({
                 attachment: [],
                 uploading: false,

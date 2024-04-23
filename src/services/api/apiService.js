@@ -27,7 +27,7 @@ export class apiService {
         const header = response.headers.get('Content-Disposition');
         const parts = header.split(';');
         const filename = parts[1].split('=')[1];
-        console.log(filename);
+        // console.log(filename);
         return response.blob().then(blob => {
             if (!response.ok) {
                 if (response.status === 401) {
@@ -66,8 +66,8 @@ export class apiService {
     }
     
     static handleAxiosResponse(response) {
-        console.log('Success');
-        console.log(response);
+        // console.log('Success');
+        // console.log(response);
         
         if (response) {
             return Promise.resolve(response);

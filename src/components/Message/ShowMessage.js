@@ -195,8 +195,8 @@ class ShowMessage extends React.Component {
     
     handleClickGetFileMultiple = async () => {
         let len = this.state.selectedMsgFilesIds.length;
-        console.log(this.state.selectedMsgFilesIds);
-        console.log(len);
+        // console.log(this.state.selectedMsgFilesIds);
+        // console.log(len);
         for(let i = 0; i < len; i++) {
           try {
             let fileId = this.state.selectedMsgFilesIds[i];
@@ -213,8 +213,8 @@ class ShowMessage extends React.Component {
         
         let cert = this.certDialogSelectedValue.cert;
         let len = this.state.selectedMsgFilesIds.length;
-        console.log(this.state.selectedMsgFilesIds);
-        console.log(len);
+        // console.log(this.state.selectedMsgFilesIds);
+        // console.log(len);
         for(let i = 0; i < len; i++) {
           try {
             let fileId = this.state.selectedMsgFilesIds[i];
@@ -323,7 +323,7 @@ class ShowMessage extends React.Component {
           const newSelecteds = this.state.msgFiles.map((n) => n.id);
          
           this.setState({selectedMsgFilesIds: newSelecteds});
-          console.log(newSelecteds);
+          // console.log(newSelecteds);
           return;
         }
         this.setState({selectedMsgFilesIds: []});

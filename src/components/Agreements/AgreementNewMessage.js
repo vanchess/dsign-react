@@ -313,7 +313,7 @@ class AgreementNewMessage extends React.Component {
         msg.attach  = this.state.msgFiles.map(item => item.id);
         msg.type    = this.props.match.params.type;
 
-        console.log(msg);
+        // console.log(msg);
         messageService.sendMsg(msg).then(
             () => { 
                 this.setState({

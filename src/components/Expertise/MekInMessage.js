@@ -122,7 +122,7 @@ class InMessage extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  console.log(store);
+  // console.log(store);
   return {
       items: store.expertiseReducer.incoming.items, 
       page: store.paginationReducer.expertise.incoming.page, 

@@ -121,7 +121,7 @@ class OutMessage extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  console.log(store);
+  // console.log(store);
   return {
       items: store.messageReducer.outgoing.items, 
       page: store.paginationReducer.message.outgoing.page, 
