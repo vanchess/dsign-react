@@ -58,18 +58,18 @@ export function inOperator(statuses) {
         value: 'in',
         getApplyFilterFn: (filterItem) => {
           if (
-            !filterItem.columnField ||
+            !filterItem.field ||
             !filterItem.value ||
-            !filterItem.operatorValue
+            !filterItem.operator
           ) {
             return null;
           }
 
-          return (params) => {
+          return (value, row, column, apiRef) => {
               if (filterItem.value.length == 0) {
                 return true;
               }
-              return filterItem.value.includes(params.value.name);
+              return filterItem.value.includes(value.name);
                 //return Number(.name) == Number(filterItem.value.name);
           };
         },

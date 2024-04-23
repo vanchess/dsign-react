@@ -1,33 +1,34 @@
 import { GridOverlay } from '@mui/x-data-grid';
-import makeStyles from '@mui/styles/makeStyles';
+import { styled } from '@mui/styles';
+import { Box } from '@mui/material';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexDirection: 'column',
-    '& .ant-empty-img-1': {
-      fill: theme.palette.mode === 'light' ? '#aeb8c2' : '#262626',
-    },
-    '& .ant-empty-img-2': {
-      fill: theme.palette.mode === 'light' ? '#f5f5f7' : '#595959',
-    },
-    '& .ant-empty-img-3': {
-      fill: theme.palette.mode === 'light' ? '#dce0e6' : '#434343',
-    },
-    '& .ant-empty-img-4': {
-      fill: theme.palette.mode === 'light' ? '#fff' : '#1c1c1c',
-    },
-    '& .ant-empty-img-5': {
-      fillOpacity: theme.palette.mode === 'light' ? '0.8' : '0.08',
-      fill: theme.palette.mode === 'light' ? '#f5f5f5' : '#fff',
-    },
-  }
+const StyledGridOverlay = styled('div')(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  height: '100%',
+  '& .ant-empty-img-1': {
+    fill: theme.palette.mode === 'light' ? '#aeb8c2' : '#262626',
+  },
+  '& .ant-empty-img-2': {
+    fill: theme.palette.mode === 'light' ? '#f5f5f7' : '#595959',
+  },
+  '& .ant-empty-img-3': {
+    fill: theme.palette.mode === 'light' ? '#dce0e6' : '#434343',
+  },
+  '& .ant-empty-img-4': {
+    fill: theme.palette.mode === 'light' ? '#fff' : '#1c1c1c',
+  },
+  '& .ant-empty-img-5': {
+    fillOpacity: theme.palette.mode === 'light' ? '0.8' : '0.08',
+    fill: theme.palette.mode === 'light' ? '#f5f5f5' : '#fff',
+  },
 }));
 
 export default function CustomNoRowsOverlay() {
-  const classes = useStyles();
-
   return (
-    <GridOverlay className={classes.root}>
+    <StyledGridOverlay>
       <svg
         width="120"
         height="100"
@@ -67,7 +68,7 @@ export default function CustomNoRowsOverlay() {
           </g>
         </g>
       </svg>
-      <div className={classes.label}>Нет строк</div>
-    </GridOverlay>
+      <Box sx={{ mt: 1 }}>Нет строк</Box>
+    </StyledGridOverlay>
   );
 }

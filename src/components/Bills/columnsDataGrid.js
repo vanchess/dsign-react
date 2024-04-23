@@ -25,13 +25,17 @@ const renderOpenButton = (onClick) => {
 }
 
 export const createColumns = (statuses, onClick) => {
+
     return [
-      { field: 'id', headerName: 'ID', width: 70, hide: true },
+      { field: 'id', headerName: 'ID', width: 70, hide: true, type: 'number', },
       { field: 'from', headerName: 'От кого', flex: 1 },
       {
         field: 'category',
         headerName: 'Категория',
         description: 'Категория',
+        valueFormatter: (params) => {
+          return ( params.value?.map( (c) => c.short_title).join())
+        },
         renderCell: (params) => {
             return ( params.value.map( (c) => 
                 (<Chip key={c.name} label={c.short_title}/>)
@@ -57,6 +61,8 @@ export const createColumns = (statuses, onClick) => {
         field: 'status',
         headerName: 'Статус',
         description: 'Статус',
+        type: 'singleSelect',
+        valueFormatter: (params) => params.value?.lable,
         renderCell: (params) => (
             <StatusIcon label={params.value.lable} name={params.value.name} />
         ),
@@ -67,12 +73,14 @@ export const createColumns = (statuses, onClick) => {
       {
         field: 'action',
         headerName: 'Действия',
+        type: 'action',
         description: '',
         renderCell: renderOpenButton(onClick),
         //filterOperators: statusOnlyOperators,
         width: 150,
         sortable: false,
-        filterable: false
+        filterable: false,
+        disableExport: true
       },
       /*
       {

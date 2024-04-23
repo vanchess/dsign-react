@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux';
 
 export default function BillList(props) {
   const periodList = useSelector(store => store.periodReducer.items);
-console.log(periodList);
+
   return (
     <div style={{ minHeight: '400px', height: 'calc(100vh - 128px)', width: '100%' }}>
       
@@ -19,7 +19,7 @@ console.log(periodList);
         loading = {props.loading}
         pageSizeOptions={[5, 10, 20]}
         rows={
-            props.items.map((msg) => {
+            props.items?.map((msg) => {
                 return ({
                     'id': msg.id, 
                     'subject': msg.attributes.subject,
@@ -50,11 +50,11 @@ console.log(periodList);
         */
         autoPageSize 
         /*pageSize={20}*/ 
-        components={{
-          Toolbar: CustomToolbar,
-          LoadingOverlay: CustomLoadingOverlay,
-          NoRowsOverlay: CustomNoRowsOverlay,
-          Pagination: CustomPagination,
+        slots={{
+          toolbar: CustomToolbar,
+          loadingOverlay: CustomLoadingOverlay,
+          noRowsOverlay: CustomNoRowsOverlay,
+          pagination: CustomPagination,
         }}
         /*checkboxSelection */
       />

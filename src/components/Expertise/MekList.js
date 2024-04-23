@@ -48,11 +48,11 @@ export default function MekList(props) {
         */
         autoPageSize 
         /*pageSize={20}*/ 
-        components={{
-          Toolbar: CustomToolbar,
-          LoadingOverlay: CustomLoadingOverlay,
-          NoRowsOverlay: CustomNoRowsOverlay,
-          Pagination: CustomPagination,
+        slots={{
+          toolbar: CustomToolbar,
+          loadingOverlay: CustomLoadingOverlay,
+          noRowsOverlay: CustomNoRowsOverlay,
+          pagination: CustomPagination,
         }}
         /*checkboxSelection */
       />
