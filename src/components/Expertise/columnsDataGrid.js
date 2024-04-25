@@ -26,7 +26,7 @@ const renderOpenButton = (onClick) => {
 
 export const createColumns = (statuses, onClick, msgType = 'mek') => {
     let columns = [];
-    columns.push({ field: 'id', headerName: 'ID', width: 70, hide: true });
+    columns.push({ field: 'id', headerName: 'ID', width: 70, hide: true, type: 'number' });
     columns.push({ field: 'from', headerName: 'Отправитель', flex: 1 });
     if (msgType === 'mek') {
       columns.push(
@@ -34,6 +34,9 @@ export const createColumns = (statuses, onClick, msgType = 'mek') => {
           field: 'category',
           headerName: 'Категория',
           description: 'Категория',
+          valueFormatter: (value) => {
+            return ( value?.map( (c) => c.short_title).join())
+          },
           renderCell: (params) => {
               return ( params.value.map( (c) => 
                   (<Chip key={c.name} label={c.short_title}/>)
@@ -58,10 +61,9 @@ export const createColumns = (statuses, onClick, msgType = 'mek') => {
         field: 'createdAt',
         headerName: 'Дата',
         type: 'date',
-        valueFormatter: (params: ValueFormatterParams) =>
-          moment(params.value, "YYYY-MM-DDTHH:mm:ss.SSSSSSZ").local().format("DD.MM.YYYY HH:mm"),
+        valueFormatter: (value) =>
+          moment(value, "YYYY-MM-DDTHH:mm:ss.SSSSSSZ").local().format("DD.MM.YYYY HH:mm"),
         width: 150,
-        //filterable: false
       }
     );
     columns.push(
@@ -69,7 +71,8 @@ export const createColumns = (statuses, onClick, msgType = 'mek') => {
         field: 'status',
         headerName: 'Статус',
         description: 'Статус',
-        renderCell: (params: GridCellParams) => (
+        valueFormatter: (value) => value?.lable,
+        renderCell: (params) => (
             <StatusIcon label={params.value.lable} name={params.value.name} />
         ),
         filterOperators: [inOperator(statuses), notInOperator(statuses)],
@@ -83,10 +86,11 @@ export const createColumns = (statuses, onClick, msgType = 'mek') => {
         headerName: 'Действия',
         description: '',
         renderCell: renderOpenButton(onClick),
-        //filterOperators: statusOnlyOperators,
         width: 150,
         sortable: false,
-        filterable: false
+        filterable: false,
+        disableExport: true,
+        hideable: false,
       }
     );
 

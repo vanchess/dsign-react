@@ -22,7 +22,7 @@ const renderOpenButton = (onClick) => {
 
 export const createColumns = (onClick) => {
     return [
-      { field: 'id', headerName: 'ID', width: 70, hide: true },
+      { field: 'id', headerName: 'ID', width: 70, hide: true, type: 'number' },
       { field: 'name', headerName: 'Имя абонента', flex: 1 },
       { field: 'fio', headerName: 'ФИО', flex: 1 },
       { field: 'job_title_branch', headerName: 'Должность (Отдел организации)', flex: 1 },
@@ -32,6 +32,9 @@ export const createColumns = (onClick) => {
         field: 'roles',
         headerName: 'Роли',
         description: 'Роли',
+        valueFormatter: (value) => {
+            return ( value?.map( (c) => c.name).join())
+        },
         renderCell: (params) => {
             return ( params.value.map( (c) => 
                 (<Chip key={c.name} label={c.name}/>)
@@ -49,10 +52,11 @@ export const createColumns = (onClick) => {
         headerName: 'Действия',
         description: '',
         renderCell: renderOpenButton(onClick),
-        //filterOperators: statusOnlyOperators,
         width: 150,
         sortable: false,
-        filterable: false
+        filterable: false,
+        disableExport: true,
+        hideable: false,
       },
     ];
 }

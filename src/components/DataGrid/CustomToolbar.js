@@ -20,12 +20,9 @@ export default function CustomToolbar() {
           delimiter: ';',
           utf8WithBom: true,
         }}
-        /*
         slotProps={{
-          tooltip: { title: 'Export data' },
           button: { variant: 'outlined' },
         }}
-        */
       />
     </GridToolbarContainer>
   );

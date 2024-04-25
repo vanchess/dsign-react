@@ -26,14 +26,17 @@ const renderOpenButton = (onClick) => {
 
 export const createColumns = (statuses, onClick) => {
     return [
-      { field: 'id', headerName: 'ID', width: 70, hide: true },
+      { field: 'id', headerName: 'ID', width: 70, hide: true, type: 'number' },
       { field: 'from', headerName: 'От кого', flex: 1 },
       { field: 'period', headerName: 'Период', width: 140 },
       {
         field: 'category',
         headerName: 'Категория',
         description: 'Категория',
-        renderCell: (params: GridCellParams) => {
+        valueFormatter: (value) => {
+          return ( value?.map( (c) => c.short_title).join())
+        },
+        renderCell: (params) => {
             return ( params.value.map( (c) => 
                 (<Chip key={c.name} label={c.short_title}/>)
             ))
@@ -44,22 +47,21 @@ export const createColumns = (statuses, onClick) => {
         sortable: false,
         filterable: false
       },
-      //{ field: 'subject', headerName: 'Тема', width: 250 },
       
       {
         field: 'createdAt',
         headerName: 'Дата',
         type: 'date',
-        valueFormatter: (params: ValueFormatterParams) =>
-          moment(params.value, "YYYY-MM-DDTHH:mm:ss.SSSSSSZ").local().format("DD.MM.YYYY HH:mm"),
+        valueFormatter: (value) =>
+          moment(value, "YYYY-MM-DDTHH:mm:ss.SSSSSSZ").local().format("DD.MM.YYYY HH:mm"),
         width: 150,
-        //filterable: false
       },
       {
         field: 'status',
         headerName: 'Статус',
         description: 'Статус',
-        renderCell: (params: GridCellParams) => (
+        valueFormatter: (value) => value?.lable,
+        renderCell: (params) => (
             <StatusIcon label={params.value.lable} name={params.value.name} />
         ),
         filterOperators: [inOperator(statuses), notInOperator(statuses)],
@@ -71,20 +73,11 @@ export const createColumns = (statuses, onClick) => {
         headerName: 'Действия',
         description: '',
         renderCell: renderOpenButton(onClick),
-        //filterOperators: statusOnlyOperators,
         width: 150,
         sortable: false,
-        filterable: false
+        filterable: false,
+        disableExport: true,
+        hideable: false,
       },
-      /*
-      {
-        field: 'fullName',
-        headerName: 'Full name',
-        description: 'This column has a value getter and is not sortable.',
-        sortable: false,
-        width: 160,
-        valueGetter: (params) =>
-          `${params.getValue('firstName') || ''} ${params.getValue('lastName') || ''}`,
-      },*/
     ];
 }

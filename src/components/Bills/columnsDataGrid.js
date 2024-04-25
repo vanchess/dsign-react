@@ -33,8 +33,8 @@ export const createColumns = (statuses, onClick) => {
         field: 'category',
         headerName: 'Категория',
         description: 'Категория',
-        valueFormatter: (params) => {
-          return ( params.value?.map( (c) => c.short_title).join())
+        valueFormatter: (value) => {
+          return (value?.map( (c) => c.short_title).join())
         },
         renderCell: (params) => {
             return ( params.value.map( (c) => 
@@ -51,18 +51,17 @@ export const createColumns = (statuses, onClick) => {
       {
         field: 'createdAt',
         headerName: 'Дата',
-        type: 'date',
-        valueFormatter: (params) =>
-          moment(params.value, "YYYY-MM-DDTHH:mm:ss.SSSSSSZ").local().format("DD.MM.YYYY HH:mm"),
+         type: 'date',
+         valueFormatter: (value) => 
+          moment(value, "YYYY-MM-DDTHH:mm:ss.SSSSSSZ").local().format("DD.MM.YYYY HH:mm"),
         width: 150,
-        //filterable: false
       },
       {
         field: 'status',
         headerName: 'Статус',
         description: 'Статус',
         type: 'singleSelect',
-        valueFormatter: (params) => params.value?.lable,
+        valueFormatter: (value) => value?.lable,
         renderCell: (params) => (
             <StatusIcon label={params.value.lable} name={params.value.name} />
         ),
@@ -76,21 +75,11 @@ export const createColumns = (statuses, onClick) => {
         type: 'action',
         description: '',
         renderCell: renderOpenButton(onClick),
-        //filterOperators: statusOnlyOperators,
         width: 150,
         sortable: false,
         filterable: false,
-        disableExport: true
+        disableExport: true,
+        hideable: false,
       },
-      /*
-      {
-        field: 'fullName',
-        headerName: 'Full name',
-        description: 'This column has a value getter and is not sortable.',
-        sortable: false,
-        width: 160,
-        valueGetter: (params) =>
-          `${params.getValue('firstName') || ''} ${params.getValue('lastName') || ''}`,
-      },*/
     ];
 }

@@ -208,7 +208,7 @@ class SignIn extends React.Component {
             </div>
           </Grid>
           <Grid item xs={12} sm={12} md={6}>
-            <Paper elevation={3} variant="outlined" className={classes.paper}>
+            <Paper variant="outlined" className={classes.paper}>
               <List className={classes.root}>
                 {cardsOut.map((card) => (
                   <React.Fragment key={card.id}>

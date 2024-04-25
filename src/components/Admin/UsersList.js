@@ -12,7 +12,14 @@ export default function UserList(props) {
         <div style={{ minHeight: '400px', height: 'calc(100vh - 128px)',width: '100%' }}>
             <DataGrid
                 pagination 
-                density="compact"
+                initialState={{ 
+                    density: "compact",
+                    columns: {
+                      columnVisibilityModel: {
+                          id: false,
+                      },
+                    },
+                }}
                 loading = {props.loading}
                 pageSizeOptions={[5, 10, 20]}
                 rows={
@@ -38,23 +45,13 @@ export default function UserList(props) {
                     }).filter(item => item != null)
                 } 
                 columns={props.columns} 
-                /*
-                filterModel={{
-                items: [
-                        { columnField: 'status', value: [], operatorValue: 'in' },
-                        { columnField: 'status', value: [], operatorValue: 'notin' }
-                ],
-                }}
-                */
                 autoPageSize 
-                /*pageSize={20}*/ 
                 slots={{
                     toolbar: CustomToolbar,
                     loadingOverlay: CustomLoadingOverlay,
                     noRowsOverlay: CustomNoRowsOverlay,
                     pagination: CustomPagination,
                 }}
-                /*checkboxSelection */
             />
         </div>
     );

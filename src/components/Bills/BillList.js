@@ -15,7 +15,14 @@ export default function BillList(props) {
       
       <DataGrid 
         pagination 
-        density="compact"
+        initialState={{ 
+          density: "compact",
+          columns: {
+            columnVisibilityModel: {
+                id: false,
+            },
+          },
+        }}
         loading = {props.loading}
         pageSizeOptions={[5, 10, 20]}
         rows={
@@ -31,32 +38,19 @@ export default function BillList(props) {
                         return res;
                       }, []),
                     'period': periodList.find(item => {
-                      //console.log(item?.id);
-                      //console.log(msg.attributes.period_id);
-                      
-                      return Number(item?.id) === msg.attributes.period_id;
+                        return Number(item?.id) === msg.attributes.period_id;
                     })?.attributes.name,
                 });
             })
         } 
         columns={props.columns} 
-        /*
-        filterModel={{
-          items: [
-                { columnField: 'status', value: [], operatorValue: 'in' },
-                { columnField: 'status', value: [], operatorValue: 'notin' }
-          ],
-        }}
-        */
         autoPageSize 
-        /*pageSize={20}*/ 
         slots={{
           toolbar: CustomToolbar,
           loadingOverlay: CustomLoadingOverlay,
           noRowsOverlay: CustomNoRowsOverlay,
           pagination: CustomPagination,
         }}
-        /*checkboxSelection */
       />
     </div>
   );
