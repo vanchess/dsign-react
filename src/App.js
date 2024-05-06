@@ -14,6 +14,7 @@ import FramePage from './FramePage.js'
 import FramePage2 from './FramePage2.js'
 import PD from './pd/PD.js'
 import AdminHome from './AdminHome';
+import DispListHome from './DispListHome.js'
 import Eissoi from './eissoi/Eissoi'
 
 class App extends React.Component {
@@ -33,6 +34,7 @@ class App extends React.Component {
               <PrivateRoute path='/registers'  component={RegistersHome}/>
               <PrivateRoute path='/agreements' component={AgreementsHome}/>
               <PrivateRoute path='/admin'      component={AdminHome}/>
+              <PrivateRoute path='/displist'      component={DispListHome}/>
               <Route exact path='/sign-up/:invite' component={SignUp}/>
               <PrivateRoute path='/f1' component={FramePage}/>
               <PrivateRoute path='/f2' component={FramePage2}/>

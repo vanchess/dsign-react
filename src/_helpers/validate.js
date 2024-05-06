@@ -38,4 +38,24 @@ export class validate {
         }
         return result;
     }
+
+    static enp(enp, error) {
+        var result = false;
+        if (typeof enp === 'number') {
+            enp = enp.toString();
+        } else if (typeof enp !== 'string') {
+            enp = '';
+        }
+        if (!enp.length) {
+            error.code = 1;
+            error.message = 'ЕНП пуст';
+        } else if (/[^0-9]/.test(enp)) {
+            error.code = 2;
+            error.message = 'ЕНП может состоять только из цифр';
+        } else if (enp.length !== 16) {
+            error.code = 3;
+            error.message = 'ЕНП может состоять только из 16 цифр';
+        } 
+        return result;
+    }
 }
