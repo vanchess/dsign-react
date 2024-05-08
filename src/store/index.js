@@ -16,6 +16,7 @@ import { organizationReducer } from './organization/organizationReducer';
 import { messageStatusReducer } from './messageStatus/messageStatusReducer';
 import { periodReducer }       from './period/periodReducer';
 import { authReducer }         from './auth/authReducer';
+import { displistReducer }     from './displist'
 //import { alert } from './alert.reducer';
 
 const rootReducer = combineReducers({
@@ -33,7 +34,8 @@ const rootReducer = combineReducers({
   organizationReducer,
   messageStatusReducer,
   periodReducer,
-  authReducer
+  authReducer,
+  displist: displistReducer
 });
 
 export default rootReducer;

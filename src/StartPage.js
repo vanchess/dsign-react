@@ -83,7 +83,7 @@ const cards = [
     {id:8, title:'Подписать файлы ЭП', text:'', image:"/images/tfoms.png", to:'/eissoi', permission:'service file-dsign' },
 ];
 const cardsNew = [
-    
+  {id:8, title:'Проф. мероприятия', text:'Списки сотрудников на проф.мероприятия', image:"/images/displist2.jpg", to:'/displist', permission:'service displist' },
 ];
 const cards2 = [
     // {id:8, title:'Мониторинг', text:'Мониторинг приема реестров', image:"/images/monitoring.png", to:'/f1' }, 
@@ -148,7 +148,11 @@ export default function StartPage() {
                   </Card>
                 </Grid>
             )})}
-            {cardsNew.map((card) => (
+            {cardsNew.map((card) => {
+              if(card.permission && !permissions.includes(card.permission)) {
+                return null;
+              }
+              return (
               <Grid item key={card.id} xs={12} sm={4} md={3}>
                 <Card className={/*classes.card*/ classes.lnk} component={RouterLink} to={ card.to } >
                   <CardMedia
@@ -176,7 +180,8 @@ export default function StartPage() {
                   */}
                 </Card>
               </Grid>
-            ))}
+            )
+            })}
             {cards2.map((card) => (
               <Grid item key={card.id} xs={12} sm={4} md={3}>
                 <Card className={/*classes.card*/ classes.lnk} component={RouterLink} to={ card.to } >

@@ -11,7 +11,7 @@ import CancelIcon from '@mui/icons-material/Close';
 import EditInputCell from './EditInputCell.js';
 import Snackbar from '@mui/material/Snackbar';
 import { Alert } from '@mui/material';
-import { uniqueId } from '../../_helpers/uniqueId';
+import { uuidv4 } from '../../_helpers/uniqueId';
 import { validate } from '../../_helpers/validate.js';
 
 export default function DispListDataGrid(props) {
@@ -108,7 +108,7 @@ export default function DispListDataGrid(props) {
 
     const addRow = () => {
         if (Object.values(rowModesModel).some(m => m.mode === GridRowModes.Edit)) {
-          setSnackbar({ children: 'Необходимо заполнить данные!', severity: 'warning' });
+          setSnackbar({ children: 'Необходимо заполнить и сохранить данные!', severity: 'warning' });
           return;
         }
         if (rows.some(r => r.error)) {
@@ -116,7 +116,7 @@ export default function DispListDataGrid(props) {
           return;
         }
 
-        const id = uniqueId();
+        const id = uuidv4();
         setRows((oldRows) => [...oldRows, { 
           id, 
           last_name: '', 
