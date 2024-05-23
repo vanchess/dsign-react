@@ -71,12 +71,12 @@ export default function DispListDataGrid(props) {
     const handleDeleteClick = (id, dbStatus) => () => {
       dispatch(displistDeleteEntry({displist_id:displistId, id, dbStatus}));
     };
-    const handleCancelClick = (id) => () => {
+    const handleCancelClick = (id, dbStatus) => () => {
       dispatch(displistUpdateRowModesModel({ displistId, rowId:id, mode: GridRowModes.View, ignoreModifications: true }));
     
       const editedRow = rows.find((row) => row.id === id);
       if (editedRow.isNew) {
-        dispatch(displistDeleteEntry({displist_id:displistId, id}));
+        dispatch(displistDeleteEntry({displist_id:displistId, id, dbStatus}));
       }
     };
 
@@ -305,7 +305,7 @@ export default function DispListDataGrid(props) {
                                 icon={<CancelIcon />}
                                 label="Cancel"
                                 className="textPrimary"
-                                onClick={handleCancelClick(id)}
+                                onClick={handleCancelClick(id, row.dbStatus)}
                                 color="inherit"
                               />,
                             ];
@@ -321,7 +321,7 @@ export default function DispListDataGrid(props) {
                             <GridActionsCellItem
                               icon={<DeleteIcon />}
                               label="Delete"
-                              onClick={handleDeleteClick(id)} // dbStatus
+                              onClick={handleDeleteClick(id, row.dbStatus)} // 
                               color="inherit"
                             />,
                           ];

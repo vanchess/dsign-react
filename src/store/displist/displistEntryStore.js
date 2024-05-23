@@ -55,11 +55,8 @@ export const displistDeleteEntry = ({id, displist_id, dbStatus}) => {
     try {
       let data;
       if (dbStatus !== 'notExist') {
-        console.log(2);
         data = await displistService.deleteEntry(displist_id, id);
-        console.log(2);
       }
-      console.log(data);
       dispatch(displistDeleteEntrySuccess({ displist_id, id, dbStatus }));
     } catch (error) {
       dispatch(displistDeleteEntryFailure({id, displist_id, error}));

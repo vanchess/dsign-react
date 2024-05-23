@@ -81,7 +81,7 @@ export class apiService {
     static handleResponse(response) {
         return response.text().then(text => {
             const data = text && JSON.parse(text);
-            console.log(response);
+            //console.log(response);
             if (!response.ok) {
                 if (response.status === 401) {
                     // auto logout if 401 response returned from api
