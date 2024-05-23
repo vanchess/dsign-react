@@ -8,7 +8,7 @@ import DispListDataGrid from "./DispListDataGrid";
 
 const title = 'Список сотрудников на проф.мероприятия';
 
-export default function Admin(props) {
+export default function DispList(props) {
     const history = useHistory();
     const {id:userId} = useParams();
     //const match = useRouteMatch();

@@ -10,13 +10,7 @@ import CustomPagination from '../DataGrid/CustomPagination';
 import { useSelector } from 'react-redux';
 
 
-
-const useStyles = makeStyles((theme) => ({
-  root: {},
-}));
-
-
-export default function BillList(props) {
+export default function DispListList(props) {
   const periodList = useSelector(store => store.periodReducer.items);
 
   return (

@@ -73,6 +73,16 @@ export class messageService {
         const url = new URL(`msg/${id}/files`, process.env.REACT_APP_APIURL);
         return fetch(url, requestOptions).then(apiService.handleResponse);
     }
+
+    static getDispLists(id) {
+        const requestOptions = {
+            method: 'GET',
+            headers: authHeader(),
+        };
+
+        const url = new URL(`msg/${id}/displists`, process.env.REACT_APP_APIURL);
+        return fetch(url, requestOptions).then(apiService.handleResponse);
+    }
     
     static setStatus(msgId, statusName) {
         const requestOptions = {

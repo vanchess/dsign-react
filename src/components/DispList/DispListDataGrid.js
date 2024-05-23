@@ -1,5 +1,5 @@
 import { DataGrid, GridRowModes, GridActionsCellItem, GridRowEditStopReasons, GridEditInputCell } from '@mui/x-data-grid';
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import CustomLoadingOverlay from "../DataGrid/CustomLoadingOverlay";
 import CustomNoRowsOverlay from "../DataGrid/CustomNoRowsOverlay";
 import CustomPagination from "../DataGrid/CustomPagination";
@@ -13,45 +13,71 @@ import Snackbar from '@mui/material/Snackbar';
 import { Alert } from '@mui/material';
 import { uuidv4 } from '../../_helpers/uniqueId';
 import { validate } from '../../_helpers/validate.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { displistEntriesSelector, rowModesModelSelector } from '../../store/displist/displistEntrySelector.js';
+import { displistAddEntry, displistDeleteEntry, displistEntriesFetch, displistSetRowModesModel, displistUpdateEntry, displistUpdateRowModesModel, updateRowModesModel } from '../../store/displist/displistEntryStore.js';
+import { preventiveMedicalMeasureTypesIdsSelector, preventiveMedicalMeasureTypesSelector } from '../../store/displist/preventiveMedicalMeasureSelector.js';
+import styled from '@emotion/styled';
+
+const StyledBox = styled('div')(({ theme }) => ({
+  /*
+  '& .MuiDataGrid-cell--editable': {
+    backgroundColor: theme.palette.mode === 'dark' ? '#376331' : 'rgb(217 243 190)',
+    '& .MuiInputBase-root': {
+      height: '100%',
+    },
+  },
+  */
+  '& .Mui-error': {
+    backgroundColor: `rgb(126,10,15, ${theme.palette.mode === 'dark' ? 0 : 0.1})`,
+    color: theme.palette.mode === 'dark' ? '#ff4343' : '#750f0f',
+  },
+  '& .displist-row--error': {
+    backgroundColor: `rgb(126,10,15, ${theme.palette.mode === 'dark' ? 0 : 0.1})`,
+    color: theme.palette.mode === 'dark' ? '#ff4343' : '#750f0f',
+  },
+}));
 
 export default function DispListDataGrid(props) {
-    const {items} = props;
+    const dispatch = useDispatch();
+    const {listId:displistId} = props;
     const [snackbar, setSnackbar] = React.useState(null);
-    const [rows, setRows] = React.useState([]);
-    const [rowModesModel, setRowModesModel] = React.useState({});
+    const rowModesModel = useSelector((store) => rowModesModelSelector(store, displistId));
+    const rows = useSelector((store) => displistEntriesSelector(store, displistId));
+    const preventiveMedicalMeasureTypes = useSelector(preventiveMedicalMeasureTypesSelector);
+    const preventiveMedicalMeasureTypesIds = useSelector(preventiveMedicalMeasureTypesIdsSelector);
 
-    const preventiveMedicalMeasureTypes = useMemo(() => (
-      [
-        {value:0, name:'диспансеризация взрослого населения'}, 
-        {value:3, name:'профосмотр взрослого населения'}, 
-        {value:8, name:'углубленная диспансеризация'}
-      ]
-    ), []);
+    useEffect(() => {
+      if (displistId) {
+        dispatch(displistEntriesFetch({id:displistId}));
+      }
+    }, [displistId])
+    
+    
 
     const renderEditCell = (params) => {
       return <EditInputCell {...params} error={params.error} />;
     }
 
     const handleEditClick = (id) => () => {
-        setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+      if (rowsHasError(id)) return;
+
+      dispatch(displistUpdateRowModesModel({ displistId, rowId:id, mode: GridRowModes.Edit }));
     };
     const handleSaveClick = (id, row) => () => {
-        setRowModesModel(oldModel => ({ ...oldModel, [id]: { mode: GridRowModes.View } }));
+      dispatch(displistUpdateRowModesModel({ displistId, rowId:id, mode: GridRowModes.View }));
     };
 
-    const handleDeleteClick = (id) => () => {
-        setRows(rows.filter((row) => row.id !== id));
+    const handleDeleteClick = (id, dbStatus) => () => {
+      dispatch(displistDeleteEntry({displist_id:displistId, id, dbStatus}));
     };
     const handleCancelClick = (id) => () => {
-        setRowModesModel({
-          ...rowModesModel,
-          [id]: { mode: GridRowModes.View, ignoreModifications: true },
-        });
+      dispatch(displistUpdateRowModesModel({ displistId, rowId:id, mode: GridRowModes.View, ignoreModifications: true }));
     
-        const editedRow = rows.find((row) => row.id === id);
-        if (editedRow.isNew) {
-          setRows(rows.filter((row) => row.id !== id));
-        }
+      const editedRow = rows.find((row) => row.id === id);
+      if (editedRow.isNew) {
+        dispatch(displistDeleteEntry({displist_id:displistId, id}));
+      }
     };
 
     const handleRowEditStop = (params, event) => {
@@ -62,6 +88,7 @@ export default function DispListDataGrid(props) {
 
     const processRowUpdate = (newRow, oldRow) => {
         let updatedRow;
+        
         let error = '';
         if (!newRow.last_name) {
           error += 'Фамилия;';
@@ -69,76 +96,78 @@ export default function DispListDataGrid(props) {
         if (!newRow.first_name) {
           error += 'Имя;';
         }
-        if (!newRow.dob) {
+        if (!newRow.birthday) {
           error += 'Дата рождения;';
         }
-        if (!newRow.emp) {
+        if (!newRow.enp) {
           error += 'ЕНП;';
         }
         if (!newRow.snils) {
           error += 'СНИЛС;';
         }
-        if (!preventiveMedicalMeasureTypes.some(p => p.value === newRow.type)) {
+        if (!preventiveMedicalMeasureTypesIds.some(p => p === newRow.preventive_medical_measure_id)) {
           error += 'Вид планируемого мероприятия;';
         }
 
-        if (error) {
-            
-            setSnackbar({ children: `Необходимо заполнить данные (${error})!`, severity: 'warning' });
+        if (!error && (newRow.birthday < new Date(1900,1,1) || newRow.birthday > Date.now())) {
+          error = 'Дата рождения указана неверно;';
+        }
 
-            setRowModesModel(oldModel => {
-                let v = ({ ...oldModel, [newRow.id]: { mode: GridRowModes.Edit } });
-                return v;
-            });
+        if (error) {       
+            setSnackbar({ children: `Необходимо заполнить данные (${error})!`, severity: 'warning' });
+            dispatch(displistUpdateRowModesModel({ displistId, rowId:newRow.id, mode: GridRowModes.Edit }));
             updatedRow = { ...newRow, isNew: false, error: true };
         } else {
             updatedRow = { ...newRow, isNew: false, error: false };
+            
         }
 
-        setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));  
+        dispatch(displistUpdateEntry(updatedRow));
         return updatedRow;
     };
     
     const handleRowModesModelChange = (newRowModesModel) => {
-      console.log('handleRowModesModelChange');
-      console.log(newRowModesModel);
-      console.log(rows);
-      setRowModesModel(newRowModesModel);
+      dispatch(displistSetRowModesModel({displistId, newRowModesModel}));
     };
 
-    const addRow = () => {
-        if (Object.values(rowModesModel).some(m => m.mode === GridRowModes.Edit)) {
-          setSnackbar({ children: 'Необходимо заполнить и сохранить данные!', severity: 'warning' });
-          return;
-        }
-        if (rows.some(r => r.error)) {
-          setSnackbar({ children: 'Введены некорректные данные. Добавление новой записи невозможно.', severity: 'warning' });
-          return;
-        }
+    const rowsHasError = (id) => {
+      if (Object.values(rowModesModel).some(m => m.mode === GridRowModes.Edit)) {
+        setSnackbar({ children: 'Необходимо заполнить и сохранить данные!', severity: 'warning' });
+        return true;
+      }
+      if (rows.some(r => (r.error && r.id !== id))) {
+        setSnackbar({ children: 'Введены некорректные данные. Необходимо исправить и сохранить данные!', severity: 'warning' });
+        return true;
+      }
+      return false;
+    }
 
+    const addRow = () => {
+        if (rowsHasError()) return;
+        
         const id = uuidv4();
-        setRows((oldRows) => [...oldRows, { 
+        
+        dispatch(displistAddEntry({
+          displist_id:displistId,
           id, 
-          last_name: '', 
-          first_name: '', 
-          surname: '', 
-          dob: null, 
-          emp: '', 
-          snils: '', 
+          first_name:'', 
+          middle_name:'', 
+          last_name:'', 
+          birthday:'', 
+          enp:'', 
+          snils:'', 
+          preventive_medical_measure_id:'', 
+          //description, 
+          //contact_info,
           type: '', 
           isNew: true,
-          // error: null 
-      }]);
-        setRowModesModel((oldModel) => ({
-          ...oldModel,
-          [id]: { mode: GridRowModes.Edit, fieldToFocus: 'last_name' },
-        }));
+        }))
       };
 
     const handleCloseSnackbar = () => setSnackbar(null);
 
     return (
-        <>
+        <StyledBox>
             <DataGrid
                 autoHeight 
                 editMode="row"
@@ -157,8 +186,9 @@ export default function DispListDataGrid(props) {
                 onRowEditStop={handleRowEditStop}
                 processRowUpdate={processRowUpdate}
                 rows = {rows}
+                getRowClassName={(params) => `${params.row.error?'displist-row--error':''}`}
                 columns={[
-                    { field: 'id', headerName: 'ID', width: 70, type: 'number', editable: false },
+                    { field: 'id', headerName: 'ID', width: 70, editable: false },
                     { field: 'last_name', headerName: 'Фамилия', width: 200, editable: true,
                         preProcessEditCellProps: (params) => {
                             if (!params.hasChanged) {
@@ -191,7 +221,7 @@ export default function DispListDataGrid(props) {
                         },
                         renderEditCell
                     },
-                    { field: 'surname', headerName: 'Отчество', width: 150, editable: true, 
+                    { field: 'middle_name', headerName: 'Отчество', width: 150, editable: true, 
                         preProcessEditCellProps: (params) => {
                             if (!params.hasChanged) {
                               return { ...params.props };
@@ -205,8 +235,12 @@ export default function DispListDataGrid(props) {
                         renderEditCell
                     },
                     
-                    { field: 'dob', headerName: 'Дата рождения', editable: true, type: 'date' },
-                    { field: 'emp', headerName: 'ЕНП', width: 165, editable: true,
+                    { field: 'birthday', headerName: 'Дата рождения', editable: true, type: 'date' ,
+                      valueGetter: (str) => {
+                        return new Date(str)
+                      }, 
+                    },
+                    { field: 'enp', headerName: 'ЕНП', width: 165, editable: true,
                         preProcessEditCellProps: (params) => {
                           if (!params.hasChanged) {
                             return { ...params.props };
@@ -233,14 +267,20 @@ export default function DispListDataGrid(props) {
                         renderEditCell
                     },
                     {
-                      field: 'type',
+                      field: 'preventive_medical_measure_id',
                       headerName: 'Вид планируемого мероприятия',
                       width: 220,
                       editable: true,
                       type: 'singleSelect',
-                      getOptionValue: (value) => value.value,
-                      getOptionLabel: (value) => `${value.value} - ${value.name}`,
-                      valueOptions: preventiveMedicalMeasureTypes,
+                      getOptionValue: (value) => value,
+                      getOptionLabel: (value) => {
+                        const p = preventiveMedicalMeasureTypes[value];
+                        if (p) {
+                         return `${p.code} - ${p.name}`
+                        }
+                        return '';
+                      },
+                      valueOptions: preventiveMedicalMeasureTypesIds,
                     },
                     { field: 'tel', headerName: 'Контактные данные', width: 140, editable: true },
                     {
@@ -281,7 +321,7 @@ export default function DispListDataGrid(props) {
                             <GridActionsCellItem
                               icon={<DeleteIcon />}
                               label="Delete"
-                              onClick={handleDeleteClick(id)}
+                              onClick={handleDeleteClick(id)} // dbStatus
                               color="inherit"
                             />,
                           ];
@@ -313,6 +353,6 @@ export default function DispListDataGrid(props) {
                   <Alert {...snackbar} onClose={handleCloseSnackbar} />
                 </Snackbar>
               )}
-        </>
+        </StyledBox>
     );
 }

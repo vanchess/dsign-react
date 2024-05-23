@@ -363,7 +363,7 @@ class DispListNewMessage extends React.Component {
                                         id="msg-text"
                                         label="Дополнительная информация (произвольный текст. Например: дата, адрес, время прохождения мероприятия)"
                                         multiline
-                                        rows = {4}
+                                        minRows = {2}
                                         maxRows={20}
                                         value={this.state.msgText}
                                         onChange={this.handleChangeMsgText}

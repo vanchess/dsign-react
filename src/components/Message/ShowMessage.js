@@ -396,7 +396,7 @@ class ShowMessage extends React.Component {
                                   id="msg-text"
                                   label="Текст сообщения"
                                   multiline
-                                  rows = {4}
+                                  minRows={2}
                                   maxRows={20}
                                   value={this.state.msgText}
                                   variant="outlined"

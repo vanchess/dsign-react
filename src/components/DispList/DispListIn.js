@@ -8,7 +8,7 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 
 import DispListList from '../DispList/DispListList.js';
-import AgreementShowMessage from '../Agreements/AgreementShowMessage';
+import DispListShowMessage from '../DispList/DispListShowMessage';
 
 import { connect } from 'react-redux';
 
@@ -183,7 +183,7 @@ class DispListIn extends React.Component {
               </Grid>
             </Container>
             <FullScreenDialog title={this.state.msgTitle} open={this.state.openMessageDialog} onClose={this.handleCloseDialog}>
-                <AgreementShowMessage setTitle={this.props.setTitle}/>
+                <DispListShowMessage setTitle={this.props.setTitle}/>
             </FullScreenDialog>
           </div>
       );
@@ -194,7 +194,7 @@ const mapStateToProps = function(store, ownProps) {
   const type = ownProps.match.params.type;
   let c = null;
   if (type === 'displist') {
-      c = store.displist.displist;
+      c = store.displist.displistMsg;
   }
   return {
       items: c.items, 

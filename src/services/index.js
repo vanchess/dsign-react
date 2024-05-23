@@ -11,3 +11,5 @@ export * from './api/inviteService';
 export * from './api/messageStatusService';
 export * from './api/pdService';
 export * from './api/periodService';
+export * from './api/displistService';
+export * from './api/preventiveMedicalMeasureService';

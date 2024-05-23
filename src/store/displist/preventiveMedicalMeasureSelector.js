@@ -1,0 +1,2 @@
+export const preventiveMedicalMeasureTypesSelector = (store) => store.displist.preventiveMedicalMeasureTypes.entities;
+export const preventiveMedicalMeasureTypesIdsSelector = (store) => store.displist.preventiveMedicalMeasureTypes.ids;
