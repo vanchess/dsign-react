@@ -9,8 +9,10 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import EditInputCell from './EditInputCell.js';
+import AddIcon from '@mui/icons-material/Add';
+import MailLockIcon from '@mui/icons-material/MailLock';
 import Snackbar from '@mui/material/Snackbar';
-import { Alert } from '@mui/material';
+import { Alert, Button } from '@mui/material';
 import { uuidv4 } from '../../_helpers/uniqueId';
 import { validate } from '../../_helpers/validate.js';
 import { useDispatch, useSelector } from 'react-redux';
@@ -31,6 +33,9 @@ const StyledBox = styled('div')(({ theme }) => ({
   '& .Mui-error': {
     backgroundColor: `rgb(126,10,15, ${theme.palette.mode === 'dark' ? 0 : 0.1})`,
     color: theme.palette.mode === 'dark' ? '#ff4343' : '#750f0f',
+  },
+  '& .displist-row--saving, & .displist-row--being-deleted': {
+    color: theme.palette.warning.main,
   },
   '& .displist-row--error': {
     backgroundColor: `rgb(126,10,15, ${theme.palette.mode === 'dark' ? 0 : 0.1})`,
@@ -186,7 +191,7 @@ export default function DispListDataGrid(props) {
                 onRowEditStop={handleRowEditStop}
                 processRowUpdate={processRowUpdate}
                 rows = {rows}
-                getRowClassName={(params) => `${params.row.error?'displist-row--error':''}`}
+                getRowClassName={(params) => `${params.row.error?'displist-row--error':''} ${params.row.dbStatus==='saving'?'displist-row--saving':''} ${params.row.dbStatus==='beingDeleted'?'displist-row--being-deleted':''}`}
                 columns={[
                     { field: 'id', headerName: 'ID', width: 70, editable: false },
                     { field: 'last_name', headerName: 'Фамилия', width: 200, editable: true,
@@ -282,7 +287,7 @@ export default function DispListDataGrid(props) {
                       },
                       valueOptions: preventiveMedicalMeasureTypesIds,
                     },
-                    { field: 'tel', headerName: 'Контактные данные', width: 140, editable: true },
+                    { field: 'contact_info', headerName: 'Контактные данные', width: 140, editable: true },
                     {
                       field: 'action',
                       headerName: 'Действия',
@@ -343,6 +348,9 @@ export default function DispListDataGrid(props) {
                     toolbar: { addRow }
                 }}
             />
+            <Button color="primary" startIcon={<AddIcon />} onClick={addRow}>
+              Добавить запись
+            </Button>
             {!!snackbar && (
                 <Snackbar
                   open

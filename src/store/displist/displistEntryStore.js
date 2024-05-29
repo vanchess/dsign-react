@@ -29,11 +29,13 @@ export const displistEntriesFetch = ({id:displistId}) => {
   }
 }
 
-export const displistUpdateEntry = ({dbStatus, id, displist_id, first_name, middle_name, last_name, birthday, enp, snils, preventive_medical_measure_id, description, contact_info}) => {
+export const displistUpdateEntry = ({dbStatus, id, displist_id, first_name, middle_name, last_name, birthday, enp, snils, preventive_medical_measure_id, description, contact_info, error}) => {
   return async (dispatch) => {
     dispatch(displistUpdateEntryRequest({id, displist_id, first_name, middle_name, last_name, birthday, enp, snils, preventive_medical_measure_id, description, contact_info}));
     
     try {
+      if (error) throw error;
+
       let data;
       if (dbStatus === 'notExist') {
         data = await displistService.addEntry(displist_id, {id, first_name, middle_name, last_name, birthday, enp, snils, preventive_medical_measure_id, description, contact_info});

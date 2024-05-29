@@ -4,10 +4,10 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 
-import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
+import MailLockIcon from '@mui/icons-material/MailLock';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { useRouteMatch } from "react-router-dom";
+import { useHistory, useParams, useRouteMatch } from "react-router-dom";
 
 import ShowMessage from '../Message/ShowMessage';
 
@@ -32,7 +32,9 @@ const PaperStyled = styled(Paper)(
 );
 
 export default function DispListShowMessage(props) {
-  // const permission = useSelector((store) => store.authReducer.user.permissions);
+  const permission = useSelector((store) => store.authReducer.user.permissions);
+  const history = useHistory();
+  const {type} = useParams();
   const dispatch = useDispatch();
   const match = useRouteMatch();
   const msgId = match.params.id;
@@ -53,10 +55,10 @@ export default function DispListShowMessage(props) {
   }, [msgId])
 
 
-  const handleReject = () => {
-    messageService.setStatus(msgId, 'rejected').then(
+  const handleSetStatusSent = () => {
+    messageService.setStatus(msgId, 'sent').then(
         () => { 
-            props.history.push('/bills/msg/in') 
+            history.push('/displist/list/displist') 
         },
         (err) => { 
             alert(err);
@@ -66,7 +68,7 @@ export default function DispListShowMessage(props) {
 
   return (
     <div>
-      {(props.permission && props.permission.includes('reject ' + props.match.params.type)) ?
+      {(permission && permission.includes('send ' + type)) ?
         (<ContainerStyled maxWidth="lg">
             <Grid container spacing={3}>
               {/* Recent Orders */}
@@ -74,9 +76,9 @@ export default function DispListShowMessage(props) {
                 <PaperStyled >
                     <Button 
                       variant="contained"
-                      color="primary"
-                      startIcon={<ThumbDownAltOutlinedIcon />}
-                      onClick={handleReject}>Скрыть сообщение</Button>
+                      color="secondary"
+                      startIcon={<MailLockIcon />}
+                      onClick={handleSetStatusSent}>Завершить редактирование списка</Button>
                 </PaperStyled>
               </Grid>
             </Grid>

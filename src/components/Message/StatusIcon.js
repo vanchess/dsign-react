@@ -12,6 +12,7 @@ import NoSimIcon from '@mui/icons-material/NoSim';
 import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
 import ComputerIcon from '@mui/icons-material/Computer';
 import CheckIcon from '@mui/icons-material/Check';
+import EditNoteIcon from '@mui/icons-material/EditNote';
 // import DoneAllIcon from '@mui/icons-material/DoneAll';
 import SendIcon from '@mui/icons-material/Send';
 
@@ -102,7 +103,14 @@ export default function StatusIcon(props) {
         </Tooltip>
       );
   }
-  
+  if(props.name == 'draft')
+  {
+      return (
+        <Tooltip title={props.label} aria-label={props.label} disableInteractive>
+            <EditNoteIcon color="secondary" />
+        </Tooltip>
+      );
+  }
   
    return (
         <Tooltip title={props.label} aria-label={props.label} disableInteractive>
