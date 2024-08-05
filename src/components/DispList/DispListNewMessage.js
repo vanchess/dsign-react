@@ -33,6 +33,7 @@ import { cadespluginService } from '../../services';
 import { messageService } from '../../services';
 
 import { periodFetch } from '../../store/period/periodAction.js';
+import { Typography } from '@mui/material';
 
 const styles = theme => ({
   container: {
@@ -261,6 +262,13 @@ class DispListNewMessage extends React.Component {
           });
           return;
         }
+        if(!this.state.msgText) {
+          alert("Заполните поле 'Дополнительная информация'");
+          this.setState({
+            msgSending: false
+          });
+          return;
+        }
         
         
         let msg = {};
@@ -342,7 +350,7 @@ class DispListNewMessage extends React.Component {
                                 </Grid>
                                 <Grid item xs={12} sm={4}>
                                     <FormControl variant="standard" fullWidth className={classes.comboboxFormControl}>
-                                      <InputLabel id='msg-period-label' >Период</InputLabel>
+                                      <InputLabel id='msg-period-label' >Период проведения мероприятия</InputLabel>
                                       <Select
                                           variant="standard"
                                           fullWidth
@@ -350,18 +358,21 @@ class DispListNewMessage extends React.Component {
                                           id="msg-period"
                                           value={ this.state.msgPeriod }
                                           onChange={ this.handleChangePeriod }>
-                                        { periodList && (periodList).map( (item) => (
+                                        { periodList && (periodList).filter(p => Date.parse(p.attributes.to) > Date.now()).map( (item) => (
                                           <MenuItem key={ item.id } value={ item.id }>{ item.attributes.name }</MenuItem>
                                         ))}
                                       </Select>
                                     </FormControl>
                                 </Grid>
+                                <Grid item xs={12} sm={8}>
+                                  <Typography color="secondary.dark">Завершить редактирование списка и подписать его электронной подписью необходимо не позднее последнего дня указанного периода. В противном случае список будет отклонен.</Typography>
+                                </Grid>
                                 <Grid item xs={12}>
                                       <TextField
                                         fullWidth
-                                        
+                                        required
                                         id="msg-text"
-                                        label="Дополнительная информация (произвольный текст. Например: дата, адрес, время прохождения мероприятия)"
+                                        label="Дополнительная информация (организация; адрес, дата и время прохождения мероприятия)"
                                         multiline
                                         minRows = {2}
                                         maxRows={20}

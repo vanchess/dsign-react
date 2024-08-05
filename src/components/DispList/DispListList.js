@@ -36,7 +36,7 @@ export default function DispListList(props) {
                     'from': msg.relationships.user.data.attributes.name,
                     'createdAt': msg.attributes.created_at,
                     'status': msg.relationships.status.data.attributes,
-                    'organization': msg.relationships.organization.data.attributes.short_name,
+                    'organization': msg.relationships.organization.data?.attributes.short_name,
                     'period': periodList.find(item => {
                         return Number(item?.id) === msg.attributes.period_id;
                     })?.attributes.name,
