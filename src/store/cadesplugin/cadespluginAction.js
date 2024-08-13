@@ -1,5 +1,14 @@
 import { cadespluginService } from '../../services';
 import { CADES_CERT_GET_REQUEST, CADES_CERT_GET_SUCCESS, CADES_CERT_GET_FAILURE, CADESPLUGIN_CHECK, CADESPLUGIN_AVAILABLE, CADESPLUGIN_NOT_AVAILABLE } from '../../constants/cadespluginConstants.js'
+import { createAction } from '@reduxjs/toolkit';
+
+export const cadesCertSelectStart = createAction('CADES_CERT_SELECT_START');
+export const cadesCertSelectOk = createAction('CADES_CERT_SELECT_OK');
+export const cadesCertSelectCancel = createAction('CADES_CERT_SELECT_CANCEL');
+export const cadesSignStart = createAction('CADES_SIGN_START');
+export const cadesSignSuccess = createAction('CADES_SIGN_SUCCESS');
+export const cadesSignFailure = createAction('CADES_SIGN_FAILURE');
+export const cadesSetSignFileIds = createAction('SET_SIGN_FILE_IDS');
 
 export const cadesCertGetRequest = () => {
   return { type: CADES_CERT_GET_REQUEST }
@@ -36,4 +45,3 @@ export const cadesCertFetch = (page, perPage) => {
     
   }
 }
-

@@ -28,8 +28,9 @@ export const createColumns = (statuses, onClick) => {
     return [
       { field: 'id', headerName: 'ID', width: 70, hide: true, type: 'number', },
       { field: 'from', headerName: 'От кого', flex: 1 },
-      { field: 'text', headerName: 'Информация', width: 250 },
-      { field: 'period', headerName: 'Период', width: 140 },
+      { field: 'subject', headerName: 'Организация', width: 250 },
+      { field: 'text', headerName: 'Место проведения', width: 150 },
+      { field: 'period', headerName: 'Период', width: 100 },
       {
         field: 'createdAt',
         headerName: 'Дата',

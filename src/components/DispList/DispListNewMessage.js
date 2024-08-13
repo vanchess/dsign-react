@@ -86,7 +86,7 @@ class DispListNewMessage extends React.Component {
       super(props);
 
       this.state = {
-        msgSubject: `Список сотрудников на проф.мероприятия`,
+        msgSubject: ``,
         msgText: '',
         msgTo: [11],
         msgPeriod: '',
@@ -117,9 +117,9 @@ class DispListNewMessage extends React.Component {
         this.props.fetchPeriod();
         
         const type = this.props.match.params.type;
-        let c = `Список сотрудников на проф.мероприятия`;
+        let c = ``;
         if (type === 'displist') {
-            c = `Список сотрудников на проф.мероприятия`;
+            c = ``;
         }
         
         this.setState({
@@ -130,9 +130,9 @@ class DispListNewMessage extends React.Component {
     componentDidUpdate(prevProps, prevState) {
       if (prevProps.match.params.type !== this.props.match.params.type) {
         const type = this.props.match.params.type;
-        let c = `Список сотрудников на проф.мероприятия`;
+        let c = ``;
         if (type === 'displist') {
-            c = `Список сотрудников на проф.мероприятия`;
+            c = ``;
         }
         
         this.setState({
@@ -249,21 +249,21 @@ class DispListNewMessage extends React.Component {
             msgSending: true
         });
         if(!this.state.msgSubject) {
-            alert("Укажите тему сообщения");
+            alert("Укажите организацию от которой лица направляются на проф.мероприятия");
             this.setState({
                 msgSending: false
             });
             return;
         }
         if(!this.state.msgPeriod) {
-          alert("Укажите период");
+          alert("Укажите период проведения мероприятия");
           this.setState({
               msgSending: false
           });
           return;
         }
         if(!this.state.msgText) {
-          alert("Заполните поле 'Дополнительная информация'");
+          alert("Заполните место проведения мероприятия");
           this.setState({
             msgSending: false
           });
@@ -341,7 +341,7 @@ class DispListNewMessage extends React.Component {
                                     variant="standard"
                                     fullWidth
                                     required
-                                    label="Тема"
+                                    label="Организация"
                                     id="msg-subject"
                                     value={this.state.msgSubject}
                                     onChange={this.handleChangeMsgSubject}
@@ -372,7 +372,7 @@ class DispListNewMessage extends React.Component {
                                         fullWidth
                                         required
                                         id="msg-text"
-                                        label="Дополнительная информация (организация; адрес, дата и время прохождения мероприятия)"
+                                        label="Место проведения мероприятия"
                                         multiline
                                         minRows = {2}
                                         maxRows={20}
