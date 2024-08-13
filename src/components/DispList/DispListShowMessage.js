@@ -18,7 +18,7 @@ import styled from '@emotion/styled';
 import { preventiveMedicalMeasureFetch } from '../../store/displist/preventiveMedicalMeasureStore';
 import { userFetch } from '../../store/user/userAction';
 import { cadesCertFetch, cadesCertSelectCancel, cadesCertSelectOk, cadesCertSelectStart, cadesSetSignFileIds, cadesSignFailure, cadesSignStart, cadesSignSuccess } from '../../store/cadesplugin/cadespluginAction';
-import { Backdrop, Chip, CircularProgress, TextField, Typography } from '@mui/material';
+import { Backdrop, Chip, CircularProgress, Popover, TextField, Typography } from '@mui/material';
 import StatusIcon from '../Message/StatusIcon';
 
 import FilesList from '../UploadFile/FilesList';
@@ -92,6 +92,8 @@ export default function DispListShowMessage(props) {
   const [msgFromId, setMsgFromId] = useState(null);
   const [msgFrom, setMsgFrom] = useState('');
   const [msgTo, setMsgTo] = useState([]);
+  const [periodId, setPeriodId] = useState(null);
+  const [periodName, setPeriodName] = useState('');
 
   const [msgFiles, setMsgFiles] = useState([]);
   const [msgFilesLoading, setMsgFilesLoading] = useState(true);
@@ -108,6 +110,20 @@ export default function DispListShowMessage(props) {
   const selectedCert = useSelector(casesSelectedCert);
   const signFileIds = useSelector(cadesSignFileIds);
 
+  const periodList = useSelector(store => store.periodReducer.items);
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
   useEffect(() => {
     props.setTitle('Cообщение');
     dispatch(preventiveMedicalMeasureFetch());
@@ -159,10 +175,20 @@ export default function DispListShowMessage(props) {
             setMsgFromId(msg.attributes.user_id);
             setMsgStatusLabel(msg.relationships.status.data.attributes.lable);
             setMsgStatusName(msg.relationships.status.data.attributes.name);
+            setPeriodId(msg.attributes.period_id);
+            
           }
         );
       }
   }, [msgId])
+
+  useEffect(() => {
+    setPeriodName(
+      periodList.find(item => {
+        return Number(item?.id) === periodId;
+      })?.attributes.name ?? ''
+    );
+  }, [periodList, periodId])
 
   useEffect(() => {
     setMsgFrom(users[msgFromId] ? users[msgFromId].attributes.name : '');
@@ -292,22 +318,10 @@ export default function DispListShowMessage(props) {
         <ContainerStyled maxWidth="lg">
           <Grid container spacing={3}>
             {/* Recent Orders */}
-            {(permission && permission.includes('send ' + type)) ?
-              (<Grid item xs={12}>
-                <PaperStyled >
-                    <Button 
-                      variant="contained"
-                      color="secondary"
-                      startIcon={<MailLockIcon />}
-                      onClick={handleSetStatusSent}>Завершить редактирование списка</Button>
-                </PaperStyled>
-              </Grid>):null
-            }
             <Grid item xs={12}>
               <PaperStyled>
-                  
                   <Grid container>
-                      <Grid item xs={10}>
+                      <Grid item xs={6}>
                           <TextField
                               variant="standard"
                               fullWidth
@@ -317,7 +331,30 @@ export default function DispListShowMessage(props) {
                               value={msgSubject}
                               helperText="" />
                       </Grid>
+                      <Grid item xs={1}>
+                          <TextField
+                              variant="standard"
+                              fullWidth
+                              readOnly
+                              label="Период"
+                              id="msg-period"
+                              value={periodName}
+                              helperText="" />
+                      </Grid>
                       <Grid item xs={2}>
+                        <Button aria-describedby={id} variant="contained" onClick={handleClick}>
+                          Подробнее
+                        </Button>
+                      </Grid>
+                      {(msgStatusName === 'draft' && permission && permission.includes('send ' + type)) ?
+                      (<Grid item xs={3}>
+                        <Button 
+                            variant="contained"
+                            color="secondary"
+                            startIcon={<MailLockIcon />}
+                            onClick={handleSetStatusSent}>Завершить редактирование списка</Button>
+                      </Grid>):
+                      (<Grid item xs={3}>
                         <Typography variant="body2" align="left" color='textSecondary'>
                             Статус
                         </Typography>
@@ -329,108 +366,136 @@ export default function DispListShowMessage(props) {
                             <StatusIcon name={msgStatusName} label={msgStatusLabel} />
                             {msgStatusLabel}
                         </div>
-                        
-                      </Grid>
-                      <Grid item xs={12}>
-                          <div align="left">
-                            <Typography variant="body2" align="left" color='textSecondary'>
-                              От кого
-                            </Typography> 
-                            <Chip label={msgFrom}/>
-                          </div>
-                      </Grid>
-                      <Grid item xs={12}>
-                          <div align="left">
-                            <Typography variant="body2" align="left" color='textSecondary'>
-                              Кому
-                            </Typography> 
-                            { (msgTo).map( (toUser) => 
-                                (<Chip key={toUser} label={toUser}/>)
-                            )}
-                          </div>
-                      </Grid>
-                      <Grid item xs={12}>
-                        {msgText ? (
-                            <TextField
-                              fullWidth
-                              readOnly
-                              id="msg-text"
-                              label="Место проведения мероприятия"
-                              multiline
-                              minRows={2}
-                              maxRows={20}
-                              value={msgText}
-                              variant="outlined"
-                              margin="normal"
+                      </Grid>)
+                      }
+                      
+                      {(msgStatusName !== 'draft')?(
+                      <>
+                        <Grid item xs={12}>
+                          <Typography variant="body2" align="left" color='textSecondary'>
+                            Прикрепленные файлы
+                          </Typography>       
+                        </Grid>
+                        <Grid item xs={12}>
+                          <ActionButtonWrapper>
+                                <Button 
+                                  variant="contained"
+                                  color="primary"
+                                  disabled={(!selectedMsgFilesIds.length || signInProcess || certDialogOpen)}
+                                  startIcon={<HowToRegIcon />}
+                                  onClick={ handleClickSignMultiple }>Подписать ЭП</Button>
+                                <Button 
+                                  variant="contained"
+                                  color="primary"
+                                  disabled={(!selectedMsgFilesIds.length || signInProcess || certDialogOpen)}
+                                  startIcon={<PictureInPictureAltIcon />}
+                                  onClick={ handleClickGetFileMultiple }>Скачать с отметкой об ЭП</Button>
+                                {(signInProcess || certDialogOpen) && <CircularProgressStyled size={24} />}
+                          </ActionButtonWrapper>
+                        </Grid>
+                        <Grid item xs={12}>
+                      
+                          <FilesList 
+                              items={msgFiles} 
+                              selectedIds = {selectedMsgFilesIds}
+                              selectAllClick = {handleSelectAllClick}
+                              selectItem = {handleSelectItem}
+                              fileSignArray = {fileSign}
+                              rowsPerPage={msgFiles.length}
+                              page={0} 
+                              loading={msgFilesLoading} 
+                              getFile={ (url, filename) => { 
+                                  fileService.getFile(url).then(
+                                      fileBlob => fileDownload(fileBlob, filename),
+                                      error    => alert(`Файл не сформирован или доступ к файлу запрещён. Msg: ${error}`)
+                                  )}
+                              }
+                              saveFileSignAsBase64={ (result, signFileName) => {
+                                      // Скачиваем текстовый файл(base64)
+                                      textFileDownload(result,signFileName+'.sig');
+                                  }
+                              }
+                              saveFileSignAsBin={ (result, signFileName) => {
+                                      fetch('data:application/octet-stream;base64,'+result).then((response) => {
+                                              response.blob().then(blob => {
+                                                      // Скачиваем бинарный файл
+                                                      fileDownload(blob,signFileName+'.sgn')
+                                              })
+                                          })
+                                  }
+                              }
+                              fileSign={handleClickSign}
+                              
+                              users={users}
                             />
-                        ):null}
-                      </Grid>
-                      <Grid item xs={12}>
-                        <Typography variant="body2" align="left" color='textSecondary'>
-                          Прикрепленные файлы
-                        </Typography>       
-                      </Grid>
-                      <Grid item xs={12}>
-                        <ActionButtonWrapper>
-                              <Button 
-                                variant="contained"
-                                color="primary"
-                                disabled={(!selectedMsgFilesIds.length || signInProcess || certDialogOpen)}
-                                startIcon={<HowToRegIcon />}
-                                onClick={ handleClickSignMultiple }>Подписать ЭП</Button>
-                              <Button 
-                                variant="contained"
-                                color="primary"
-                                disabled={(!selectedMsgFilesIds.length || signInProcess || certDialogOpen)}
-                                startIcon={<PictureInPictureAltIcon />}
-                                onClick={ handleClickGetFileMultiple }>Скачать с отметкой об ЭП</Button>
-                              {(signInProcess || certDialogOpen) && <CircularProgressStyled size={24} />}
-                        </ActionButtonWrapper>
-                      </Grid>
-                      <Grid item xs={12}>
-                    
-                        <FilesList 
-                            items={msgFiles} 
-                            selectedIds = {selectedMsgFilesIds}
-                            selectAllClick = {handleSelectAllClick}
-                            selectItem = {handleSelectItem}
-                            fileSignArray = {fileSign}
-                            rowsPerPage={msgFiles.length}
-                            page={0} 
-                            loading={msgFilesLoading} 
-                            getFile={ (url, filename) => { 
-                                fileService.getFile(url).then(
-                                    fileBlob => fileDownload(fileBlob, filename),
-                                    error    => alert(`Файл не сформирован или доступ к файлу запрещён. Msg: ${error}`)
-                                )}
-                            }
-                            saveFileSignAsBase64={ (result, signFileName) => {
-                                    // Скачиваем текстовый файл(base64)
-                                    textFileDownload(result,signFileName+'.sig');
-                                }
-                            }
-                            saveFileSignAsBin={ (result, signFileName) => {
-                                    fetch('data:application/octet-stream;base64,'+result).then((response) => {
-                                            response.blob().then(blob => {
-                                                    // Скачиваем бинарный файл
-                                                    fileDownload(blob,signFileName+'.sgn')
-                                            })
-                                        })
-                                }
-                            }
-                            fileSign={handleClickSign}
-                            
-                            users={users}
-                          />
-                      </Grid>
+                        </Grid>
+                      </>):null}
                   </Grid>
               </PaperStyled>
             </Grid>
           </Grid>
         </ContainerStyled>
         <CertDialog open={certDialogOpen} onClose={handleCloseCertDialog} />
+        <Popover
+          id={id}
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+        >
+          <ContainerStyled>
+            <Grid item xs={12}>
+                <TextField
+                    variant="standard"
+                    fullWidth
+                    readOnly
+                    label="Организация"
+                    id="msg-subject"
+                    value={msgSubject}
+                    helperText="" />
+            </Grid>
+            <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    readOnly
+                    id="msg-text"
+                    label="Место проведения мероприятия"
+                    multiline
+                    minRows={2}
+                    maxRows={20}
+                    value={msgText}
+                    variant="outlined"
+                    margin="normal"
+                  />
+            </Grid>
+            <Grid container>
+              <Grid item xs={12}>
+                  <div align="left">
+                    <Typography variant="body2" align="left" color='textSecondary'>
+                      От кого
+                    </Typography> 
+                    <Chip label={msgFrom}/>
+                  </div>
+              </Grid>
+              <Grid item xs={12}>
+                  <div align="left">
+                    <Typography variant="body2" align="left" color='textSecondary'>
+                      Кому
+                    </Typography> 
+                    { (msgTo).map( (toUser) => 
+                        (<Chip key={toUser} label={toUser}/>)
+                    )}
+                  </div>
+              </Grid>
+            </Grid>
+          </ContainerStyled>  
+        </Popover>
+        
       {displistId &&
-        <DispListDataGrid listId = {displistId}/>
+        <DispListDataGrid listId = {displistId} isDraft = {msgStatusName === 'draft'} />
       }
     </div>
   )

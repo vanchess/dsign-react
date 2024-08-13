@@ -4,13 +4,14 @@ import CustomLoadingOverlay from "../DataGrid/CustomLoadingOverlay";
 import CustomNoRowsOverlay from "../DataGrid/CustomNoRowsOverlay";
 import CustomPagination from "../DataGrid/CustomPagination";
 import EditToolbar from './EditToolbar.js'
+import CustomToolbar from '../DataGrid/CustomToolbar';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import EditInputCell from './EditInputCell.js';
 import AddIcon from '@mui/icons-material/Add';
-import MailLockIcon from '@mui/icons-material/MailLock';
+import ControlPointDuplicateIcon from '@mui/icons-material/ControlPointDuplicate';
 import Snackbar from '@mui/material/Snackbar';
 import { Alert, Button } from '@mui/material';
 import { uuidv4 } from '../../_helpers/uniqueId';
@@ -45,7 +46,7 @@ const StyledBox = styled('div')(({ theme }) => ({
 
 export default function DispListDataGrid(props) {
     const dispatch = useDispatch();
-    const {listId:displistId} = props;
+    const {listId:displistId, isDraft} = props;
     const [snackbar, setSnackbar] = React.useState(null);
     const rowModesModel = useSelector((store) => rowModesModelSelector(store, displistId));
     const rows = useSelector((store) => displistEntriesSelector(store, displistId));
@@ -84,6 +85,7 @@ export default function DispListDataGrid(props) {
         dispatch(displistDeleteEntry({displist_id:displistId, id, dbStatus}));
       }
     };
+    const handleCopyClick = (row) => () => copyRow(row);
 
     const handleRowEditStop = (params, event) => {
         if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -168,6 +170,28 @@ export default function DispListDataGrid(props) {
           isNew: true,
         }))
       };
+
+    const copyRow = (row) => {
+        if (rowsHasError()) return;
+          
+        const id = uuidv4();
+
+        dispatch(displistAddEntry({
+          displist_id:displistId,
+          id, 
+          first_name: row.first_name, 
+          middle_name: row.middle_name, 
+          last_name: row.last_name, 
+          birthday: row.birthday, 
+          enp: row.enp, 
+          snils: row.snils, 
+          preventive_medical_measure_id:'', 
+          //description, 
+          contact_info:row.contact_info,
+          type: '', 
+          isNew: true,
+        }))
+      }
 
     const handleCloseSnackbar = () => setSnackbar(null);
 
@@ -295,6 +319,7 @@ export default function DispListDataGrid(props) {
                       type: 'actions',
                       // renderCell: renderOpenButton(onClick),
                       getActions: ({ id, row }) => {
+                          if (!isDraft) return [];
                           const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
                           if (isInEditMode) {
                             return [
@@ -329,6 +354,13 @@ export default function DispListDataGrid(props) {
                               onClick={handleDeleteClick(id, row.dbStatus)} // 
                               color="inherit"
                             />,
+                            <GridActionsCellItem
+                              icon={<ControlPointDuplicateIcon />}
+                              label="Copy"
+                              onClick={handleCopyClick(row)} // 
+                              color="inherit"
+                            />,
+                            
                           ];
                       },
                       width: 150,
@@ -339,7 +371,7 @@ export default function DispListDataGrid(props) {
                     },
                 ]}  
                 slots={{
-                    toolbar: EditToolbar,
+                    toolbar: isDraft ? EditToolbar : CustomToolbar,
                     loadingOverlay: CustomLoadingOverlay,
                     noRowsOverlay: CustomNoRowsOverlay,
                    // pagination: CustomPagination,
@@ -348,9 +380,11 @@ export default function DispListDataGrid(props) {
                     toolbar: { addRow }
                 }}
             />
+            {(isDraft)?
             <Button color="primary" startIcon={<AddIcon />} onClick={addRow}>
               Добавить запись
             </Button>
+            :null}
             {!!snackbar && (
                 <Snackbar
                   open
