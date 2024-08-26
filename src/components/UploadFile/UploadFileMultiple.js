@@ -1,32 +1,17 @@
 import React from 'react';
 
-import withStyles from '@mui/styles/withStyles';
-import { green } from '@mui/material/colors';
-
 import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 import { fileService } from '../../services';
+import { styled } from '@mui/material';
+import { ButtonCircularProgress } from './ButtonCircularProgress';
 
-const styles = theme => ({
-   root: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-   wrapper: {
-    margin: theme.spacing(1),
-    position: 'relative',
-  },
-   buttonProgress: {
-    color: green[500],
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: -12,
-    marginLeft: -12,
-  },
-})
+const DivWrapper = styled('div')(({theme}) => ({
+  margin: theme.spacing(1),
+  position: 'relative',
+}));
+
 
 class UploadFileMultiple extends React.Component {
   constructor(props) {
@@ -41,13 +26,11 @@ class UploadFileMultiple extends React.Component {
   _handleSubmit(e) {
     e.preventDefault();
 
-    // console.log('handle uploading-', this.state.attachment);
     this.setState({
         uploading: true
       });
     fileService.uploadMultiple(this.state.attachment).then(
         result => {
-            // console.log(result);
             this.setState({
                 attachment: [],
                 uploading: false,
@@ -84,20 +67,15 @@ class UploadFileMultiple extends React.Component {
         fileName: fileName.join(', ')
       });
     
-    // reader.onloadend = () => { }
-    // reader.readAsDataURL(file)
   }
 
   render() {
-    const { classes } = this.props;
-    
-
 
     return (
       <div>
         <form onSubmit={(e)=>this._handleSubmit(e)}>
-          <div className={classes.root}>
-            <div className={classes.wrapper}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <DivWrapper>
             <Button
               disabled={ this.state.uploading }
               variant="contained"
@@ -111,9 +89,9 @@ class UploadFileMultiple extends React.Component {
                 hidden
               />
             </Button>
-            </div>
+            </DivWrapper>
             {this.state.fileName}
-            <div className={classes.wrapper}>
+            <DivWrapper>
               <Button 
                 variant="contained"
                 color="primary"
@@ -121,8 +99,8 @@ class UploadFileMultiple extends React.Component {
                 disabled={!this.state.attachment.length || this.state.uploading}
                 startIcon={<CloudUploadIcon />}
                 onClick={(e)=>this._handleSubmit(e)}>Загрузить</Button>
-              {this.state.uploading && <CircularProgress size={24} className={classes.buttonProgress} />}
-            </div>
+              {this.state.uploading && <ButtonCircularProgress size={24} />}
+            </DivWrapper>
           </div>
         </form>
 
@@ -131,4 +109,4 @@ class UploadFileMultiple extends React.Component {
   }
 }
 
-export default withStyles(styles)(UploadFileMultiple);
+export default UploadFileMultiple;

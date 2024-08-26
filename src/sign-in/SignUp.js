@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
 import Container from '@mui/material/Container';
 
 import { useSelector, useDispatch  } from 'react-redux'
@@ -20,34 +17,19 @@ import { inviteService } from '../services';
 
 import { useHistory } from "react-router-dom";
 import { Link as RouterLink } from 'react-router-dom';
+import { FormStyled } from './FormStyled.js';
+import { styled } from '@mui/material';
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    width: theme.spacing(7),
-    height: theme.spacing(7),
-    // backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
-
+const DivStyled = styled('div')(({theme}) => ({
+  marginTop: theme.spacing(8),
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+}))
   
 const defaultFormButtonText = 'Зарегистрироваться';
 
 export default function SignUp(props) {
-  const classes = useStyles();
   let history = useHistory();
   
   const organizations = useSelector(store => store.organizationReducer.items);
@@ -147,12 +129,12 @@ export default function SignUp(props) {
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar} src="/tfoms.png" />
+      <DivStyled>
+        <AvatarStyled src="/tfoms.png" />
         <Typography component="h1" variant="h5">
           Регистрация
         </Typography>
-        <form className={classes.form} onSubmit={handleSubmit}>
+        <FormStyled onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -300,15 +282,14 @@ export default function SignUp(props) {
               />
             </Grid>
           </Grid>
-          <Button
+          <SubmitButton
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}
           >
           { formButtonText }
-          </Button>
+          </SubmitButton>
           <Grid container justifyContent="flex-end">
             <Grid item>
               <Link
@@ -321,8 +302,8 @@ export default function SignUp(props) {
               </Link>
             </Grid>
           </Grid>
-        </form>
-      </div>
+        </FormStyled>
+      </DivStyled>
       <Box mt={5}>
 
       </Box>

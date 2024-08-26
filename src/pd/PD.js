@@ -3,49 +3,28 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
 import Container from '@mui/material/Container';
 
 import { validate } from '../_helpers';
 import { pdService } from '../services';
+import { AvatarStyled } from '../sign-in/AvatarStyled';
+import { FormStyled } from '../sign-in/FormStyled';
+import { SubmitButton } from '../sign-in/SubmitButton';
+import { styled } from '@mui/material';
 
-import moment from 'moment';
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    width: theme.spacing(7),
-    height: theme.spacing(7),
-    // backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
-
+const DivStyled = styled('div')(({theme}) => ({
+  marginTop: theme.spacing(8),
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+}))
   
 const defaultFormButtonText = 'Сохранить';
 
-export default function PD(props) {
-  const classes = useStyles();
-  
+export default function PD(props) { 
   const [formButtonText, setFormButtonText] = useState(defaultFormButtonText);
   const [formButtonDisabled, setFormButtonDisabled] = useState(false);
   
@@ -135,16 +114,15 @@ export default function PD(props) {
         error  => (history.push('/'))
       )
   },[]);
-  // console.log(pDate);
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar} src="/tfoms.png" />
+      <DivStyled>
+        <AvatarStyled src="/tfoms.png" />
         <Typography component="h1" variant="h5">
           Данные для выпуска сертификата
         </Typography>
-        <form className={classes.form} onSubmit={handleSubmit}>
+        <FormStyled onSubmit={handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -322,18 +300,17 @@ export default function PD(props) {
             </Grid>
             
           </Grid>
-          <Button
+          <SubmitButton
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}
           >
           { formButtonText }
-          </Button>
+          </SubmitButton>
           
-        </form>
-      </div>
+        </FormStyled>
+      </DivStyled>
       <Box mt={5}>
 
       </Box>

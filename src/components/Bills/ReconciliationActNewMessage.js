@@ -1,39 +1,24 @@
 import React from 'react';
 import { withRouter } from "react-router-dom";
-//import clsx from 'clsx';
+
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
-import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 
-import FormGroup from '@mui/material/FormGroup';
-import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
-import Input from '@mui/material/Input';
-import FormHelperText from '@mui/material/FormHelperText';
 
 import CircularProgress from '@mui/material/CircularProgress';
-
 
 import UploadFileMultiple from '../UploadFile/UploadFileMultiple';
 import FilesList from '../UploadFile/FilesList';
 
-import withStyles from '@mui/styles/withStyles';
-import { green } from '@mui/material/colors';
-
 import SendIcon from '@mui/icons-material/Send';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 import { connect } from 'react-redux';
 
-// import { myFileFetch } from '../../store/my-file/myFileAction.js'
 import { userFetch } from '../../store/user/userAction.js'
 import { cadesCertFetch } from '../../store/cadesplugin/cadespluginAction.js'
 
@@ -46,55 +31,15 @@ import { fileDownload, textFileDownload } from '../../_helpers';
 import CertDialog from '../Dialog/CertDialog';
 
 import moment from 'moment';
-import { MenuItem, Select } from '@mui/material';
+import { FormControl, MenuItem, Select } from '@mui/material';
 import { periodFetch } from '../../store/period/periodAction';
 import { organizationFetch } from '../../store/organization/organizationAction';
-
-const styles = theme => ({
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-  },
-  
-  actionButtonDiv: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-start'
-  },
-  buttonSendDiv: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end'
-  },
-  wrapper: {
-    margin: theme.spacing(1),
-    position: 'relative',
-  },
-  buttonProgress: {
-    color: green[500],
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: -12,
-    marginLeft: -12,
-  },
-  //fixedHeight: {
-  //  height: 240,
-  //},
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
-    color: '#fff',
-  },
-})
-
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
+import { ContainerStyled } from '../Message/ContainerStyled.js';
+import { PaperStyled } from '../Message/PaperStyled.js';
+import { ActionButtonWrapper } from '../Message/ActionButtonWrapper.js';
+import { SendButtonWrapper } from '../Message/SendButtonWrapper.js';
+import { CircularProgressStyled } from '../Message/CircularProgressStyled.js';
+import { BackdropStyled } from '../Message/BackdropStyled.js'
 
 const filterOrganizationOptions = createFilterOptions({
   stringify: (option) => option.attributes.short_name + option.attributes.name,
@@ -142,7 +87,6 @@ class ReconciliationActNewMessage extends React.Component {
     }
     
     componentDidMount(){
-        // this.props.fetchMyFiles(this.props.page, this.props.perPage);
         this.props.fetchUsers(0, -1);
         this.props.fetchPeriod();
         this.props.fetchOrganization();
@@ -209,7 +153,6 @@ class ReconciliationActNewMessage extends React.Component {
         this.setState(state => {
             
           const msgFiles = [...state.msgFiles, ...files];
-          //state.msgFiles.concat(file);
      
           return {
             msgFiles
@@ -356,7 +299,6 @@ class ReconciliationActNewMessage extends React.Component {
         msg.attach  = this.state.msgFiles.map(item => item.id);
         msg.period  = this.state.msgPeriod;
         msg.type    = msgType;
-        //console.log(msg);
         messageService.sendMsg(msg).then(
             () => { 
                 this.setState({
@@ -407,9 +349,6 @@ class ReconciliationActNewMessage extends React.Component {
   
   
   render() {
-      const { classes } = this.props;
-      //const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
       const periodList = this.props.periodList.slice().sort(function(a, b) {
         if (a.attributes.from < b.attributes.from) {
           return 1; }
@@ -420,18 +359,17 @@ class ReconciliationActNewMessage extends React.Component {
 
       return (
           <div>
-            <Backdrop className={classes.backdrop} open={this.state.signInProcess}>
+            <BackdropStyled open={this.state.signInProcess}>
               <CircularProgress color="inherit" />
-            </Backdrop>
-            <Container maxWidth="lg" className={classes.container}>
+            </BackdropStyled>
+            <ContainerStyled maxWidth="lg" >
               <Grid container spacing={3}>
                 {/* Recent Orders */}
                 <Grid item xs={12}>
-                  <Paper className={classes.paper}>
+                  <PaperStyled>
                     <Grid container>
                         <Grid item xs={12}>
-                        <div className={classes.buttonSendDiv} >
-                          <div className={classes.wrapper}>
+                          <SendButtonWrapper>
                               <Button 
                                 variant="contained"
                                 color="primary"
@@ -439,15 +377,14 @@ class ReconciliationActNewMessage extends React.Component {
                                 disabled={this.state.msgSending}
                                 startIcon={<SendIcon />}
                                 onClick={(e)=>this._handleSubmit(e)}>Отправить</Button>
-                              {this.state.msgSending && <CircularProgress size={24} className={classes.buttonProgress} />}
-                          </div>
-                        </div>
+                              {this.state.msgSending && <CircularProgressStyled size={24}/>}
+                          </SendButtonWrapper>
                         </Grid>
                         <Grid item xs={12}>
                         <form onSubmit={(e)=>this._handleSubmit(e)}>
                           <Grid container>
                             <Grid item xs={12} sm={4}>
-                                <FormControl variant="standard" fullWidth className={classes.comboboxFormControl}>
+                                <FormControl variant="standard" fullWidth >
                                   <InputLabel id='msg-period-label' >Период</InputLabel>
                                   <Select
                                       variant="standard"
@@ -471,8 +408,8 @@ class ReconciliationActNewMessage extends React.Component {
                                   getOptionLabel={(option) => (option.attributes.short_name)}
                                   filterOptions={filterOrganizationOptions}
                                   onChange={this.handleChangeMsgToOrg}
-                                  renderOption={(props, option, { selected }) => (
-                                    <li {...props}>
+                                  renderOption={({key, ...props}, option, { selected }) => (
+                                    <li key={option.id} {...props}>
                                       {option.attributes.short_name}
                                     </li>
                                   )}
@@ -503,18 +440,16 @@ class ReconciliationActNewMessage extends React.Component {
                             <Grid item xs={12}>
                                 <Typography variant="body1" align="left">
                                   Прикрепленные файлы
-                                </Typography>                          
-                                <div className={classes.actionButtonDiv} >
-                                    <div className={classes.wrapper}>
-                                      <Button 
-                                        variant="contained"
-                                        color="primary"
-                                        disabled={(!this.state.selectedMsgFilesIds.length || this.state.signInProcess || this.state.certDialogOpen)}
-                                        startIcon={<HowToRegIcon />}
-                                        onClick={ this.handleClickSignMultiple }>Подписать ЭП</Button>
-                                      {(this.state.signInProcess || this.state.certDialogOpen) && <CircularProgress size={24} className={classes.buttonProgress} />}
-                                    </div>
-                                </div>
+                                </Typography>
+                                <ActionButtonWrapper>
+                                    <Button 
+                                      variant="contained"
+                                      color="primary"
+                                      disabled={(!this.state.selectedMsgFilesIds.length || this.state.signInProcess || this.state.certDialogOpen)}
+                                      startIcon={<HowToRegIcon />}
+                                      onClick={ this.handleClickSignMultiple }>Подписать ЭП</Button>
+                                    {(this.state.signInProcess || this.state.certDialogOpen) && <CircularProgressStyled size={24} />}
+                                </ActionButtonWrapper>
                                 <CertDialog open={this.state.certDialogOpen} onClose={this.handleCloseCertDialog} />
                                 <FilesList 
                                     items = {this.state.msgFiles}
@@ -554,8 +489,7 @@ class ReconciliationActNewMessage extends React.Component {
                         </Grid>
                         <Grid item xs={12}>
                         <UploadFileMultiple onUploadFile={(result) => this.handleOnUploadFile(result)} />
-                        <div className={classes.buttonSendDiv} >
-                            <div className={classes.wrapper}>
+                        <SendButtonWrapper>
                               <Button 
                                 variant="contained"
                                 color="primary"
@@ -563,22 +497,20 @@ class ReconciliationActNewMessage extends React.Component {
                                 disabled={this.state.msgSending}
                                 startIcon={<SendIcon />}
                                 onClick={(e)=>this._handleSubmit(e)}>Отправить</Button>
-                              {this.state.msgSending && <CircularProgress size={24} className={classes.buttonProgress} />}
-                            </div>
-                        </div>
+                              {this.state.msgSending && <CircularProgressStyled size={24} />}
+                        </SendButtonWrapper>
                         </Grid>
                       </Grid>
-                  </Paper>
+                  </PaperStyled>
                 </Grid>
               </Grid>
-            </Container>
+            </ContainerStyled>
           </div>
       );
   }
 }
 
 const mapStateToProps = function(store) {
-  // console.log(store);
   return {
       users: store.userReducer.items,
       usersLoading: store.userReducer.loading,
@@ -588,17 +520,6 @@ const mapStateToProps = function(store) {
 }
 const mapDispatchToProps = dispatch => {
   return {
-    /*
-    handleChangePage: (event, page) => {
-        dispatch(myFileStartChangePage(page));
-    },
-    handleChangeRowsPerPage: (event) => {
-        let perPage = parseInt(event.target.value, 10);
-        dispatch(myFileStartChangeRowPerPage(perPage));
-    },
-    fetchMyFiles: (page, perPage) => {
-        dispatch(myFileFetch(page, perPage));
-    },*/
     fetchUsers: (page, perPage) => {
         dispatch(userFetch(page, perPage));
     },
@@ -615,4 +536,4 @@ const mapDispatchToProps = dispatch => {
 }
 
 
-export default connect(mapStateToProps,mapDispatchToProps)(withRouter(withStyles(styles)(ReconciliationActNewMessage)));
+export default connect(mapStateToProps,mapDispatchToProps)(withRouter(ReconciliationActNewMessage));

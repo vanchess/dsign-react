@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import FilesList from "../components/UploadFile/FilesList";
 import {
     Button,
     Chip,
     CssBaseline,
     IconButton,
+    styled,
     Table,
     TableBody,
     TableCell,
@@ -13,10 +13,6 @@ import {
     Tooltip,
     Typography,
 } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
-import { green } from "@mui/material/colors";
-import CircularProgress from '@mui/material/CircularProgress';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CertDialogAllSnils from "../components/Dialog/CertDialogAllSnils";
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import ArchiveIcon from '@mui/icons-material/Archive';
@@ -26,39 +22,21 @@ import { authService, cadespluginService } from "../services";
 import { fileDownload, textFileDownload } from "../_helpers";
 import JSZip from "jszip";
 import { Header } from "../eissoi/Header";
+import { CircularProgressStyled } from "../components/Message/CircularProgressStyled";
 
-const useStyles = makeStyles((theme) => ({
-        root: {
-            display: 'flex',
-            alignItems: 'center',
-          },
-           wrapper: {
-            margin: theme.spacing(1),
-            position: 'relative',
-          },
-           buttonProgress: {
-            color: green[500],
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            marginTop: -12,
-            marginLeft: -12,
-          },
-          appBarSpacer: theme.mixins.toolbar,
-          content: {
-            flexGrow: 1,
-            height: '100vh',
-            overflow: 'auto',
-          },
-          buttonProgress: {
-            color: green[500],
-            position: 'absolute',
-            top: '50%',
-            left: 0,
-            marginTop: -12,
-            marginLeft: -12,
-          },
-    }))
+const Wrapper = styled('div')(({theme}) => ({
+  margin: theme.spacing(1),
+  position: 'relative',
+}))
+
+const AppBarSpacer = styled('div')(({theme}) => theme.mixins.toolbar);
+
+const MainContent  = styled('main')`
+  flex-grow: 1;
+  height: '100vh';
+  overflow: 'auto';
+`
+
 
 export default function Eissoi() {
     const dispatch = useDispatch();
@@ -70,8 +48,6 @@ export default function Eissoi() {
     let certDialogSelectedValue = {};
     let [signFile, setSignFile] = useState(null);
     let [signInProcess, setSignInProcess] = useState(false)
-
-    const classes = useStyles();
 
     let i = 1;
 
@@ -149,7 +125,6 @@ export default function Eissoi() {
             (result) => {
                 addFileSign(signFile.id, {name: certDialogSelectedValue.name, base64:result, id: new Date().getTime() + certDialogSelectedValue.thumbprint});
                 setSignInProcess(false);
-                // console.log(`Success: ${result}`);
             },
             (error) => {
               setSignInProcess(false);
@@ -169,8 +144,8 @@ export default function Eissoi() {
             <CssBaseline />
             <Header title={'Подписание файлов (для ЕИССОИ)'} open={false} userName={''} handleDrawerOpen={() => {}} logout={authService.logout}  />
             <CertDialogAllSnils open={certDialogOpen} onClose={handleCloseCertDialog} />
-            <main className={classes.content}>
-              <div className={classes.appBarSpacer} />
+            <MainContent>
+              <AppBarSpacer />
               <Table size="small">
                   <TableHead>
                     <TableRow>
@@ -196,28 +171,28 @@ export default function Eissoi() {
                         <TableCell>
                         {fileSignArray[row.id] && (
                           <Tooltip title="Скачать архив с подписью" disableInteractive>
-                            <div className={classes.wrapper}>
+                            <Wrapper>
                               <IconButton
                                   aria-label="zip"
                                   onClick={ () => { getZipOms(row) } }
                                   disabled={ loading }
                                   size="large"><ArchiveIcon /></IconButton>
-                              {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
-                            </div>
+                              {loading && <CircularProgressStyled size={24}/>}
+                            </Wrapper>
                           </Tooltip>
                         )}
                         </TableCell>
                         <TableCell>
                           <Tooltip title="Подписать файл электронной подписью" disableInteractive>
 
-                            <div className={classes.wrapper}>
+                            <Wrapper>
                               <IconButton
                                   aria-label="sign"
                                   disabled={( signInProcess || certDialogOpen)}
                                   onClick={ () => { handleClickSign(row) } }
                                   size="large"><HowToRegIcon /></IconButton>
-                              {signInProcess && <CircularProgress size={24} className={classes.buttonProgress} />}
-                            </div>
+                              {signInProcess && <CircularProgressStyled size={24} />}
+                            </Wrapper>
                           </Tooltip>
                         </TableCell>
                         <TableCell>
@@ -240,8 +215,8 @@ export default function Eissoi() {
           
               <div>
                   <form>
-                      <div className={classes.root}>
-                          <div className={classes.wrapper}>
+                      <div style={{display: 'flex', alignItems: 'center'}}>
+                          <Wrapper>
                               <Button variant="contained" component="label">
                                   Выбрать файлы
                                   <input
@@ -251,11 +226,11 @@ export default function Eissoi() {
                                       hidden
                                   />
                               </Button>
-                          </div>
+                          </Wrapper>
                       </div>
                   </form>
               </div>
-            </main>
+            </MainContent>
         </div>
     );
 }

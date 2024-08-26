@@ -1,3 +1,4 @@
+/*
 import React from 'react';
 import { connect } from 'react-redux';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -65,3 +66,4 @@ const mapDispatchToProps = dispatch => {
 }
 
 export default connect(mapStateToProps,mapDispatchToProps)(withStyles(styles)(FramePage));
+*/

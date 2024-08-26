@@ -1,106 +1,52 @@
 import React from 'react';
-import { withRouter } from "react-router-dom";
-//import clsx from 'clsx';
-import Container from '@mui/material/Container';
+import { useRouteMatch } from "react-router-dom";
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 
 import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
 
-import withStyles from '@mui/styles/withStyles';
-
-import { connect } from 'react-redux';
-
 import ShowMessage from '../Message/ShowMessage';
 
 import { messageService } from '../../services';
+import { useSelector } from 'react-redux';
+import { ShowMessageContainerStyled } from '../Message/ShowMessageContainerStyled';
+import { ShowMessagePaperStyled } from '../Message/ShowMessagePaperStyled';
 
-const styles = theme => ({
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(0),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    //flexDirection: 'column',
-  },
-})
+export default function MekShowMessage(props) {
+  const match = useRouteMatch();
+  const permission = useSelector(store => store.authReducer.user.permissions);
 
+  const handleReject = () => {
+    let msgId = match.params.id;
+    messageService.setStatus(msgId, 'rejected').then(
+        () => { 
+            this.props.history.push('/expertise/msg/' + match.params.type) 
+        },
+        (err) => { 
+            alert(err);
+        } 
+    );
+  }
 
-class MekShowMessage extends React.Component {
-
-    constructor(props){
-      super(props);
-      
-      this.handleReject = this.handleReject.bind(this);
-    }
-    
-    componentDidMount(){
-        
-    }
-    
-    componentDidUpdate(prevProps, prevState) {
-      
-    }
-
-    handleReject = () => {
-        let msgId = this.props.match.params.id;
-        messageService.setStatus(msgId, 'rejected').then(
-            () => { 
-                this.props.history.push('/expertise/msg/' + this.props.match.params.type) 
-            },
-            (err) => { 
-                alert(err);
-            } 
-        );
-    }
-  
-  
-  render() {
-      const { classes } = this.props;
-      //const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
-      return (
-        <div>
-        {(this.props.permission && this.props.permission.includes('reject ' + this.props.match.params.type)) ?
-          (<Container maxWidth="lg" className={classes.container}>
-              <Grid container spacing={3}>
-                {/* Recent Orders */}
-                <Grid item xs={12}>
-                  <Paper className={classes.paper}>
-                      <Button 
-                        variant="contained"
-                        color="primary"
-                        startIcon={<ThumbDownAltOutlinedIcon />}
-                        onClick={this.handleReject}>Скрыть сообщение</Button>
-                  </Paper>
-                </Grid>
+  return (
+    <div>
+      {(permission && permission.includes('reject ' + match.params.type)) ?
+        (<ShowMessageContainerStyled maxWidth="lg" >
+            <Grid container spacing={3}>
+              {/* Recent Orders */}
+              <Grid item xs={12}>
+                <ShowMessagePaperStyled>
+                    <Button 
+                      variant="contained"
+                      color="primary"
+                      startIcon={<ThumbDownAltOutlinedIcon />}
+                      onClick={handleReject}>Скрыть сообщение</Button>
+                </ShowMessagePaperStyled>
               </Grid>
-          </Container>):null
-        }
-          <ShowMessage setTitle={this.props.setTitle} />
-        </div>
-      );
-  }
+            </Grid>
+        </ShowMessageContainerStyled>):null
+      }
+      <ShowMessage setTitle={props.setTitle} />
+    </div>
+  )
 }
-
-const mapStateToProps = function(store) {
-  // console.log(store);
-  return {
-        permission: store.authReducer.user.permissions,
-    };
-}
-const mapDispatchToProps = dispatch => {
-  return {
-    /*
-    fetchMyFiles: (page, perPage) => {
-        dispatch(myFileFetch(page, perPage));
-    },*/
-  }
-}
-
-
-export default connect(mapStateToProps,mapDispatchToProps)(withRouter(withStyles(styles)(MekShowMessage)));

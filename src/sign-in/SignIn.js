@@ -3,15 +3,10 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
-import {List, ListItem, Divider, ListItemAvatar, ListItemText } from '@mui/material';
+import {List, ListItem, Divider, ListItemAvatar, ListItemText, styled } from '@mui/material';
 import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-// import { makeStyles } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 
 import FormControl from '@mui/material/FormControl';
@@ -23,60 +18,34 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import PropTypes from 'prop-types';
-import withStyles from '@mui/styles/withStyles';
 
 import { withRouter } from "react-router-dom";
 import { connect } from 'react-redux';
 import { login as signin } from '../store/auth/authAction.js'
 
-// import $ from 'jquery';
-import axios from 'axios';
-
-import { authService } from '../services';
-import { Card, CardContent, CardMedia } from '@mui/material';
 import Paper from '@mui/material/Paper';
+import { AvatarStyled } from './AvatarStyled.js';
+import { FormStyled } from './FormStyled.js';
+import { SubmitButton } from './SubmitButton.js';
 
 const defaultFormButtonText = 'Войти';
 const disabledFormButtonText = 'Загрузка...';
 
-const styles = theme => ({
-  '@global': {
-    body: {
-      backgroundColor: theme.palette.common.white,
-    },
-  },
-  paper: {
+const PaperStyled = styled(Paper)(({theme}) => ({
     marginTop: theme.spacing(8),
     padding: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    width: theme.spacing(7),
-    height: theme.spacing(7),
-    // backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-  card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  cardMedia: {
-    paddingTop: '56.25%', // 16:9
-  },
-  cardContent: {
-    flexGrow: 1,
-  },
-});
+}))
+
+const DivStyled = styled('div')(({theme}) => ({
+  marginTop: theme.spacing(8),
+  padding: theme.spacing(2),
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+}))
 
 const cards = [
   {id:1, title:'Подписать файлы ЭП', text:'', image:"/images/tfoms.png", to:'/eissoi' },
@@ -130,12 +99,12 @@ class SignIn extends React.Component {
         <CssBaseline />
           <Grid container>
             <Grid item xs={12} sm={12} md={6}>
-              <div className={classes.paper}>
-              <Avatar className={classes.avatar} src="/tfoms.png" />
+              <DivStyled>
+              <AvatarStyled src="/tfoms.png" />
               <Typography component="h1" variant="h5">
                 Войти в систему
               </Typography>
-              <form className={classes.form} onSubmit={this.handleSubmit}>
+              <FormStyled onSubmit={this.handleSubmit}>
                 <TextField
                   variant="outlined"
                   margin="normal"
@@ -151,7 +120,7 @@ class SignIn extends React.Component {
                   autoFocus
                 />
                 <FormControl fullWidth margin="normal" variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-password">Пароль</InputLabel>
+                  <InputLabel htmlFor="password">Пароль</InputLabel>
                     <OutlinedInput
                       required
                       
@@ -180,16 +149,15 @@ class SignIn extends React.Component {
                   label="Remember me"
                 />
                 */}
-                <Button
+                <SubmitButton
                   type="submit"
                   fullWidth
                   variant="contained"
                   color="primary"
-                  className={classes.submit}
                   disabled={disabled}
                 >
                   {disabled ? disabledFormButtonText : defaultFormButtonText}
-                </Button>
+                </SubmitButton>
                 <Grid container>
                   {/*
                   <Grid item xs>
@@ -204,12 +172,12 @@ class SignIn extends React.Component {
                   </Grid>
                   */}
                 </Grid>
-              </form>
-            </div>
+              </FormStyled>
+            </DivStyled>
           </Grid>
           <Grid item xs={12} sm={12} md={6}>
-            <Paper variant="outlined" className={classes.paper}>
-              <List className={classes.root}>
+            <PaperStyled variant="outlined" >
+              <List>
                 {cardsOut.map((card) => (
                   <React.Fragment key={card.id}>
                     <ListItem alignItems="flex-start" component={Link} href={ card.to } target="_blank" rel="noopener noreferrer" color="inherit" underline="none">
@@ -247,7 +215,7 @@ class SignIn extends React.Component {
                   </React.Fragment>
                 ))} 
               </List>
-            </Paper>
+            </PaperStyled>
           </Grid>
         </Grid>
       </Container>
@@ -256,7 +224,7 @@ class SignIn extends React.Component {
 }
 
 SignIn.propTypes = {
-  classes: PropTypes.object.isRequired,
+  // classes: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = function(store) {
@@ -272,4 +240,4 @@ const mapDispatchToProps = dispatch => {
   }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(withRouter(withStyles(styles)(SignIn)));
+export default connect(mapStateToProps,mapDispatchToProps)(withRouter(SignIn));

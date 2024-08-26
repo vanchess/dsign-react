@@ -1,11 +1,7 @@
 import React from 'react';
 import { withRouter } from "react-router-dom";
-import withStyles from '@mui/styles/withStyles';
-import { green } from '@mui/material/colors';
 
-import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
 
 import MessageList from '../Message/MessageList';
@@ -14,43 +10,8 @@ import { connect } from 'react-redux';
 
 import { messageFetch } from '../../store/expertise/meeMessageInAction.js'
 import { messageStartChangeRowPerPage, messageStartChangePage } from '../../store/pagination/expertise/meeMessageInPaginationAction.js'
-
-const styles = theme => ({
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-  },
-  
-  root: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  wrapper: {
-    margin: theme.spacing(1),
-    position: 'relative',
-  },
-  buttonProgress: {
-    color: green[500],
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: -12,
-    marginLeft: -12,
-  },
-  buttonSendDiv: {
-    textAlign: 'right',
-  }
-  //fixedHeight: {
-  //  height: 240,
-  //},
-})
-
+import { ContainerStyled } from '../Message/ContainerStyled.js';
+import { PaperStyled } from '../Message/PaperStyled.js';
 
 class InMessage extends React.Component {
     
@@ -64,8 +25,6 @@ class InMessage extends React.Component {
     
     componentDidMount(){
         this.props.fetchMessages(this.props.page, this.props.perPage);
-        // this.props.fetchMyFiles(this.props.page, this.props.perPage);
-        // this.props.fetchUsers(0, -1);
     }
   
     handleClickShowItem(id){
@@ -74,15 +33,14 @@ class InMessage extends React.Component {
     
   render() {
       const { classes } = this.props;
-      //const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
       return (
         <div>
-          <Container maxWidth="lg" className={classes.container}>
+          <ContainerStyled maxWidth="lg" className={classes.container}>
             <Grid container spacing={3}>
               {/* Recent Orders */}
               <Grid item xs={12}>
-                <Paper className={classes.paper}>
+                <PaperStyled className={classes.paper}>
 
                   <MessageList 
                       items={this.props.items} 
@@ -112,17 +70,16 @@ class InMessage extends React.Component {
                      onRowsPerPageChange={this.props.handleChangeRowsPerPage}
                   /> : null }
 
-                </Paper>
+                </PaperStyled>
               </Grid>
             </Grid>
-          </Container>
+          </ContainerStyled>
         </div>
       );
   }
 }
 
 const mapStateToProps = function(store) {
-  // console.log(store);
   return {
       items: store.expertiseReducer.mee.items, 
       page: store.paginationReducer.expertise.mee.page, 
@@ -147,4 +104,4 @@ const mapDispatchToProps = dispatch => {
 }
 
 
-export default connect(mapStateToProps,mapDispatchToProps)(withRouter(withStyles(styles)(InMessage)));
+export default connect(mapStateToProps,mapDispatchToProps)(withRouter(InMessage));

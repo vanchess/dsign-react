@@ -1,29 +1,19 @@
 import React from 'react';
 import { withRouter } from "react-router-dom";
-import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
 import Chip from '@mui/material/Chip';
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 
 import FilesList from '../UploadFile/FilesList';
-
-import withStyles from '@mui/styles/withStyles';
-import { green } from '@mui/material/colors';
-
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import PictureInPictureAltIcon from '@mui/icons-material/PictureInPictureAlt';
 
 import { connect } from 'react-redux';
 
-// import { myFileFetch } from '../../store/my-file/myFileAction.js'
 import { userFetch } from '../../store/user/userAction.js'
 import { myFileStartChangeRowPerPage, myFileStartChangePage } from '../../store/pagination/my-file/myFilePaginationAction.js'
 import { cadesCertFetch } from '../../store/cadesplugin/cadespluginAction.js'
@@ -36,54 +26,11 @@ import { fileDownload, textFileDownload } from '../../_helpers';
 
 import CertDialog from '../Dialog/CertDialog';
 import StatusIcon from './StatusIcon';
-const styles = theme => ({
-
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-  },
-  
-  root: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  actionButtonDiv: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-start'
-  },
-  wrapper: {
-    margin: theme.spacing(1),
-    position: 'relative',
-  },
-  buttonProgress: {
-    color: green[500],
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: -12,
-    marginLeft: -12,
-  },
-  buttonSendDiv: {
-    textAlign: 'right',
-  },
-  //fixedHeight: {
-  //  height: 240,
-  //},
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
-    color: '#fff',
-  },
-})
-
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
+import { ContainerStyled } from './ContainerStyled.js';
+import { PaperStyled } from './PaperStyled.js';
+import { ActionButtonWrapper } from './ActionButtonWrapper.js';
+import { BackdropStyled } from './BackdropStyled.js';
+import { CircularProgressStyled } from './CircularProgressStyled.js';
 
 class ShowMessage extends React.Component {
     
@@ -122,7 +69,6 @@ class ShowMessage extends React.Component {
     }
     
     componentDidMount(){
-        // this.props.fetchMyFiles(this.props.page, this.props.perPage);
         this.props.fetchUsers(0, -1);
         let msgId = this.props.match.params.id;
         messageService.get(msgId).then(
@@ -166,7 +112,6 @@ class ShowMessage extends React.Component {
                     msgStatusLabel: msg.relationships.status.data.attributes.lable,
                     msgStatusName:  msg.relationships.status.data.attributes.name,
                 });
-                //console.log(msg);
             }
         );
     }
@@ -195,8 +140,6 @@ class ShowMessage extends React.Component {
     
     handleClickGetFileMultiple = async () => {
         let len = this.state.selectedMsgFilesIds.length;
-        // console.log(this.state.selectedMsgFilesIds);
-        // console.log(len);
         for(let i = 0; i < len; i++) {
           try {
             let fileId = this.state.selectedMsgFilesIds[i];
@@ -213,8 +156,6 @@ class ShowMessage extends React.Component {
         
         let cert = this.certDialogSelectedValue.cert;
         let len = this.state.selectedMsgFilesIds.length;
-        // console.log(this.state.selectedMsgFilesIds);
-        // console.log(len);
         for(let i = 0; i < len; i++) {
           try {
             let fileId = this.state.selectedMsgFilesIds[i];
@@ -333,18 +274,17 @@ class ShowMessage extends React.Component {
   
   render() {
       const { classes } = this.props;
-      //const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
       return (
           <div>
-            <Backdrop className={classes.backdrop} open={this.state.signInProcess}>
+            <BackdropStyled open={this.state.signInProcess}>
               <CircularProgress color="inherit" />
-            </Backdrop>
-            <Container maxWidth="lg" className={classes.container}>
+            </BackdropStyled>
+            <ContainerStyled maxWidth="lg" >
               <Grid container spacing={3}>
                 {/* Recent Orders */}
                 <Grid item xs={12}>
-                  <Paper className={classes.paper}>
+                  <PaperStyled>
                       <Grid container>
                           <Grid item xs={10}>
                               <TextField
@@ -410,8 +350,7 @@ class ShowMessage extends React.Component {
                             </Typography>       
                           </Grid>
                           <Grid item xs={12}>
-                            <div className={classes.actionButtonDiv} >
-                                <div className={classes.wrapper}>
+                            <ActionButtonWrapper>
                                   <Button 
                                     variant="contained"
                                     color="primary"
@@ -424,9 +363,8 @@ class ShowMessage extends React.Component {
                                     disabled={(!this.state.selectedMsgFilesIds.length || this.state.signInProcess || this.state.certDialogOpen)}
                                     startIcon={<PictureInPictureAltIcon />}
                                     onClick={ this.handleClickGetFileMultiple }>Скачать с отметкой об ЭП</Button>
-                                  {(this.state.signInProcess || this.state.certDialogOpen) && <CircularProgress size={24} className={classes.buttonProgress} />}
-                                </div>
-                            </div>
+                                  {(this.state.signInProcess || this.state.certDialogOpen) && <CircularProgressStyled size={24} />}
+                            </ActionButtonWrapper>
                           </Grid>
                           <Grid item xs={12}>
                         
@@ -465,10 +403,10 @@ class ShowMessage extends React.Component {
                              />
                           </Grid>
                       </Grid>
-                  </Paper>
+                  </PaperStyled>
                 </Grid>
               </Grid>
-            </Container>
+            </ContainerStyled>
             <CertDialog selectedValue={this.state.certDialogSelectedValue} open={this.state.certDialogOpen} onClose={this.handleCloseCertDialog} />
           </div>
       );
@@ -476,7 +414,6 @@ class ShowMessage extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  //console.log(store);
   return {
       
       loading: store.myFileReducer.loading,
@@ -493,10 +430,6 @@ const mapDispatchToProps = dispatch => {
         let perPage = parseInt(event.target.value, 10);
         dispatch(myFileStartChangeRowPerPage(perPage));
     },
-    /*
-    fetchMyFiles: (page, perPage) => {
-        dispatch(myFileFetch(page, perPage));
-    },*/
     fetchUsers: (page, perPage) => {
         dispatch(userFetch(page, perPage));
     },
@@ -507,4 +440,4 @@ const mapDispatchToProps = dispatch => {
 }
 
 
-export default connect(mapStateToProps,mapDispatchToProps)(withRouter(withStyles(styles)(ShowMessage)));
+export default connect(mapStateToProps,mapDispatchToProps)(withRouter(ShowMessage));

@@ -3,8 +3,6 @@ import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 
 import { PrivateRoute } from '../_components';
 
-import Dashboard  from '../dashboard/Dashboard.js'
-import MyFiles    from  '../components/UploadFile/MyFiles.js'
 import BillsNewMessage  from  '../components/Bills/BillsNewMessage.js'
 import BillsShowMessage from  '../components/Bills/BillsShowMessage.js'
 import BillsInRejected  from  '../components/Bills/BillsInRejected.js' 
@@ -23,7 +21,6 @@ class Routes extends React.Component {
               <Route exact path={`${path}`} >
                 <Redirect to={`${path}/list/bill`} />
               </Route>
-              <PrivateRoute path={`${path}upload-file`} component={MyFiles} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
               <PrivateRoute path={`${path}/msg/bill/new`} component={BillsNewMessage} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
               <PrivateRoute path={`${path}/msg/:type/new`} component={ReconciliationActNewMessage} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
               <PrivateRoute path={`${path}/msg/reconciliation-act`}  component={ReconciliationActMessage}  handleSetTitle={(title) => this.props.handleSetTitle(title)} />
@@ -34,8 +31,6 @@ class Routes extends React.Component {
               <PrivateRoute path={`${path}/list/bill`} component={BillsIn} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
               <PrivateRoute path={`${path}/list/reconciliation-act/:id`} component={ReconciliationActIn} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
               <PrivateRoute path={`${path}/list/reconciliation-act`} component={ReconciliationActIn} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
-              
-              <PrivateRoute component={Dashboard} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
             </Switch>
       );
     }

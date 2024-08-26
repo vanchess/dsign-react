@@ -1,14 +1,10 @@
 import React from 'react';
 import { withRouter } from "react-router-dom";
-//import clsx from 'clsx';
-import Container from '@mui/material/Container';
+
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 
 import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
-
-import withStyles from '@mui/styles/withStyles';
 
 import { connect } from 'react-redux';
 
@@ -18,20 +14,8 @@ import SendIcon from '@mui/icons-material/Send';
 import { messageService } from '../../services';
 
 import { messageFetch } from '../../store/bill/messageInAction.js'
-
-const styles = theme => ({
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(0),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    //margin: theme.spacing(1),
-    display: 'flex',
-    overflow: 'auto',
-    //flexDirection: 'column',
-  },
-})
+import { ShowMessagePaperStyled } from '../Message/ShowMessagePaperStyled.js';
+import { ShowMessageContainerStyled } from '../Message/ShowMessageContainerStyled.js';
 
 
 class BillsShowMessage extends React.Component {
@@ -42,14 +26,6 @@ class BillsShowMessage extends React.Component {
       this.handleReject = this.handleReject.bind(this);
     }
     
-    componentDidMount(){
-        
-    }
-    
-    componentDidUpdate(prevProps, prevState) {
-      
-    }
-
     fetchMessages = () => {
         this.props.fetchMessages(
             0, 
@@ -88,16 +64,15 @@ class BillsShowMessage extends React.Component {
   
   
   render() {
-      const { classes } = this.props;
 
       return (
         <div>
         {(this.props.permission && (this.props.permission.includes('reject bill') || this.props.permission.includes('sent-to-smo bill'))) ?
-          (<Container maxWidth="lg" className={classes.container}>
+          (<ShowMessageContainerStyled maxWidth="lg">
               <Grid container spacing={3}>
                 {/* Recent Orders */}
                 <Grid item xs={12}>
-                  <Paper className={classes.paper}>
+                  <ShowMessagePaperStyled>
                       {(this.props.permission.includes('reject bill')) &&
                       <Button 
                         variant="contained"
@@ -112,10 +87,10 @@ class BillsShowMessage extends React.Component {
                         startIcon={<SendIcon />}
                         onClick={this.handleSendSmo}>Отправить СМО</Button>
                       }
-                  </Paper>
+                  </ShowMessagePaperStyled>
                 </Grid>
               </Grid>
-          </Container>):null
+          </ShowMessageContainerStyled>):null
         }
           <ShowMessage setTitle={this.props.setTitle} />
         </div>
@@ -124,7 +99,6 @@ class BillsShowMessage extends React.Component {
 }
 
 const mapStateToProps = function(store) {
-  // console.log(store);
   return {
         permission: store.authReducer.user.permissions,
         filterPeriod: store.filtersReducer.bill.period,
@@ -137,12 +111,8 @@ const mapDispatchToProps = dispatch => {
     fetchMessages: (page, perPage, status = [], period = [], org = []) => {
         dispatch(messageFetch(page, perPage, status, period, org));
     },
-    /*
-    fetchMyFiles: (page, perPage) => {
-        dispatch(myFileFetch(page, perPage));
-    },*/
   }
 }
 
 
-export default connect(mapStateToProps,mapDispatchToProps)(withRouter(withStyles(styles)(BillsShowMessage)));
+export default connect(mapStateToProps,mapDispatchToProps)(withRouter(BillsShowMessage));

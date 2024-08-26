@@ -1,20 +1,11 @@
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 
-import makeStyles from '@mui/styles/makeStyles';
-
 import CustomToolbar from '../DataGrid/CustomToolbar';
 import CustomNoRowsOverlay from '../DataGrid/CustomNoRowsOverlay';
 import CustomLoadingOverlay from '../DataGrid/CustomLoadingOverlay';
 import CustomPagination from '../DataGrid/CustomPagination';
 import { useSelector } from 'react-redux';
-
-
-
-const useStyles = makeStyles((theme) => ({
-  root: {},
-}));
-
 
 export default function ReconciliationActList(props) {
   const periodList = useSelector(store => store.periodReducer.items);

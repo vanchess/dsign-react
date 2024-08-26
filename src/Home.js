@@ -1,7 +1,4 @@
 import React from 'react';
-// import Button from '@mui/material/Button';
-// import ThreeDRotation from '@mui/icons-material/ThreeDRotation';
-// import IconButton from '@mui/material/IconButton';
 import 'typeface-roboto';
 
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,21 +7,16 @@ import { Header } from './components/Header';
 import { Sidebar } from './components/Sidebar'; 
 import { MainListItems, secondaryListItems } from './components/Sidebar/listItems';
 
-import withStyles from '@mui/styles/withStyles';
-
 import { authService } from './services';
+import { styled } from '@mui/material';
 
-const styles = theme => ({
-  root: {
-    display: 'flex',
-  },
-  appBarSpacer: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-    height: '100vh',
-    overflow: 'auto',
-  },
-})
+const AppBarSpacer = styled('div')(({theme}) => theme.mixins.toolbar);
+
+const MainStyled = styled('main')`
+    flex-grow: 1;
+    height: '100vh';
+    overflow: 'auto';
+`
 
 class Home extends React.Component {
   constructor(props) {
@@ -57,13 +49,10 @@ class Home extends React.Component {
       this.setState({open: false});
   }
   
-
-  
   render(){
-    const { classes } = this.props;
 
     return (  
-      <div className={classes.root}>
+      <div style={{ display: 'flex' }}>
           <CssBaseline />
           <Header title={this.props.title} open={this.state.open} userName={this.state.userName} handleDrawerOpen={() => this.handleDrawerOpen()} logout={authService.logout} />
           <Sidebar 
@@ -73,14 +62,14 @@ class Home extends React.Component {
           >
                 <MainListItems sidebarMainListItems={this.props.sidebarMainListItems} />
           </Sidebar>
-          <main className={classes.content}>
-            <div className={classes.appBarSpacer} />
+          <MainStyled>
+            <AppBarSpacer />
             {this.props.main}
-          </main>
+          </MainStyled>
             {this.props.snackbar}
       </div>
     );
   }
 }
 
-export default withStyles(styles)(Home);
+export default Home;

@@ -1,32 +1,16 @@
 import React from 'react';
 
-import withStyles from '@mui/styles/withStyles';
-import { green } from '@mui/material/colors';
-
 import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 import { fileService } from '../../services';
+import { styled } from '@mui/material';
+import { ButtonCircularProgress } from './ButtonCircularProgress';
 
-const styles = theme => ({
-   root: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-   wrapper: {
+const Wrapper = styled('div')(({theme}) => ({
     margin: theme.spacing(1),
     position: 'relative',
-  },
-   buttonProgress: {
-    color: green[500],
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: -12,
-    marginLeft: -12,
-  },
-})
+}))
 
 class UploadFile extends React.Component {
   constructor(props) {
@@ -42,13 +26,11 @@ class UploadFile extends React.Component {
   _handleSubmit(e) {
     e.preventDefault();
 
-    // console.log('handle uploading-', this.state.file);
     this.setState({
         uploading: true
       });
     fileService.upload(this.state.file).then(
         result => {
-            // console.log(result);
             this.setState({
                 file: '',
                 uploading: false,
@@ -69,9 +51,6 @@ class UploadFile extends React.Component {
   _handleChange(e) {
     e.preventDefault();
 
-    // let reader = new FileReader();
-
-    
     let file = e.target.files[0];
     
     if (!file) {
@@ -88,9 +67,6 @@ class UploadFile extends React.Component {
         file: file,
         fileName: file.name
       });
-    
-    // reader.onloadend = () => { }
-    // reader.readAsDataURL(file)
   }
 
   render() {
@@ -101,23 +77,23 @@ class UploadFile extends React.Component {
     return (
       <div>
         <form onSubmit={(e)=>this._handleSubmit(e)}>
-          <div className={classes.root}>
-            <div className={classes.wrapper}>
-            <Button
-              disabled={ this.state.uploading || this.state.disabled }
-              variant="contained"
-              component="label"
-            >
-              Выбрать файл
-              <input
-                type="file"
-                onChange={(e)=>this._handleChange(e)}
-                hidden
-              />
-            </Button>
-            </div>
+          <div style={{display: 'flex', alignItems: 'center',}}>
+            <Wrapper>
+              <Button
+                disabled={ this.state.uploading || this.state.disabled }
+                variant="contained"
+                component="label"
+              >
+                Выбрать файл
+                <input
+                  type="file"
+                  onChange={(e)=>this._handleChange(e)}
+                  hidden
+                />
+              </Button>
+            </Wrapper>
             {this.state.fileName}
-            <div className={classes.wrapper}>
+            <Wrapper>
               <Button 
                 variant="contained"
                 color="primary"
@@ -125,8 +101,8 @@ class UploadFile extends React.Component {
                 disabled={!this.state.file || this.state.uploading || this.state.disabled}
                 startIcon={<CloudUploadIcon />}
                 onClick={(e)=>this._handleSubmit(e)}>Загрузить</Button>
-              {this.state.uploading && <CircularProgress size={24} className={classes.buttonProgress} />}
-            </div>
+              {this.state.uploading && <ButtonCircularProgress size={24} />}
+            </Wrapper>
           </div>
         </form>
 
@@ -135,4 +111,4 @@ class UploadFile extends React.Component {
   }
 }
 
-export default withStyles(styles)(UploadFile);
+export default UploadFile;

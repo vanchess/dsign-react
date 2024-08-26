@@ -1,5 +1,3 @@
-/* eslint-disable no-script-url */
-
 import React from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -13,27 +11,7 @@ import Skeleton from '@mui/material/Skeleton';
 
 import StatusIcon from './StatusIcon';
 
-import withStyles from '@mui/styles/withStyles';
-
 import moment from 'moment';
-
-const styles = theme => ({
-     tableRow: {
-       "&:hover": {
-           cursor: 'pointer'
-        }
-      },
-});
-/*
-const styles = theme => ({
-  content: {
-    flexGrow: 1,
-    height: '100vh',
-    overflow: 'auto',
-  }
-})
-*/
-
 
 class MessageList extends React.Component {
 
@@ -78,22 +56,22 @@ class MessageList extends React.Component {
                 <TableBody>
                 
                   {(this.props.items).map(row => (
-                    <TableRow key={row.id} onClick={ () => { this.props.showItem(row.id) } } hover={true} className={ classes.tableRow }>
+                    <TableRow key={row.id} onClick={ () => { this.props.showItem(row.id) } } hover={true} sx={{"&:hover": {cursor: 'pointer'}}}>
                       <TableCell>{i++}</TableCell>
                       {(this.props.displayColumnTo)?(
                       <TableCell>
                             { (row.relationships.to_users.data).map( (toUser) => 
-                                (<Chip key={toUser.id} label={toUser.attributes.name} className={ classes.tableRow }/>)
+                                (<Chip key={toUser.id} label={toUser.attributes.name} sx={{"&:hover": {cursor: 'pointer'}}} />)
                             )}
                       </TableCell>
                       ):null}
                       {(this.props.displayColumnFrom)?(
-                      <TableCell><Chip label={row.relationships.user.data.attributes.name} className={ classes.tableRow }/></TableCell>
+                      <TableCell><Chip label={row.relationships.user.data.attributes.name} sx={{"&:hover": {cursor: 'pointer'}}} /></TableCell>
                       ):null}
                       {(this.props.displayCategory)?(
                       <TableCell>
                             { (row.relationships.category.data).map( (c) => 
-                                (<Chip key={c.id} label={c.attributes.short_title} className={ classes.tableRow }/>)
+                                (<Chip key={c.id} label={c.attributes.short_title} sx={{"&:hover": {cursor: 'pointer'}}} />)
                             )}
                       </TableCell>
                       ):null}
@@ -116,4 +94,4 @@ class MessageList extends React.Component {
   }
 }
 
-export default withStyles(styles)(MessageList);
+export default MessageList;

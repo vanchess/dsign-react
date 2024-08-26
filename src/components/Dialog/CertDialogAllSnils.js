@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import makeStyles from '@mui/styles/makeStyles';
 
 import Avatar from '@mui/material/Avatar';
 import List from '@mui/material/List';
@@ -9,24 +8,23 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
-//import PersonIcon from '@mui/icons-material/Person';
-import AddIcon from '@mui/icons-material/Add';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import Typography from '@mui/material/Typography';
 import { blue } from '@mui/material/colors';
 
-import { connect } from 'react-redux';
+import { styled } from '@mui/material';
+import { useSelector } from 'react-redux';
 
-const useStyles = makeStyles({
-  avatar: {
-    backgroundColor: blue[100],
-    color: blue[600],
-  },
-});
+const AvatarStyled = styled(Avatar)`
+    background-color: ${blue[100]};
+    color: ${blue[600]};
+`
 
-function CertDialog(props) {
-  const classes = useStyles();
+export default function CertDialog(props) {
   const { onClose, selectedValue, open } = props;
+  const items = useSelector((store) => store.cadespluginReducer.items);
+  // const itemsTotal = store => store.cadespluginReducer.itemsTotal;
+  // const loading = store => store.cadespluginReducer.loading;
 
   const handleClose = () => {
     onClose(selectedValue);
@@ -49,12 +47,12 @@ function CertDialog(props) {
     <Dialog onClose={handleClose} aria-labelledby="simple-dialog-title" open={open}>
       <DialogTitle id="simple-dialog-title">Выберите сертификат</DialogTitle>
       <List>
-        {props.items.map((item) => {
+        {items.map((item) => {
           return (<ListItem button onClick={() => handleListItemClick(item)} key={item.thumbprint} alignItems="flex-start">
                 <ListItemAvatar>
-                  <Avatar className={classes.avatar}>
+                  <AvatarStyled>
                     <VpnKeyIcon />
-                  </Avatar>
+                  </AvatarStyled>
                 </ListItemAvatar>
                 <ListItemText primary={item.name} secondary={
                     <React.Fragment>
@@ -62,7 +60,6 @@ function CertDialog(props) {
                       <Typography
                         component="span"
                         variant="body2"
-                        className={classes.inline}
                         color="textPrimary"
                       >
                       { item.secondaryInfoString }
@@ -88,19 +85,3 @@ CertDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
 };
-
-const mapStateToProps = function(store) {
-  return {
-      items: store.cadespluginReducer.items, 
-      itemsTotal: store.cadespluginReducer.itemsTotal,
-      loading: store.cadespluginReducer.loading,
-    };
-}
-const mapDispatchToProps = dispatch => {
-  return {  
-    
-  }
-}
-
-
-export default connect(mapStateToProps,mapDispatchToProps)(CertDialog);

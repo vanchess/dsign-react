@@ -1,6 +1,4 @@
-import { GridOverlay } from '@mui/x-data-grid';
-import { styled } from '@mui/styles';
-import { Box } from '@mui/material';
+import { Box, styled } from '@mui/material';
 
 const StyledGridOverlay = styled('div')(({ theme }) => ({
   display: 'flex',

@@ -1,35 +1,24 @@
 import React from 'react';
 
-import makeStyles from '@mui/styles/makeStyles';
-
 import Tooltip from '@mui/material/Tooltip';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 
 import { Link } from 'react-router-dom';
+import { useTheme } from '@mui/material';
 
-const useStyles = makeStyles((theme) => ({
-  margin: {
-    margin: theme.spacing(1),
-  },
-  extendedIcon: {
-    marginRight: theme.spacing(1),
-  },
-}));
-
-export default function ActionButton(props) { 
-  const classes = useStyles();
-  
+export default function ActionButton(props) {
+  const theme = useTheme();
   return (
     <Tooltip title={ props.tooltip } disableInteractive>
         <Fab component={Link} to={ props.to }
             variant={props.open?'extended':'round'}
             color="secondary"
             size="small"
-            className={classes.margin}
+            sx={{margin: theme.spacing(1)}}
         >
             <AddIcon 
-                className={props.open?classes.extendedIcon:''}
+                sx={props.open?{marginRight: theme.spacing(1)}:{}}
             />
             {props.open?props.title:''}
         </Fab>

@@ -1,7 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import makeStyles from '@mui/styles/makeStyles';
-
-import Chip from '@mui/material/Chip';
+import React from 'react';
 
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import Tooltip from '@mui/material/Tooltip';
@@ -13,23 +10,10 @@ import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
 import ComputerIcon from '@mui/icons-material/Computer';
 import CheckIcon from '@mui/icons-material/Check';
 import EditNoteIcon from '@mui/icons-material/EditNote';
-// import DoneAllIcon from '@mui/icons-material/DoneAll';
 import SendIcon from '@mui/icons-material/Send';
-
-const useStyles = makeStyles((theme) => ({
-  /*
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  */
-}));
 
 
 export default function StatusIcon(props) {
-  const classes = useStyles();
   
   if(props.name == 'sent')
   {

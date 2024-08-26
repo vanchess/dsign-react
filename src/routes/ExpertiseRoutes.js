@@ -3,7 +3,6 @@ import { Redirect, Route, Switch, withRouter } from 'react-router-dom';
 
 import { PrivateRoute } from '../_components';
 
-import Dashboard  from '../dashboard/Dashboard.js'
 import MekNewMessage  from  '../components/Expertise/MekNewMessage.js'
 import MekShowMessage from  '../components/Expertise/MekShowMessage.js'
 import MekInMessage   from  '../components/Expertise/MekInMessage.js'
@@ -26,7 +25,6 @@ class Routes extends React.Component {
               <PrivateRoute path={`${path}/msg/mek`} component={MekInMessage}  handleSetTitle={(title) => this.props.handleSetTitle(title)} />
               <PrivateRoute path={`${path}/list/:type/:id`} component={MekIn} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
               <PrivateRoute path={`${path}/list/:type`} component={MekIn} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
-              <PrivateRoute component={Dashboard} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
             </Switch>
       );
     }

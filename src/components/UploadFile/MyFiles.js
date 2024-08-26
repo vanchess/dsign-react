@@ -6,12 +6,11 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
 // import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 
 import UploadFile from './UploadFile';
 import FilesList from './FilesList';
 
-import withStyles from '@mui/styles/withStyles';
+// import withStyles from '@mui/styles/withStyles';
 
 import { connect } from 'react-redux';
 
@@ -43,9 +42,6 @@ const styles = theme => ({
     overflow: 'auto',
     flexDirection: 'column',
   },
-  //fixedHeight: {
-  //  height: 240,
-  //},
 })
 
 class MyFiles extends React.Component {

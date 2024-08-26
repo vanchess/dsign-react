@@ -1,5 +1,4 @@
 import React, { useEffect }  from 'react';
-import makeStyles from '@mui/styles/makeStyles';
 import { connect } from 'react-redux';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
@@ -11,57 +10,17 @@ import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 
-import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
-import Checkbox from '@mui/material/Checkbox';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { createFilterOptions } from '@mui/material/Autocomplete';
 
 import { messageFetch } from '../../store/displist/messageInAction.js'
 import { periodFetch } from '../../store/period/periodAction.js'
 import { organizationFetch } from '../../store/organization/organizationAction.js'
 import { billFilterPeriodSet, billFilterStatusSet, billFilterOrganizationSet } from '../../store/filters/bill/billFiltersAction.js'
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-  },
-  heading: {
-    fontSize: theme.typography.pxToRem(15),
-  },
-  secondaryHeading: {
-    fontSize: theme.typography.pxToRem(15),
-    color: theme.palette.text.secondary,
-  },
-  icon: {
-    verticalAlign: 'bottom',
-    height: 20,
-    width: 20,
-  },
-  details: {
-    alignItems: 'center',
-  },
-  column: {
-    flexBasis: '33.33%',
-  },
-  helper: {
-    borderLeft: `2px solid ${theme.palette.divider}`,
-    padding: theme.spacing(1, 2),
-  },
-  link: {
-    color: theme.palette.primary.main,
-    textDecoration: 'none',
-    '&:hover': {
-      textDecoration: 'underline',
-    },
-  },
-}));
-
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
+import { DivColumn } from '../FilterPanel/DivColumn.js';
+import { MultipleAutocomplete } from '../FilterPanel/MultipleAutocomplete.js';
+import { Box } from '@mui/material';
 
 function BillsFilter(props) {
-  const classes = useStyles();
 
   const [expanded, setExpanded] = React.useState('filter');
 
@@ -142,120 +101,59 @@ function BillsFilter(props) {
     });
   
   return (
-    <div className={classes.root}>
+    <div style={{width: '100%'}}>
       <Accordion expanded={expanded === 'filter'} onChange={handleChange('filter')} >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1c-content"
           id="panel1c-header"
         >
-          <div className={classes.column}>
-            <Typography className={classes.heading}></Typography>
-          </div>
-          <div className={classes.column}>
-            <Typography className={classes.secondaryHeading}>Укажите параметры и нажмите кнопку &laquo;Загрузить&raquo;</Typography>
-          </div>
-          <div className={classes.column}>
+          <DivColumn>
+            <Typography sx={{fontSize: theme => theme.typography.pxToRem(15)}}></Typography>
+          </DivColumn>
+          <DivColumn>
+            <Typography sx={{fontSize: theme => theme.typography.pxToRem(15), color: theme => theme.palette.text.secondary}}>Укажите параметры и нажмите кнопку &laquo;Загрузить&raquo;</Typography>
+          </DivColumn>
+          <DivColumn>
             <Button disabled={props.loading} size="small" color="primary" onClick={handleButtonClick} onFocus={(event) => event.stopPropagation()} >
                 Загрузить
             </Button>
-          </div>
+          </DivColumn>
         </AccordionSummary>
-        <AccordionDetails className={classes.details}>
+        <AccordionDetails sx={{alignItems: 'center'}}>
             <Grid container spacing={2}>
                 <Grid item xs={8}>
-                    <Autocomplete
-                          size="small"
-                          fullWidth
-                          multiple
-                          required
+                    <MultipleAutocomplete
                           id="period"
                           options={periodList}
-                          isOptionEqualToValue={(option, value) => {return value.id == option.id;}}
                           value={props.filterPeriod}
                           groupBy={(option) => option.attributes.year}
-                          disableCloseOnSelect
-                          getOptionLabel={(option) => option.attributes.name}
                           onChange={handleChangePeriod}
-                          renderOption={(props, option, { selected }) => (
-                            <li {...props}>
-                              <Checkbox
-                                icon={icon}
-                                checkedIcon={checkedIcon}
-                                style={{ marginRight: 8 }}
-                                checked={selected}
-                              />
-                              {option.attributes.name}
-                            </li>
-                          )}
-                          renderInput={(params) => (
-                            <TextField variant="standard" {...params} label="Периоды" placeholder="" />
-                          )}
+                          label="Периоды"
                         />
-                    <Autocomplete
-                          size="small"
-                          fullWidth
-                          multiple
-                          required
+                    <MultipleAutocomplete
                           id="organization"
                           options={props.organizationList}
-                          isOptionEqualToValue={(option, value) => {return value.id == option.id;}}
                           value={props.filterOrganization}
                           groupBy={(option) => option.attributes.year}
-                          disableCloseOnSelect
                           getOptionLabel={(option) => option.attributes.short_name}
                           filterOptions={filterOrganizationOptions}
                           onChange={handleChangeOrganization}
-                          renderOption={(props, option, { selected }) => (
-                            <li {...props}>
-                              <Checkbox
-                                icon={icon}
-                                checkedIcon={checkedIcon}
-                                style={{ marginRight: 8 }}
-                                checked={selected}
-                              />
-                              {option.attributes.short_name}
-                            </li>
-                          )}
-                          renderInput={(params) => (
-                            <TextField
-                              variant="standard"
-                              {...params}
-                              label="Организации"
-                              placeholder="Начните вводить название организации" />
-                          )}
+                          label="Организации"
+                          placeholder="Начните вводить название организации"
                         />
-                    <Autocomplete
-                          size="small"
-                          fullWidth
-                          multiple
-                          required
+                    <MultipleAutocomplete
                           id="status"
                           options={props.statusList}
-                          isOptionEqualToValue={(option, value) => {return value.id == option.id;}}
                           value={props.filterStatus}
                           groupBy={(option) => option.attributes.year}
-                          disableCloseOnSelect
                           getOptionLabel={(option) => option.attributes.lable}
                           onChange={handleChangeStatus}
-                          renderOption={(props, option, { selected }) => (
-                            <li {...props}>
-                              <Checkbox
-                                icon={icon}
-                                checkedIcon={checkedIcon}
-                                style={{ marginRight: 8 }}
-                                checked={selected}
-                              />
-                              {option.attributes.lable}
-                            </li>
-                          )}
-                          renderInput={(params) => (
-                            <TextField variant="standard" {...params} label="Статусы" placeholder="" />
-                          )}
+                          label="Статусы"
                         />
                 </Grid>
                 <Grid item xs={4}>
-                  <div className={classes.helper}>
+                  <Box sx={{borderLeft: theme => `2px solid ${theme.palette.divider}`, padding: theme => theme.spacing(1, 2)}}>
                     <Typography variant="caption">
                       Указанные здесь параметры применяются при загрузке данных с сервера.
                       <br />
@@ -263,7 +161,7 @@ function BillsFilter(props) {
                       <br />
                       Для получения новых данных с сервера используйте кнопку &laquo;Загрузить&raquo;.
                     </Typography>
-                  </div>
+                  </Box>
                 </Grid>
             </Grid>
         </AccordionDetails>

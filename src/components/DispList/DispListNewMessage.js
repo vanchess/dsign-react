@@ -1,10 +1,7 @@
 import React from 'react';
 import { withRouter } from "react-router-dom";
-import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 
 import MenuItem from '@mui/material/MenuItem';
@@ -14,16 +11,10 @@ import InputLabel from '@mui/material/InputLabel';
 
 import CircularProgress from '@mui/material/CircularProgress';
 
-import withStyles from '@mui/styles/withStyles';
-import { green } from '@mui/material/colors';
-
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 
 import { connect } from 'react-redux';
 
-// import { myFileFetch } from '../../store/my-file/myFileAction.js'
 import { userFetch } from '../../store/user/userAction.js'
 import { cadesCertFetch } from '../../store/cadesplugin/cadespluginAction.js'
 import { organizationFetch } from '../../store/organization/organizationAction.js'
@@ -34,51 +25,12 @@ import { messageService } from '../../services';
 
 import { periodFetch } from '../../store/period/periodAction.js';
 import { Typography } from '@mui/material';
-
-const styles = theme => ({
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-  },
-  
-  buttonSendDiv: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end'
-  },
-  wrapper: {
-    margin: theme.spacing(1),
-    position: 'relative',
-  },
-  buttonProgress: {
-    color: green[500],
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: -12,
-    marginLeft: -12,
-  },
-  //fixedHeight: {
-  //  height: 240,
-  //},
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
-    color: '#fff',
-  },
-  comboboxFormControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
-})
-
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
+import { BackdropStyled } from '../Message/BackdropStyled.js';
+import { ContainerStyled } from '../Message/ContainerStyled.js';
+import { PaperStyled } from '../Message/PaperStyled.js';
+import { SendButtonWrapper } from '../Message/SendButtonWrapper.js';
+import { CircularProgressStyled } from '../Message/CircularProgressStyled.js';
+import { ComboboxFormControl } from '../Message/ComboboxFormControl.js';
 
 class DispListNewMessage extends React.Component {
     
@@ -111,7 +63,6 @@ class DispListNewMessage extends React.Component {
     }
     
     componentDidMount(){
-        // this.props.fetchMyFiles(this.props.page, this.props.perPage);
         this.props.fetchUsers(0, -1);
         this.props.fetchOrganization();
         this.props.fetchPeriod();
@@ -278,7 +229,6 @@ class DispListNewMessage extends React.Component {
         msg.period  = this.state.msgPeriod;
         msg.type    = this.props.match.params.type;
 
-        // console.log(msg);
         messageService.sendMsg(msg).then(
             (data) => { 
                 this.setState({
@@ -298,8 +248,6 @@ class DispListNewMessage extends React.Component {
   
   
   render() {
-      const { classes } = this.props;
-      //const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
       const periodList = this.props.periodList.slice().sort(function(a, b) {
         if (a.attributes.from < b.attributes.from) {
           return 1; }
@@ -310,18 +258,17 @@ class DispListNewMessage extends React.Component {
 
       return (
           <div>
-              <Backdrop className={classes.backdrop} open={this.state.signInProcess}>
+              <BackdropStyled open={this.state.signInProcess}>
                 <CircularProgress color="inherit" />
-              </Backdrop>
-              <Container maxWidth="lg" className={classes.container}>
+              </BackdropStyled>
+              <ContainerStyled maxWidth="lg" className={classes.container}>
                 <Grid container spacing={3}>
                   {/* Recent Orders */}
                   <Grid item xs={12}>
-                    <Paper className={classes.paper}>
+                    <PaperStyled className={classes.paper}>
                       <Grid container>
                           <Grid item xs={12}>
-                          <div className={classes.buttonSendDiv} >
-                            <div className={classes.wrapper}>
+                          <SendButtonWrapper>
                                 <Button 
                                   variant="contained"
                                   color="primary"
@@ -329,9 +276,8 @@ class DispListNewMessage extends React.Component {
                                   disabled={this.state.msgSending}
                                   startIcon={<PostAddIcon />}
                                   onClick={(e)=>this._handleSubmit(e)}>Создать список</Button>
-                                {this.state.msgSending && <CircularProgress size={24} className={classes.buttonProgress} />}
-                            </div>
-                          </div>
+                                {this.state.msgSending && <CircularProgressStyled size={24} />}
+                          </SendButtonWrapper>
                           </Grid>
                           <Grid item xs={12}> 
                           <form onSubmit={(e)=>this._handleSubmit(e)}>
@@ -349,7 +295,7 @@ class DispListNewMessage extends React.Component {
                                     margin="normal" />
                                 </Grid>
                                 <Grid item xs={12} sm={4}>
-                                    <FormControl variant="standard" fullWidth className={classes.comboboxFormControl}>
+                                    <ComboboxFormControl variant="standard" fullWidth>
                                       <InputLabel id='msg-period-label' >Период проведения мероприятия</InputLabel>
                                       <Select
                                           variant="standard"
@@ -362,7 +308,7 @@ class DispListNewMessage extends React.Component {
                                           <MenuItem key={ item.id } value={ item.id }>{ item.attributes.name }</MenuItem>
                                         ))}
                                       </Select>
-                                    </FormControl>
+                                    </ComboboxFormControl>
                                 </Grid>
                                 <Grid item xs={12} sm={8}>
                                   <Typography color="secondary.dark">Завершить редактирование списка и подписать его электронной подписью необходимо не позднее последнего дня указанного периода. В противном случае список будет отклонен.</Typography>
@@ -386,8 +332,7 @@ class DispListNewMessage extends React.Component {
                           </form>
                           </Grid>
                           <Grid item xs={12}>
-                            <div className={classes.buttonSendDiv} >
-                              <div className={classes.wrapper}>
+                            <SendButtonWrapper>
                                 <Button 
                                   variant="contained"
                                   color="primary"
@@ -395,15 +340,14 @@ class DispListNewMessage extends React.Component {
                                   disabled={this.state.msgSending}
                                   startIcon={<PostAddIcon />}
                                   onClick={(e)=>this._handleSubmit(e)}>Создать список</Button>
-                                {this.state.msgSending && <CircularProgress size={24} className={classes.buttonProgress} />}
-                              </div>
-                            </div>
+                                {this.state.msgSending && <CircularProgressStyled size={24} />}
+                            </SendButtonWrapper>
                           </Grid>
                       </Grid>
-                    </Paper>
+                    </PaperStyled>
                   </Grid>
                 </Grid>
-              </Container>
+              </ContainerStyled>
           </div>
       );
   }
@@ -435,4 +379,4 @@ const mapDispatchToProps = dispatch => {
 }
 
 
-export default connect(mapStateToProps,mapDispatchToProps)(withRouter(withStyles(styles)(DispListNewMessage)));
+export default connect(mapStateToProps,mapDispatchToProps)(withRouter(DispListNewMessage));

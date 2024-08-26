@@ -12,7 +12,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import Tooltip from '@mui/material/Tooltip';
 import { Link } from 'react-router-dom';
 
-import withStyles from '@mui/styles/withStyles';
+// import withStyles from '@mui/styles/withStyles';
 
 const drawerWidth = 240;
 

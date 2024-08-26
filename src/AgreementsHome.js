@@ -1,11 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
 import MailIcon from '@mui/icons-material/Mail';
-import LabelImportantIcon from '@mui/icons-material/LabelImportant';
-import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
-import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
 
 import AgreementsRoutes from './routes/AgreementsRoutes';
 import Home from './Home';

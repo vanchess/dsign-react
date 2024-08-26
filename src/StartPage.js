@@ -8,13 +8,13 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 
 import { Link as RouterLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { authPermissionsSelector } from './store/auth/authSelectors';
+import { styled } from '@mui/material';
 
 function Copyright() {
   return (
@@ -29,49 +29,37 @@ function Copyright() {
   );
 }
 
-const useStyles = makeStyles((theme) => ({
-  icon: {
-    marginRight: theme.spacing(2),
-  },
-  heroContent: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(8, 0, 6),
-  },
-  heroButtons: {
-    marginTop: theme.spacing(4),
-  },
-  cardGrid: {
+const StartPageContainer = styled(Container)(({theme}) => ({
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(8),
-  },
-  card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  cardMedia: {
-    paddingTop: '56.25%', // 16:9
-  },
-  cardContent: {
-    flexGrow: 1,
-  },
-  footer: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(6),
-  },
-  avatar: {
+}))
+
+const CardMediaStyled = styled(CardMedia)(({theme}) => ({
+  paddingTop: '56.25%', // 16:9
+}))
+
+const CardContentStyled = styled(CardContent)(({theme}) => ({
+  flexGrow: 1,
+}))
+
+const FooterStyled = styled('footer')(({theme}) => ({
+  backgroundColor: theme.palette.background.paper,
+  padding: theme.spacing(6),
+}))
+
+const AvatarStyled = styled(Avatar)(({theme}) => ({
     margin: theme.spacing(1),
     width: theme.spacing(7),
     height: theme.spacing(7),
-    backgroundColor: 'white',
-  },
-  lnk: {
-    textDecoration: 'none',
+    backgroundColor: 'white',  
+}))
+
+const CardLnc = styled(Card)(({theme}) => ({
+  textDecoration: 'none',
     '&:focus, &:hover, &:visited, &:link, &:active': {
         textDecoration: 'none'
     }
-  }
-}));
+}))
 
 const cards = [
     {id:1, title:'Почта', text:'Отправка сообщений и подписанных электронной подписью файлов', image:"/images/mail.jpg", to:'/mail'  },
@@ -95,7 +83,6 @@ const cardsOut= [
 
 
 export default function StartPage() {
-  const classes = useStyles();
   const permissions = useSelector(authPermissionsSelector);
 
   useEffect( () => {
@@ -108,14 +95,14 @@ export default function StartPage() {
       <AppBar position="relative">
         <Toolbar>
           
-          <Avatar className={classes.avatar} src="/tfoms.png" />
+          <AvatarStyled src="/tfoms.png" />
           <Typography variant="h6" color="inherit" noWrap>
             ТФ ОМС Курганской области
           </Typography>
         </Toolbar>
       </AppBar>
       <main>
-        <Container className={classes.cardGrid} maxWidth="md">
+        <StartPageContainer maxWidth="md">
           <Grid container spacing={4}>
             {cards.map((card) => {
               if(card.permission && !permissions.includes(card.permission)) {
@@ -124,20 +111,19 @@ export default function StartPage() {
 
               return (
                 <Grid item key={card.id} xs={12} sm={4} md={3}>
-                  <Card className={/*classes.card*/ classes.lnk} component={RouterLink} to={ card.to } >
-                    <CardMedia
-                      className={classes.cardMedia}
+                  <CardLnc component={RouterLink} to={ card.to } >
+                    <CardMediaStyled
                       image={ card.image }
                       title={ card.title }
                     />
-                    <CardContent className={classes.cardContent}>
+                    <CardContentStyled>
                       <Typography gutterBottom variant="h5" component="h2">
                       { card.title }
                       </Typography>
                       <Typography >
                       { card.text }
                       </Typography>
-                    </CardContent>
+                    </CardContentStyled>
                     {/*
                     <CardActions>
                       <Button   size="small" color="primary">
@@ -145,7 +131,7 @@ export default function StartPage() {
                       </Button>
                     </CardActions>
                     */}
-                  </Card>
+                  </CardLnc>
                 </Grid>
             )})}
             {cardsNew.map((card) => {
@@ -154,13 +140,12 @@ export default function StartPage() {
               }
               return (
               <Grid item key={card.id} xs={12} sm={4} md={3}>
-                <Card className={/*classes.card*/ classes.lnk} component={RouterLink} to={ card.to } >
-                  <CardMedia
-                    className={classes.cardMedia}
+                <CardLnc component={RouterLink} to={ card.to } >
+                  <CardMediaStyled
                     image={ card.image }
                     title={ card.title }
                   />
-                  <CardContent className={classes.cardContent} disabled >
+                  <CardContentStyled disabled >
                     <Typography gutterBottom variant="h5" component="h2">
                     { card.title }
                     </Typography>
@@ -170,7 +155,7 @@ export default function StartPage() {
                     <Typography color="secondary">
                     НОВОЕ
                     </Typography>
-                  </CardContent>
+                  </CardContentStyled>
                   {/*
                   <CardActions>
                     <Button   size="small" color="primary">
@@ -178,26 +163,25 @@ export default function StartPage() {
                     </Button>
                   </CardActions>
                   */}
-                </Card>
+                </CardLnc>
               </Grid>
             )
             })}
             {cards2.map((card) => (
               <Grid item key={card.id} xs={12} sm={4} md={3}>
-                <Card className={/*classes.card*/ classes.lnk} component={RouterLink} to={ card.to } >
-                  <CardMedia
-                    className={classes.cardMedia}
+                <CardLnc component={RouterLink} to={ card.to } >
+                  <CardMediaStyled
                     image={ card.image }
                     title={ card.title }
                   />
-                  <CardContent className={classes.cardContent}>
+                  <CardContentStyled>
                     <Typography gutterBottom variant="h5" component="h2">
                     { card.title }
                     </Typography>
                     <Typography >
                     { card.text }
                     </Typography>
-                  </CardContent>
+                  </CardContentStyled>
                   {/*
                   <CardActions>
                     <Button   size="small" color="primary">
@@ -205,25 +189,24 @@ export default function StartPage() {
                     </Button>
                   </CardActions>
                   */}
-                </Card>
+                </CardLnc>
               </Grid>
             ))}
             {cardsOut.map((card) => (
               <Grid item key={card.id} xs={12} sm={4} md={3}>
                 <Card component={Link} href={ card.to } target="_blank" rel="noopener noreferrer" color="inherit" underline="none" disabled>
-                  <CardMedia
-                    className={classes.cardMedia}
+                  <CardMediaStyled
                     image={ card.image }
                     title={ card.title }
                   />
-                  <CardContent className={classes.cardContent}>
+                  <CardContentStyled>
                     <Typography gutterBottom variant="h5" component="h2" >
                     { card.title }
                     </Typography>
                     <Typography>
                     { card.text }
                     </Typography>
-                  </CardContent>
+                  </CardContentStyled>
                   {/*
                   <CardActions>
                     <Button size="small" color="primary">
@@ -235,17 +218,17 @@ export default function StartPage() {
               </Grid>
             ))}
           </Grid>
-        </Container>
+        </StartPageContainer>
       </main>
       {/* Footer */}
-      <footer className={classes.footer}>
+      <FooterStyled>
           {/*
         <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
           Something here to give the footer a purpose!
         </Typography>
           */}
         <Copyright />
-      </footer>
+      </FooterStyled>
       {/* End footer */}
     </React.Fragment>
   );

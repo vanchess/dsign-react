@@ -3,13 +3,13 @@ import clsx from 'clsx';
 
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
+//import Paper from '@mui/material/Paper';
 
-import Chart from './Chart';
-import Deposits from './Deposits';
-import Orders from './Orders';
+// import Chart from './Chart';
+// import Deposits from './Deposits';
+// import Orders from './Orders';
 
-import withStyles from '@mui/styles/withStyles';
+// import withStyles from '@mui/styles/withStyles';
 
 const styles = theme => ({
   appBarSpacer: theme.mixins.toolbar,

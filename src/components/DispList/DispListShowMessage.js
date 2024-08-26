@@ -26,6 +26,8 @@ import CertDialog from '../Dialog/CertDialog';
 
 import { fileDownload, textFileDownload } from '../../_helpers';
 import { cadesSignFileIds, casesCertSelectionInProcess, casesSelectedCert, casesSignInProcess } from '../../store/cadesplugin/cadespluginSelector';
+import { ActionButtonWrapper } from '../Message/ActionButtonWrapper';
+import { CircularProgressStyled } from '../Message/CircularProgressStyled';
 
 const ContainerStyled = styled(Container)(
   ({theme}) => ({
@@ -48,32 +50,6 @@ const BackdropStyled = styled(Backdrop)(
     color: '#fff',
   })
 )
-
-const ActionButtonDiv = styled.div`
-  display: flex,
-  alignItems: center,
-  justifyContent: flex-start
-`
-
-const ActionButtonWrapperDiv = styled.div`
-  margin: theme.spacing(1),
-  position: 'relative',
-`
-
-const ActionButtonWrapper = ({children, ...props}) => {
-  return (
-    <ActionButtonDiv><ActionButtonWrapperDiv {...props} />{children}</ActionButtonDiv>
-  );
-}
-
-const CircularProgressStyled = styled(CircularProgress)`
-    color: green[500],
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: -12,
-    marginLeft: -12,
-`
 
 export default function DispListShowMessage(props) {
   const dispatch = useDispatch();

@@ -3,7 +3,6 @@ import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 
 import { PrivateRoute } from '../_components';
 
-import Dashboard  from '../dashboard/Dashboard.js'
 import RegisterNewMessage  from  '../components/Registers/RegisterNewMessage.js'
 import RegisterShowMessage from  '../components/Registers/RegisterShowMessage.js'
 import RegisterInMessage   from  '../components/Registers/RegisterInMessage.js'
@@ -28,8 +27,6 @@ class Routes extends React.Component {
               
               <PrivateRoute path={`${path}/list/:type/:id`} component={RegisterIn} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
               <PrivateRoute path={`${path}/list/:type`} component={RegisterIn} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
-              
-              <PrivateRoute component={Dashboard} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
             </Switch>
       );
     }

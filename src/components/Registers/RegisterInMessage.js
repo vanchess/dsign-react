@@ -1,6 +1,5 @@
 import React from 'react';
 import { withRouter } from "react-router-dom";
-import withStyles from '@mui/styles/withStyles';
 import { green } from '@mui/material/colors';
 
 import Container from '@mui/material/Container';
@@ -14,46 +13,11 @@ import { connect } from 'react-redux';
 
 import { messageFetch } from '../../store/bill/messageInAction.js'
 import { messageStartChangeRowPerPage, messageStartChangePage } from '../../store/pagination/bill/messageInPaginationAction.js'
-
-const styles = theme => ({
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-  },
-  
-  root: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  wrapper: {
-    margin: theme.spacing(1),
-    position: 'relative',
-  },
-  buttonProgress: {
-    color: green[500],
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: -12,
-    marginLeft: -12,
-  },
-  buttonSendDiv: {
-    textAlign: 'right',
-  }
-  //fixedHeight: {
-  //  height: 240,
-  //},
-})
-
+import { ContainerStyled } from '../Message/ContainerStyled.js';
+import { PaperStyled } from '../Message/PaperStyled.js';
 
 class BillsInMessage extends React.Component {
-    
+
     constructor(props){
       super(props);
       
@@ -61,28 +25,25 @@ class BillsInMessage extends React.Component {
       
       this.props.setTitle('Счета');
     }
-    
+
     componentDidMount(){
         this.props.fetchMessages(this.props.page, this.props.perPage);
-        // this.props.fetchMyFiles(this.props.page, this.props.perPage);
-        // this.props.fetchUsers(0, -1);
     }
-  
+
     handleClickShowItem(id){
         this.props.history.push(`/bills/msg/${id}`)
     }
-    
+
   render() {
       const { classes } = this.props;
-      //const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
       return (
         <div>
-          <Container maxWidth="lg" className={classes.container}>
+          <ContainerStyled maxWidth="lg">
             <Grid container spacing={3}>
               {/* Recent Orders */}
               <Grid item xs={12}>
-                <Paper className={classes.paper}>
+                <PaperStyled >
 
                   <MessageList 
                       items={this.props.items} 
@@ -112,17 +73,16 @@ class BillsInMessage extends React.Component {
                      onRowsPerPageChange={this.props.handleChangeRowsPerPage}
                   /> : null }
 
-                </Paper>
+                </PaperStyled>
               </Grid>
             </Grid>
-          </Container>
+          </ContainerStyled>
         </div>
       );
   }
 }
 
 const mapStateToProps = function(store) {
-  // console.log(store);
   return {
       items: store.billReducer.incoming.items, 
       page: store.paginationReducer.bill.incoming.page, 
@@ -147,4 +107,4 @@ const mapDispatchToProps = dispatch => {
 }
 
 
-export default connect(mapStateToProps,mapDispatchToProps)(withRouter(withStyles(styles)(BillsInMessage)));
+export default connect(mapStateToProps,mapDispatchToProps)(withRouter(BillsInMessage));

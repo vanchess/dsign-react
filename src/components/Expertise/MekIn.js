@@ -1,11 +1,7 @@
 import React from 'react';
 import { withRouter } from "react-router-dom";
-import withStyles from '@mui/styles/withStyles';
-import { green } from '@mui/material/colors';
 
-import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 
 import MekList from './MekList';
 import MekShowMessage from '../Expertise/MekShowMessage';
@@ -16,40 +12,8 @@ import { messageStatusFetch } from '../../store/messageStatus/messageStatusActio
 import { createColumns } from './columnsDataGrid.js'
 import FullScreenDialog from '../Dialog/FullScreenDialog'
 import MekFilter from './MekFilter'
-
-const styles = theme => ({
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-  },
-  
-  root: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  wrapper: {
-    margin: theme.spacing(1),
-    position: 'relative',
-  },
-  buttonProgress: {
-    color: green[500],
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    marginTop: -12,
-    marginLeft: -12,
-  },
-  buttonSendDiv: {
-    textAlign: 'right',
-  }
-})
-
+import { ContainerStyled } from '../Message/ContainerStyled.js';
+import { PaperStyled } from '../Message/PaperStyled.js';
 
 class MekInMessage extends React.Component {
     
@@ -134,33 +98,17 @@ class MekInMessage extends React.Component {
     };
     
     render() {
-      const { classes } = this.props;
       const type = this.props.match.params.type;
-      //const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
       
-      /*
-      if (columns.length > 0) {
-        const statusColumn = columns.find((column) => column.field === 'status');
-        const statusColIndex = columns.findIndex((col) => col.field === 'status');
-
-        const newStatusColumn = {
-          ...statusColumn,
-          filterOperators: [inOperator(this.props.statuses), notInOperator(this.props.statuses)],
-        };
-
-        columns[statusColIndex] = newStatusColumn;
-        columns = Array.from(columns);
-      }
-      */
       let columns = createColumns(this.props.statuses, this.handleClickShowItem, type);
       
       return (
           <div>
-            <Container maxWidth="lg" className={classes.container}>
+            <ContainerStyled maxWidth="lg">
               <Grid container spacing={3}>
                 {/* Recent Orders */}
                 <Grid item xs={12}>
-                  <Paper className={classes.paper}>
+                  <PaperStyled >
                     <MekFilter msgType={type} />
                     <MekList 
                         rowsPerPageOptions={[10, 15, 20, 50, 100]}
@@ -178,14 +126,11 @@ class MekInMessage extends React.Component {
                            nextIconButtonProps={{
                              'aria-label': 'Next Page',
                            }}
-                           
-                           //onChangePage={this.props.handleChangePage}
-                           //onChangeRowsPerPage={this.props.handleChangeRowsPerPage}
                      />
-                  </Paper>
+                  </PaperStyled>
                 </Grid>
               </Grid>
-            </Container>
+            </ContainerStyled>
             <FullScreenDialog title={this.state.msgTitle} open={this.state.openMessageDialog} onClose={this.handleCloseDialog}>
                 <MekShowMessage setTitle={this.props.setTitle}/>
             </FullScreenDialog>
@@ -218,4 +163,4 @@ const mapDispatchToProps = dispatch => {
 }
 
 
-export default connect(mapStateToProps,mapDispatchToProps)(withRouter(withStyles(styles)(MekInMessage)));
+export default connect(mapStateToProps,mapDispatchToProps)(withRouter(MekInMessage));
