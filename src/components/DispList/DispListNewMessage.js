@@ -286,7 +286,7 @@ class DispListNewMessage extends React.Component {
                                     variant="standard"
                                     fullWidth
                                     required
-                                    label="Организация"
+                                    label="Организация (место работы или учебы лиц)"
                                     id="msg-subject"
                                     value={this.state.msgSubject}
                                     onChange={this.handleChangeMsgSubject}

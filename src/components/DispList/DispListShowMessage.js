@@ -292,7 +292,7 @@ export default function DispListShowMessage(props) {
           <CircularProgress color="inherit" />
         </BackdropStyled>
         <ContainerStyled maxWidth="lg">
-          <Grid container spacing={3}>
+          <Grid container spacing={5}>
             {/* Recent Orders */}
             <Grid item xs={12}>
               <PaperStyled>
@@ -302,7 +302,7 @@ export default function DispListShowMessage(props) {
                               variant="standard"
                               fullWidth
                               readOnly
-                              label="Организация"
+                              label="Организация (место работы или учебы лиц)"
                               id="msg-subject"
                               value={msgSubject}
                               helperText="" />
@@ -428,8 +428,7 @@ export default function DispListShowMessage(props) {
                     variant="standard"
                     fullWidth
                     readOnly
-                    label="Организация"
-                    id="msg-subject"
+                    label="Организация (место работы или учебы лиц)"
                     value={msgSubject}
                     helperText="" />
             </Grid>
