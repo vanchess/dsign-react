@@ -317,7 +317,7 @@ class DispListNewMessage extends React.Component {
                                         fullWidth
                                         required
                                         id="msg-text"
-                                        label="Место проведения мероприятия"
+                                        label="Место и дата проведения мероприятия"
                                         multiline
                                         minRows = {2}
                                         maxRows={20}
