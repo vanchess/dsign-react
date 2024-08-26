@@ -6,7 +6,6 @@ import TextField from '@mui/material/TextField';
 
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
-import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 
 import CircularProgress from '@mui/material/CircularProgress';
@@ -261,11 +260,11 @@ class DispListNewMessage extends React.Component {
               <BackdropStyled open={this.state.signInProcess}>
                 <CircularProgress color="inherit" />
               </BackdropStyled>
-              <ContainerStyled maxWidth="lg" className={classes.container}>
+              <ContainerStyled maxWidth="lg" >
                 <Grid container spacing={3}>
                   {/* Recent Orders */}
                   <Grid item xs={12}>
-                    <PaperStyled className={classes.paper}>
+                    <PaperStyled >
                       <Grid container>
                           <Grid item xs={12}>
                           <SendButtonWrapper>
