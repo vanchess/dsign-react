@@ -7,7 +7,7 @@ const ActionButtonDiv = styled('div')`
 `
 
 const ActionButtonWrapperDiv = styled('div')(({theme}) => ({
-  margin: theme.spacing(1),
+  // margin: theme.spacing(1),
   position: 'relative',
 }));
 

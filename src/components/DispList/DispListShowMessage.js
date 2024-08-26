@@ -292,11 +292,8 @@ export default function DispListShowMessage(props) {
           <CircularProgress color="inherit" />
         </BackdropStyled>
         <ContainerStyled maxWidth="lg">
-          <Grid container spacing={5}>
-            {/* Recent Orders */}
-            <Grid item xs={12}>
               <PaperStyled>
-                  <Grid container>
+                  <Grid container spacing={1}>
                       <Grid item xs={6}>
                           <TextField
                               variant="standard"
@@ -408,8 +405,6 @@ export default function DispListShowMessage(props) {
                       </>):null}
                   </Grid>
               </PaperStyled>
-            </Grid>
-          </Grid>
         </ContainerStyled>
         <CertDialog open={certDialogOpen} onClose={handleCloseCertDialog} />
         <Popover

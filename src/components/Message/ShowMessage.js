@@ -281,11 +281,8 @@ class ShowMessage extends React.Component {
               <CircularProgress color="inherit" />
             </BackdropStyled>
             <ContainerStyled maxWidth="lg" >
-              <Grid container spacing={3}>
-                {/* Recent Orders */}
-                <Grid item xs={12}>
                   <PaperStyled>
-                      <Grid container>
+                      <Grid container spacing={1}>
                           <Grid item xs={10}>
                               <TextField
                                   variant="standard"
@@ -404,8 +401,6 @@ class ShowMessage extends React.Component {
                           </Grid>
                       </Grid>
                   </PaperStyled>
-                </Grid>
-              </Grid>
             </ContainerStyled>
             <CertDialog selectedValue={this.state.certDialogSelectedValue} open={this.state.certDialogOpen} onClose={this.handleCloseCertDialog} />
           </div>
