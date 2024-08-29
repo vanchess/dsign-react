@@ -17,6 +17,7 @@ import { messageStatusReducer } from './messageStatus/messageStatusReducer';
 import { periodReducer }       from './period/periodReducer';
 import { authReducer }         from './auth/authReducer';
 import { displistReducer }     from './displist'
+import { dnReducer } from './dn';
 //import { alert } from './alert.reducer';
 
 const rootReducer = combineReducers({
@@ -35,7 +36,8 @@ const rootReducer = combineReducers({
   messageStatusReducer,
   periodReducer,
   authReducer,
-  displist: displistReducer
+  displist: displistReducer,
+  dn: dnReducer
 });
 
 export default rootReducer;
