@@ -19,6 +19,8 @@ import { useHistory } from "react-router-dom";
 import { Link as RouterLink } from 'react-router-dom';
 import { FormStyled } from './FormStyled.js';
 import { styled } from '@mui/material';
+import { AvatarStyled } from './AvatarStyled.js';
+import { SubmitButton } from './SubmitButton.js';
 
 const DivStyled = styled('div')(({theme}) => ({
   marginTop: theme.spacing(8),
