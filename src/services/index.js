@@ -13,3 +13,4 @@ export * from './api/pdService';
 export * from './api/periodService';
 export * from './api/displistService';
 export * from './api/preventiveMedicalMeasureService';
+export * from './api/dnService';

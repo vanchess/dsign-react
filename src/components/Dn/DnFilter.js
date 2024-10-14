@@ -19,6 +19,7 @@ import { DivColumn } from '../FilterPanel/DivColumn.js';
 import { MultipleAutocomplete } from '../FilterPanel/MultipleAutocomplete.js';
 import { Box } from '@mui/material';
 import { msgDnContractFetch } from '../../store/dn/dnContractMsgStore.js';
+import { msgDnListFetch } from '../../store/dn/dnListMsgStore.js';
 
 export default function DnFilter(props) {
   const dispatch = useDispatch();
@@ -27,16 +28,18 @@ export default function DnFilter(props) {
   const periodList = useSelector(store => store.periodReducer.items);
   const statusList = useSelector(store => store.messageStatusReducer.items);
   const organizationList = useSelector(store => store.organizationReducer.items);
-  const filterPeriod = useSelector(store => store.filtersReducer.bill.period);
+  const filterPeriod = [];
   const filterStatus = useSelector(store => store.filtersReducer.bill.status);
   const filterOrganization = useSelector(store => store.filtersReducer.bill.organization);
 
-  const fetchMsg = (page, perPage, status = [], period = [], org = []) => {
-      
-    if (props.msgType === 'dn-list') {
-      // dispatch(msgDnContractFetch(page, perPage, status, period, org));
+  const fetchMsg = (msgType = null, status = [], period = [], org = []) => {
+    if(!msgType) return;
+    const page = 0;
+    const perPage = -1;
+    if (msgType === 'dn-list') {
+      dispatch(msgDnListFetch(page, perPage, status, period, org));
     }
-    if (props.msgType === 'dn-contract') {
+    if (msgType === 'dn-contract') {
       dispatch(msgDnContractFetch(page, perPage, status, period, org));
     }
   };
@@ -54,15 +57,14 @@ export default function DnFilter(props) {
     setExpanded(isExpanded ? panel : false);
   };
   
-  const fetchMessages = ({filterPeriod:fp}={}) => {
+  const fetchMessages = (msgType, {filterPeriod:fp}={}) => {
 
     if (!fp) {
       fp = filterPeriod;
     }
 
     fetchMsg(
-      0, 
-      -1, 
+      msgType,
       filterStatus.map(item => item.attributes.name), 
       fp.map(item => item.id),
       filterOrganization.map(item => item.id),
@@ -71,13 +73,8 @@ export default function DnFilter(props) {
   
   const handleButtonClick = (event) => {
       event.stopPropagation();
-      fetchMessages();
+      fetchMessages(props.msgType);
       setExpanded(false);
-  };
-  
-  const handleChangePeriod = (e, newValue) => {
-    e.preventDefault();
-    setPeriod(newValue);
   };
   
   const handleChangeStatus = (e, newValue) => {
@@ -92,35 +89,8 @@ export default function DnFilter(props) {
   useEffect( () => {
       fetchPeriod();
       fetchOrganization();
-      if (filterPeriod.length) {
-          fetchMessages();
-      }
+      fetchMessages(props.msgType);
   },[props.msgType]);
-
-  useEffect( () => {
-      if(periodList.length && !filterPeriod.length) {
-        let previousMonth = new Date();
-        previousMonth.setDate(0); // 0 will result in the last day of the previous month
-        let newFilterPeriod = periodList.reduce((acc, cur) => {
-            let dtTo   = new Date(cur.attributes.to)
-            if (previousMonth <= dtTo) {
-                acc.push(cur);
-            }
-            return acc;
-        }, [] );
-        setPeriod(newFilterPeriod);
-        
-        fetchMessages({filterPeriod: newFilterPeriod});
-      }
-  },[periodList]);
-  
-  const periodListSorted = periodList.slice().sort(function(a, b) {
-    if (a.attributes.from < b.attributes.from) {
-      return 1; }
-    if (a.attributes.from > b.attributes.from) {
-      return -1; }
-    return 0;
-  });
 
   const filterOrganizationOptions = createFilterOptions({
       stringify: (option) => option.attributes.short_name + option.attributes.name,
@@ -149,14 +119,6 @@ export default function DnFilter(props) {
         <AccordionDetails sx={{alignItems: 'center'}}>
             <Grid container spacing={2}>
                 <Grid item xs={8}>
-                    <MultipleAutocomplete
-                          id="period"
-                          options={periodListSorted}
-                          value={filterPeriod}
-                          groupBy={(option) => option.attributes.year}
-                          onChange={handleChangePeriod}
-                          label="Периоды"
-                        />
                     <MultipleAutocomplete
                           id="organization"
                           options={organizationList}

@@ -83,6 +83,16 @@ export class messageService {
         const url = new URL(`msg/${id}/displists`, process.env.REACT_APP_APIURL);
         return fetch(url, requestOptions).then(apiService.handleResponse);
     }
+
+    static getDnLists(id) {
+        const requestOptions = {
+            method: 'GET',
+            headers: authHeader(),
+        };
+
+        const url = new URL(`msg/${id}/dnlists`, process.env.REACT_APP_APIURL);
+        return fetch(url, requestOptions).then(apiService.handleResponse);
+    }
     
     static setStatus(msgId, statusName) {
         const requestOptions = {

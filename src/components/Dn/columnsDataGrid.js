@@ -30,7 +30,6 @@ export const createColumns = (statuses, onClick) => {
       { field: 'from', headerName: 'От кого', flex: 1 },
       { field: 'subject', headerName: 'Организация', width: 250 },
       { field: 'text', headerName: 'Место проведения', width: 150 },
-      { field: 'period', headerName: 'Период', width: 100 },
       {
         field: 'createdAt',
         headerName: 'Дата',

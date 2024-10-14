@@ -14,7 +14,6 @@ import PictureInPictureAltIcon from '@mui/icons-material/PictureInPictureAlt';
 
 import { fileService, messageService, cadespluginService } from '../../services';
 import styled from '@emotion/styled';
-import { preventiveMedicalMeasureFetch } from '../../store/displist/preventiveMedicalMeasureStore';
 import { userFetch } from '../../store/user/userAction';
 import { cadesCertFetch, cadesCertSelectCancel, cadesCertSelectOk, cadesCertSelectStart, cadesSetSignFileIds, cadesSignFailure, cadesSignStart, cadesSignSuccess } from '../../store/cadesplugin/cadespluginAction';
 import { Backdrop, Chip, CircularProgress, Popover, TextField, Typography } from '@mui/material';
@@ -24,7 +23,7 @@ import FilesList from '../UploadFile/FilesList';
 import CertDialog from '../Dialog/CertDialog';
 
 import { fileDownload, textFileDownload } from '../../_helpers';
-import { cadesSignFileIds, casesCertSelectionInProcess, casesSelectedCert, casesSignInProcess } from '../../store/cadesplugin/cadespluginSelector';
+import { cadesSignFileIdsSelector, casesCertSelectionInProcessSelector, casesSelectedCertSelector, casesSignInProcessSelector } from '../../store/cadesplugin/cadespluginSelector';
 import { ActionButtonWrapper } from '../Message/ActionButtonWrapper';
 import { CircularProgressStyled } from '../Message/CircularProgressStyled';
 import DnDataGrid from './DnDataGrid';
@@ -60,16 +59,14 @@ export default function DnShowMessage(props) {
 
   const match = useRouteMatch();
   const msgId = match.params.id;
-  const [displistId, setDisplistId] = useState(null);
+  const [dnlistId, setDnlistId] = useState(null);
 
   
   const [msgSubject, setMsgSubject] = useState('');
   const [msgText, setMsgText] = useState('');
   const [msgFromId, setMsgFromId] = useState(null);
-  const [msgFrom, setMsgFrom] = useState('');
   const [msgTo, setMsgTo] = useState([]);
   const [periodId, setPeriodId] = useState(null);
-  const [periodName, setPeriodName] = useState('');
 
   const [msgFiles, setMsgFiles] = useState([]);
   const [msgFilesLoading, setMsgFilesLoading] = useState(true);
@@ -78,13 +75,13 @@ export default function DnShowMessage(props) {
   const [msgStatusLabel, setMsgStatusLabel] = useState('');
   const [msgStatusName, setMsgStatusName] = useState('');
   
-  const certDialogOpen = useSelector(casesCertSelectionInProcess);
-  const signInProcess = useSelector(casesSignInProcess)
+  const certDialogOpen = useSelector(casesCertSelectionInProcessSelector);
+  const signInProcess = useSelector(casesSignInProcessSelector)
       
   const [selectedMsgFilesIds, setSelectedMsgFilesIds] = useState([]);
 
-  const selectedCert = useSelector(casesSelectedCert);
-  const signFileIds = useSelector(cadesSignFileIds);
+  const selectedCert = useSelector(casesSelectedCertSelector);
+  const signFileIds = useSelector(cadesSignFileIdsSelector);
 
   const periodList = useSelector(store => store.periodReducer.items);
 
@@ -102,7 +99,6 @@ export default function DnShowMessage(props) {
   const id = open ? 'simple-popover' : undefined;
   useEffect(() => {
     props.setTitle('Cообщение');
-    dispatch(preventiveMedicalMeasureFetch());
 
     dispatch(userFetch(0, -1));
 
@@ -110,9 +106,9 @@ export default function DnShowMessage(props) {
 
   useEffect(() => {
       if (msgId) {
-        messageService.getDispLists(msgId).then(
+        messageService.getDnLists(msgId).then(
           (data) => {
-            setDisplistId(data.data[0]?.id);
+            setDnlistId(data.data[0]?.id);
           }
         )
 
@@ -158,22 +154,16 @@ export default function DnShowMessage(props) {
       }
   }, [msgId])
 
-  useEffect(() => {
-    setPeriodName(
-      periodList.find(item => {
+  const periodName  = periodList.find(item => {
         return Number(item?.id) === periodId;
       })?.attributes.name ?? ''
-    );
-  }, [periodList, periodId])
 
-  useEffect(() => {
-    setMsgFrom(users[msgFromId] ? users[msgFromId].attributes.name : '');
-  }, [users, msgFromId]);
+  const msgFrom = users[msgFromId] ? users[msgFromId].attributes.name : '';
 
   const handleSetStatusSent = () => {
     messageService.setStatus(msgId, 'sent').then(
         () => { 
-            history.push('/displist/list/displist') 
+            history.push('/dn/list/dn-list') 
         },
         (err) => { 
             alert(err);
@@ -464,8 +454,8 @@ export default function DnShowMessage(props) {
           </ContainerStyled>  
         </Popover>
         
-      {displistId &&
-        <DnDataGrid listId = {displistId} isDraft = {msgStatusName === 'draft'} />
+      {dnlistId &&
+        <DnDataGrid listId = {dnlistId} isDraft = {msgStatusName === 'draft'} />
       }
     </div>
   )

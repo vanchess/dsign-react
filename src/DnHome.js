@@ -27,7 +27,7 @@ export default function DnHome(props) {
         }
 
         sidebarMainListItems.push({'key':3, 'title':'Списки на диспансерное наблюдение', 'to':`${path}/list/dn-list`,   'tooltip':'Списки сотрудников на диспансерное наблюдение', 'icon': <ListAltIcon />});
-        sidebarMainListItems.push({'key':4, 'title':'Договоры', 'to':`${path}/list/dn-contract`,   'tooltip':'Договорв с работодателями на диспансерное наблюдение сотрудников', 'icon': <ListAltIcon />});
+        sidebarMainListItems.push({'key':4, 'title':'Договоры', 'to':`${path}/list/dn-contract`,   'tooltip':'Договоры с работодателями на диспансерное наблюдение сотрудников', 'icon': <ListAltIcon />});
     }
 
     return (  

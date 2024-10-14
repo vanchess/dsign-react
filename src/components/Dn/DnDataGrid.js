@@ -17,10 +17,9 @@ import { Alert, Button } from '@mui/material';
 import { uuidv4 } from '../../_helpers/uniqueId';
 import { validate } from '../../_helpers/validate.js';
 import { useDispatch, useSelector } from 'react-redux';
-import { displistEntriesSelector, rowModesModelSelector } from '../../store/displist/displistEntrySelector.js';
-import { displistAddEntry, displistDeleteEntry, displistEntriesFetch, displistSetRowModesModel, displistUpdateEntry, displistUpdateRowModesModel, updateRowModesModel } from '../../store/displist/displistEntryStore.js';
-import { preventiveMedicalMeasureTypesIdsSelector, preventiveMedicalMeasureTypesSelector } from '../../store/displist/preventiveMedicalMeasureSelector.js';
 import styled from '@emotion/styled';
+import { dnlistEntriesSelector, rowModesModelSelector } from '../../store/dn/dnListEntrySelector.js';
+import { dnlistAddEntry, dnlistDeleteEntry, dnlistEntriesFetch, dnlistSetRowModesModel, dnlistUpdateEntry, dnlistUpdateRowModesModel } from '../../store/dn/dnListEntryStore.js';
 
 const StyledBox = styled('div')(({ theme }) => ({
   /*
@@ -35,10 +34,10 @@ const StyledBox = styled('div')(({ theme }) => ({
     backgroundColor: `rgb(126,10,15, ${theme.palette.mode === 'dark' ? 0 : 0.1})`,
     color: theme.palette.mode === 'dark' ? '#ff4343' : '#750f0f',
   },
-  '& .displist-row--saving, & .displist-row--being-deleted': {
+  '& .dnlist-row--saving, & .dnlist-row--being-deleted': {
     color: theme.palette.warning.main,
   },
-  '& .displist-row--error': {
+  '& .dnlist-row--error': {
     backgroundColor: `rgb(126,10,15, ${theme.palette.mode === 'dark' ? 0 : 0.1})`,
     color: theme.palette.mode === 'dark' ? '#ff4343' : '#750f0f',
   },
@@ -46,18 +45,16 @@ const StyledBox = styled('div')(({ theme }) => ({
 
 export default function DnDataGrid(props) {
     const dispatch = useDispatch();
-    const {listId:displistId, isDraft} = props;
+    const {listId:dnlistId, isDraft} = props;
     const [snackbar, setSnackbar] = React.useState(null);
-    const rowModesModel = useSelector((store) => rowModesModelSelector(store, displistId));
-    const rows = useSelector((store) => displistEntriesSelector(store, displistId));
-    const preventiveMedicalMeasureTypes = useSelector(preventiveMedicalMeasureTypesSelector);
-    const preventiveMedicalMeasureTypesIds = useSelector(preventiveMedicalMeasureTypesIdsSelector);
+    const rowModesModel = useSelector((store) => rowModesModelSelector(store, dnlistId));
+    const rows = useSelector((store) => dnlistEntriesSelector(store, dnlistId));
 
     useEffect(() => {
-      if (displistId) {
-        dispatch(displistEntriesFetch({id:displistId}));
+      if (dnlistId) {
+        dispatch(dnlistEntriesFetch({id:dnlistId}));
       }
-    }, [displistId])
+    }, [dnlistId])
     
     
 
@@ -68,21 +65,21 @@ export default function DnDataGrid(props) {
     const handleEditClick = (id) => () => {
       if (rowsHasError(id)) return;
 
-      dispatch(displistUpdateRowModesModel({ displistId, rowId:id, mode: GridRowModes.Edit }));
+      dispatch(dnlistUpdateRowModesModel({ dnlistId, rowId:id, mode: GridRowModes.Edit }));
     };
     const handleSaveClick = (id, row) => () => {
-      dispatch(displistUpdateRowModesModel({ displistId, rowId:id, mode: GridRowModes.View }));
+      dispatch(dnlistUpdateRowModesModel({ dnlistId, rowId:id, mode: GridRowModes.View }));
     };
 
     const handleDeleteClick = (id, dbStatus) => () => {
-      dispatch(displistDeleteEntry({displist_id:displistId, id, dbStatus}));
+      dispatch(dnlistDeleteEntry({dn_list_id:dnlistId, id, dbStatus}));
     };
     const handleCancelClick = (id, dbStatus) => () => {
-      dispatch(displistUpdateRowModesModel({ displistId, rowId:id, mode: GridRowModes.View, ignoreModifications: true }));
+      dispatch(dnlistUpdateRowModesModel({ dnlistId, rowId:id, mode: GridRowModes.View, ignoreModifications: true }));
     
       const editedRow = rows.find((row) => row.id === id);
       if (editedRow.isNew) {
-        dispatch(displistDeleteEntry({displist_id:displistId, id, dbStatus}));
+        dispatch(dnlistDeleteEntry({dn_list_id:dnlistId, id, dbStatus}));
       }
     };
     const handleCopyClick = (row) => () => copyRow(row);
@@ -112,9 +109,6 @@ export default function DnDataGrid(props) {
         if (!newRow.snils) {
           error += 'СНИЛС;';
         }
-        if (!preventiveMedicalMeasureTypesIds.some(p => p === newRow.preventive_medical_measure_id)) {
-          error += 'Вид планируемого мероприятия;';
-        }
 
         if (!error && (newRow.birthday < new Date(1900,1,1) || newRow.birthday > Date.now())) {
           error = 'Дата рождения указана неверно;';
@@ -122,19 +116,19 @@ export default function DnDataGrid(props) {
 
         if (error) {       
             setSnackbar({ children: `Необходимо заполнить данные (${error})!`, severity: 'warning' });
-            dispatch(displistUpdateRowModesModel({ displistId, rowId:newRow.id, mode: GridRowModes.Edit }));
+            dispatch(dnlistUpdateRowModesModel({ dnlistId, rowId:newRow.id, mode: GridRowModes.Edit }));
             updatedRow = { ...newRow, isNew: false, error: true };
         } else {
             updatedRow = { ...newRow, isNew: false, error: false };
             
         }
 
-        dispatch(displistUpdateEntry(updatedRow));
+        dispatch(dnlistUpdateEntry(updatedRow));
         return updatedRow;
     };
     
     const handleRowModesModelChange = (newRowModesModel) => {
-      dispatch(displistSetRowModesModel({displistId, newRowModesModel}));
+      dispatch(dnlistSetRowModesModel({dnlistId, newRowModesModel}));
     };
 
     const rowsHasError = (id) => {
@@ -154,8 +148,8 @@ export default function DnDataGrid(props) {
         
         const id = uuidv4();
         
-        dispatch(displistAddEntry({
-          displist_id:displistId,
+        dispatch(dnlistAddEntry({
+          dn_list_id:dnlistId,
           id, 
           first_name:'', 
           middle_name:'', 
@@ -163,7 +157,6 @@ export default function DnDataGrid(props) {
           birthday:'', 
           enp:'', 
           snils:'', 
-          preventive_medical_measure_id:'', 
           //description, 
           //contact_info,
           type: '', 
@@ -176,8 +169,8 @@ export default function DnDataGrid(props) {
           
         const id = uuidv4();
 
-        dispatch(displistAddEntry({
-          displist_id:displistId,
+        dispatch(dnlistAddEntry({
+          dn_list_id:dnlistId,
           id, 
           first_name: row.first_name, 
           middle_name: row.middle_name, 
@@ -185,7 +178,6 @@ export default function DnDataGrid(props) {
           birthday: row.birthday, 
           enp: row.enp, 
           snils: row.snils, 
-          preventive_medical_measure_id:'', 
           //description, 
           contact_info:row.contact_info,
           type: '', 
@@ -215,7 +207,7 @@ export default function DnDataGrid(props) {
                 onRowEditStop={handleRowEditStop}
                 processRowUpdate={processRowUpdate}
                 rows = {rows}
-                getRowClassName={(params) => `${params.row.error?'displist-row--error':''} ${params.row.dbStatus==='saving'?'displist-row--saving':''} ${params.row.dbStatus==='beingDeleted'?'displist-row--being-deleted':''}`}
+                getRowClassName={(params) => `${params.row.error?'dnlist-row--error':''} ${params.row.dbStatus==='saving'?'dnlist-row--saving':''} ${params.row.dbStatus==='beingDeleted'?'dnlist-row--being-deleted':''}`}
                 columns={[
                     { field: 'id', headerName: 'ID', width: 70, editable: false },
                     { field: 'last_name', headerName: 'Фамилия', width: 200, editable: true,
@@ -294,22 +286,6 @@ export default function DnDataGrid(props) {
                           return {...params.props, error: ''};
                         },
                         renderEditCell
-                    },
-                    {
-                      field: 'preventive_medical_measure_id',
-                      headerName: 'Вид планируемого мероприятия',
-                      width: 220,
-                      editable: true,
-                      type: 'singleSelect',
-                      getOptionValue: (value) => value,
-                      getOptionLabel: (value) => {
-                        const p = preventiveMedicalMeasureTypes[value];
-                        if (p) {
-                         return `${p.code} - ${p.name}`
-                        }
-                        return '';
-                      },
-                      valueOptions: preventiveMedicalMeasureTypesIds,
                     },
                     { field: 'contact_info', headerName: 'Контактные данные', width: 140, editable: true },
                     {

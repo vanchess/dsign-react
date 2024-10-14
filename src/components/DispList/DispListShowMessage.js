@@ -25,7 +25,7 @@ import FilesList from '../UploadFile/FilesList';
 import CertDialog from '../Dialog/CertDialog';
 
 import { fileDownload, textFileDownload } from '../../_helpers';
-import { cadesSignFileIds, casesCertSelectionInProcess, casesSelectedCert, casesSignInProcess } from '../../store/cadesplugin/cadespluginSelector';
+import { cadesSignFileIdsSelector, casesCertSelectionInProcessSelector, casesSelectedCertSelector, casesSignInProcessSelector } from '../../store/cadesplugin/cadespluginSelector';
 import { ActionButtonWrapper } from '../Message/ActionButtonWrapper';
 import { CircularProgressStyled } from '../Message/CircularProgressStyled';
 
@@ -78,13 +78,13 @@ export default function DispListShowMessage(props) {
   const [msgStatusLabel, setMsgStatusLabel] = useState('');
   const [msgStatusName, setMsgStatusName] = useState('');
   
-  const certDialogOpen = useSelector(casesCertSelectionInProcess);
-  const signInProcess = useSelector(casesSignInProcess)
+  const certDialogOpen = useSelector(casesCertSelectionInProcessSelector);
+  const signInProcess = useSelector(casesSignInProcessSelector)
       
   const [selectedMsgFilesIds, setSelectedMsgFilesIds] = useState([]);
 
-  const selectedCert = useSelector(casesSelectedCert);
-  const signFileIds = useSelector(cadesSignFileIds);
+  const selectedCert = useSelector(casesSelectedCertSelector);
+  const signFileIds = useSelector(cadesSignFileIdsSelector);
 
   const periodList = useSelector(store => store.periodReducer.items);
 

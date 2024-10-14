@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import Grid from '@mui/material/Grid';
 
@@ -16,9 +16,6 @@ import { useRouteMatch } from 'react-router-dom';
 import { msgItemsByTypeSelector, msgLoadingByTypeSelector } from '../../store/message/messageSelectors.js';
 
 export default function DnIn(props) {
-  const [openMessageDialog, setOpenMessageDialog] = useState(false);
-  const [title, setTitle] = useState('Списки сотрудников на диспансерное наблюдение');
-  const [msgTitle, setMsgTitle] = useState('Список сотрудников на диспансерное наблюдение');
   const dispatch = useDispatch();
   const match = useRouteMatch();
   const type = match.params.type;
@@ -27,34 +24,33 @@ export default function DnIn(props) {
   const loading = useSelector(store => msgLoadingByTypeSelector(store, type));
   const statuses = useSelector(store => store.messageStatusReducer.items); 
 
-  useEffect(() => {
-      dispatch(messageStatusFetch(0, -1));
-
-      if (match.params.id) {
-        setOpenMessageDialog(true);
-      }
-  }, []);
-
-  useEffect(() => {
-    if (match.params.id) {
-      setOpenMessageDialog(true);
-    } else {
-      setOpenMessageDialog(false);
+  const [title, msgTitle] = useMemo(() => {
+    switch (type) {
+      case 'dn-list':
+        return [
+          `Списки сотрудников на диспансерное наблюдение`,
+          'Список сотрудников на диспансерное наблюдение', 
+        ];
+      case 'dn-contract':
+        return [
+          `Договоры с работодателями на диспансерное наблюдение сотрудников`,
+          'Договор с работодателем на диспансерное наблюдение сотрудников', 
+        ];
+      default:
+        return [
+          `Списки сотрудников на диспансерное наблюдение`,
+          'Список сотрудников на диспансерное наблюдение', 
+        ];
     }
+  }, [type]);
+
+  const openMessageDialog = useMemo(() => {
+    return !!match.params.id;
   }, [match.params.id]);
 
   useEffect(() => {
-    let c = `Списки сотрудников на проф.мероприятия`;
-    let m = 'Список сотрудников на проф.мероприятия';
-    if (type === 'dn-list') {
-      c = `Списки сотрудников на проф.мероприятия`;
-      m = 'Список сотрудников на проф.мероприятия';
-    }
-    
-    setTitle(c);
-    setMsgTitle(m);
-
-  },[type]);
+      dispatch(messageStatusFetch(0, -1));
+  }, []);
 
   useEffect(() => {
     props.setTitle(title)
