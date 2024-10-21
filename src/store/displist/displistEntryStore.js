@@ -14,7 +14,7 @@ export const displistDeleteEntrySuccess = createAction('DISPLIST_ENTRIES_DELETE_
 export const displistDeleteEntryFailure = createAction('DISPLIST_ENTRIES_DELETE_ENTRY_FAILURE');
 export const displistUpdateRowModesModel = createAction('DISPLIST_ENTRIES_UPDATE_ROW_MODES_MODEL');
 export const displistSetRowModesModel = createAction('DISPLIST_ENTRIES_SET_ROW_MODES_MODEL');
-
+export const displistDiscardUnsavedChanges = createAction('DISPLIST_ENTRIES_DISCARD_UNSAVED_CHANGES')
 
 export const displistEntriesFetch = ({id:displistId}) => {
   return async (dispatch) => {
@@ -183,6 +183,20 @@ export function displistEntriesReducer(state = initialState, action) {
           }
         }
       };
+    case displistDiscardUnsavedChanges.type:
+      return {
+        list: { ...state.list,
+          [action.payload.displistId]: { ...state.list[action.payload.displistId],
+            entries: state.list[action.payload.displistId].entries?.filter(en => !en.isNew),
+            rowModesModel: state.list[action.payload.displistId].rowModesModel ?
+                            Object.keys(state.list[action.payload.displistId].rowModesModel).reduce((rmm, id) => { 
+                              rmm[id] = { ...state.list[action.payload.displistId].rowModesModel[id], mode: GridRowModes.View, ignoreModifications: true}; 
+                              return rmm;
+                            }, {})
+                            : state.list[action.payload.displistId].rowModesModel
+          }
+        }
+      }
     default:
         return state;
   }

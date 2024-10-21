@@ -14,6 +14,7 @@ export const dnlistDeleteEntrySuccess = createAction('DNLIST_ENTRIES_DELETE_ENTR
 export const dnlistDeleteEntryFailure = createAction('DNLIST_ENTRIES_DELETE_ENTRY_FAILURE');
 export const dnlistUpdateRowModesModel = createAction('DNLIST_ENTRIES_UPDATE_ROW_MODES_MODEL');
 export const dnlistSetRowModesModel = createAction('DNLIST_ENTRIES_SET_ROW_MODES_MODEL');
+export const dnlistDiscardUnsavedChanges = createAction('DNLIST_ENTRIES_DISCARD_UNSAVED_CHANGES')
 
 
 export const dnlistEntriesFetch = ({id:dnlistId}) => {
@@ -183,6 +184,20 @@ export function dnListEntriesReducer(state = initialState, action) {
           }
         }
       };
+    case dnlistDiscardUnsavedChanges.type:
+      return {
+        list: { ...state.list,
+          [action.payload.dnlistId]: { ...state.list[action.payload.dnlistId],
+            entries: state.list[action.payload.dnlistId].entries?.filter(en => !en.isNew),
+            rowModesModel: state.list[action.payload.dnlistId].rowModesModel ?
+                            Object.keys(state.list[action.payload.dnlistId].rowModesModel).reduce((rmm, id) => { 
+                              rmm[id] = { ...state.list[action.payload.dnlistId].rowModesModel[id], mode: GridRowModes.View, ignoreModifications: true}; 
+                              return rmm;
+                            }, {})
+                            : state.list[action.payload.dnlistId].rowModesModel
+          }
+        }
+      }
     default:
         return state;
   }

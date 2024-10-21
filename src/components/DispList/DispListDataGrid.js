@@ -1,5 +1,5 @@
 import { DataGrid, GridRowModes, GridActionsCellItem, GridRowEditStopReasons, GridEditInputCell } from '@mui/x-data-grid';
-import React, { useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import CustomLoadingOverlay from "../DataGrid/CustomLoadingOverlay";
 import CustomNoRowsOverlay from "../DataGrid/CustomNoRowsOverlay";
 import CustomPagination from "../DataGrid/CustomPagination";
@@ -18,7 +18,7 @@ import { uuidv4 } from '../../_helpers/uniqueId';
 import { validate } from '../../_helpers/validate.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { displistEntriesSelector, rowModesModelSelector } from '../../store/displist/displistEntrySelector.js';
-import { displistAddEntry, displistDeleteEntry, displistEntriesFetch, displistSetRowModesModel, displistUpdateEntry, displistUpdateRowModesModel, updateRowModesModel } from '../../store/displist/displistEntryStore.js';
+import { displistAddEntry, displistDeleteEntry, displistDiscardUnsavedChanges, displistEntriesFetch, displistSetRowModesModel, displistUpdateEntry, displistUpdateRowModesModel, updateRowModesModel } from '../../store/displist/displistEntryStore.js';
 import { preventiveMedicalMeasureTypesIdsSelector, preventiveMedicalMeasureTypesSelector } from '../../store/displist/preventiveMedicalMeasureSelector.js';
 import styled from '@emotion/styled';
 
@@ -57,6 +57,10 @@ export default function DispListDataGrid(props) {
       if (displistId) {
         dispatch(displistEntriesFetch({id:displistId}));
       }
+
+      return () => {
+        dispatch(displistDiscardUnsavedChanges({displistId}));
+      }
     }, [displistId])
     
     
@@ -87,13 +91,13 @@ export default function DispListDataGrid(props) {
     };
     const handleCopyClick = (row) => () => copyRow(row);
 
-    const handleRowEditStop = (params, event) => {
+    const handleRowEditStop = useCallback((params, event) => {
         if (params.reason === GridRowEditStopReasons.rowFocusOut) {
           event.defaultMuiPrevented = true;
         }
-    };
+    }, []);
 
-    const processRowUpdate = (newRow, oldRow) => {
+    const processRowUpdate = useCallback((newRow, oldRow) => {
         let updatedRow;
         
         let error = '';
@@ -103,7 +107,7 @@ export default function DispListDataGrid(props) {
         if (!newRow.first_name) {
           error += 'Имя;';
         }
-        if (!newRow.birthday) {
+        if (!newRow.birthday || !(newRow.birthday instanceof Date) || isNaN(newRow.birthday)) {
           error += 'Дата рождения;';
         }
         if (!newRow.enp) {
@@ -120,22 +124,23 @@ export default function DispListDataGrid(props) {
           error = 'Дата рождения указана неверно;';
         }
 
-        if (error) {       
-            setSnackbar({ children: `Необходимо заполнить данные (${error})!`, severity: 'warning' });
-            dispatch(displistUpdateRowModesModel({ displistId, rowId:newRow.id, mode: GridRowModes.Edit }));
-            updatedRow = { ...newRow, isNew: false, error: true };
-        } else {
-            updatedRow = { ...newRow, isNew: false, error: false };
-            
+        if (error) {
+          throw new Error(`Необходимо заполнить данные (${error})!`);      
         }
 
+        updatedRow = { ...newRow, isNew: false, error: false };
         dispatch(displistUpdateEntry(updatedRow));
         return updatedRow;
-    };
+
+    }, [preventiveMedicalMeasureTypesIds, dispatch, displistUpdateEntry ]);
     
-    const handleRowModesModelChange = (newRowModesModel) => {
+    const handleProcessRowUpdateError = useCallback((error) => {
+      setSnackbar({ children: error.message, severity: 'warning' });
+    }, [setSnackbar])
+
+    const handleRowModesModelChange = useCallback((newRowModesModel) => {
       dispatch(displistSetRowModesModel({displistId, newRowModesModel}));
-    };
+    }, [displistId]);
 
     const rowsHasError = (id) => {
       if (Object.values(rowModesModel).some(m => m.mode === GridRowModes.Edit)) {
@@ -214,6 +219,7 @@ export default function DispListDataGrid(props) {
                 onRowModesModelChange={handleRowModesModelChange}
                 onRowEditStop={handleRowEditStop}
                 processRowUpdate={processRowUpdate}
+                onProcessRowUpdateError={handleProcessRowUpdateError}
                 rows = {rows}
                 getRowClassName={(params) => `${params.row.error?'displist-row--error':''} ${params.row.dbStatus==='saving'?'displist-row--saving':''} ${params.row.dbStatus==='beingDeleted'?'displist-row--being-deleted':''}`}
                 columns={[

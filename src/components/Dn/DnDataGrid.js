@@ -1,5 +1,5 @@
 import { DataGrid, GridRowModes, GridActionsCellItem, GridRowEditStopReasons, GridEditInputCell } from '@mui/x-data-grid';
-import React, { useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import CustomLoadingOverlay from "../DataGrid/CustomLoadingOverlay";
 import CustomNoRowsOverlay from "../DataGrid/CustomNoRowsOverlay";
 import CustomPagination from "../DataGrid/CustomPagination";
@@ -19,7 +19,7 @@ import { validate } from '../../_helpers/validate.js';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from '@emotion/styled';
 import { dnlistEntriesSelector, rowModesModelSelector } from '../../store/dn/dnListEntrySelector.js';
-import { dnlistAddEntry, dnlistDeleteEntry, dnlistEntriesFetch, dnlistSetRowModesModel, dnlistUpdateEntry, dnlistUpdateRowModesModel } from '../../store/dn/dnListEntryStore.js';
+import { dnlistAddEntry, dnlistDeleteEntry, dnlistDiscardUnsavedChanges, dnlistEntriesFetch, dnlistSetRowModesModel, dnlistUpdateEntry, dnlistUpdateRowModesModel } from '../../store/dn/dnListEntryStore.js';
 
 const StyledBox = styled('div')(({ theme }) => ({
   /*
@@ -54,6 +54,10 @@ export default function DnDataGrid(props) {
       if (dnlistId) {
         dispatch(dnlistEntriesFetch({id:dnlistId}));
       }
+
+      return () => {
+          dispatch(dnlistDiscardUnsavedChanges({ dnlistId }));
+      }
     }, [dnlistId])
     
     
@@ -84,13 +88,13 @@ export default function DnDataGrid(props) {
     };
     const handleCopyClick = (row) => () => copyRow(row);
 
-    const handleRowEditStop = (params, event) => {
+    const handleRowEditStop = useCallback((params, event) => {
         if (params.reason === GridRowEditStopReasons.rowFocusOut) {
           event.defaultMuiPrevented = true;
         }
-    };
+    }, []);
 
-    const processRowUpdate = (newRow, oldRow) => {
+    const processRowUpdate = useCallback((newRow, oldRow) => {
         let updatedRow;
         
         let error = '';
@@ -100,7 +104,7 @@ export default function DnDataGrid(props) {
         if (!newRow.first_name) {
           error += 'Имя;';
         }
-        if (!newRow.birthday) {
+        if (!newRow.birthday || !(newRow.birthday instanceof Date) || isNaN(newRow.birthday)) {
           error += 'Дата рождения;';
         }
         if (!newRow.enp) {
@@ -114,22 +118,23 @@ export default function DnDataGrid(props) {
           error = 'Дата рождения указана неверно;';
         }
 
-        if (error) {       
-            setSnackbar({ children: `Необходимо заполнить данные (${error})!`, severity: 'warning' });
-            dispatch(dnlistUpdateRowModesModel({ dnlistId, rowId:newRow.id, mode: GridRowModes.Edit }));
-            updatedRow = { ...newRow, isNew: false, error: true };
-        } else {
-            updatedRow = { ...newRow, isNew: false, error: false };
-            
+        if (error) {
+          throw new Error(`Необходимо заполнить данные (${error})!`);      
         }
 
+        updatedRow = { ...newRow, isNew: false, error: false };
         dispatch(dnlistUpdateEntry(updatedRow));
         return updatedRow;
-    };
+
+    }, [dispatch, dnlistUpdateEntry]);
     
-    const handleRowModesModelChange = (newRowModesModel) => {
+    const handleProcessRowUpdateError = useCallback((error) => {
+      setSnackbar({ children: error.message, severity: 'warning' });
+    }, [setSnackbar])
+
+    const handleRowModesModelChange = useCallback((newRowModesModel) => {
       dispatch(dnlistSetRowModesModel({dnlistId, newRowModesModel}));
-    };
+    }, [dnlistId, dispatch, dnlistSetRowModesModel]);
 
     const rowsHasError = (id) => {
       if (Object.values(rowModesModel).some(m => m.mode === GridRowModes.Edit)) {
@@ -206,6 +211,7 @@ export default function DnDataGrid(props) {
                 onRowModesModelChange={handleRowModesModelChange}
                 onRowEditStop={handleRowEditStop}
                 processRowUpdate={processRowUpdate}
+                onProcessRowUpdateError={handleProcessRowUpdateError}
                 rows = {rows}
                 getRowClassName={(params) => `${params.row.error?'dnlist-row--error':''} ${params.row.dbStatus==='saving'?'dnlist-row--saving':''} ${params.row.dbStatus==='beingDeleted'?'dnlist-row--being-deleted':''}`}
                 columns={[
