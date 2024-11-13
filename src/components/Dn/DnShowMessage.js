@@ -289,7 +289,7 @@ export default function DnShowMessage(props) {
                               variant="standard"
                               fullWidth
                               readOnly
-                              label="Организация (место работы или учебы лиц)"
+                              label="Название"
                               id="msg-subject"
                               value={msgSubject}
                               helperText="" />
@@ -413,7 +413,7 @@ export default function DnShowMessage(props) {
                     variant="standard"
                     fullWidth
                     readOnly
-                    label="Организация (место работы или учебы лиц)"
+                    label="Название"
                     value={msgSubject}
                     helperText="" />
             </Grid>
@@ -422,7 +422,7 @@ export default function DnShowMessage(props) {
                     fullWidth
                     readOnly
                     id="msg-text"
-                    label="Место проведения мероприятия"
+                    label="ОГРН"
                     multiline
                     minRows={2}
                     maxRows={20}
