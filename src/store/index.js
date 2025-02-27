@@ -18,6 +18,7 @@ import { periodReducer }       from './period/periodReducer';
 import { authReducer }         from './auth/authReducer';
 import { displistReducer }     from './displist'
 import { dnReducer } from './dn';
+import { smoFinReducer } from './smo-fin';
 //import { alert } from './alert.reducer';
 
 const rootReducer = combineReducers({
@@ -37,7 +38,8 @@ const rootReducer = combineReducers({
   periodReducer,
   authReducer,
   displist: displistReducer,
-  dn: dnReducer
+  dn: dnReducer,
+  smoFin: smoFinReducer,
 });
 
 export default rootReducer;

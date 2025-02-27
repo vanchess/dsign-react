@@ -7,6 +7,12 @@ const msgByTypeSelector = (store, msgType) => {
     if (msgType === 'dn-contract') {
         return store.dn.dnContractMsg;
     }
+    if (msgType === 'smo-fin-advance') {
+        return store.smoFin.smoFinAdvanceMsg;
+    }
+    if (msgType === 'smo-fin-payment') {
+        return store.smoFin.smoFinPaymentMsg;
+    }
     return store.messageReducer;
 }
 
