@@ -73,7 +73,7 @@ const cards = [
     {id:10, title:'Диспансерное наблюдение', text:'Списки сотрудников на диспансерное наблюдение', image:"/images/dn.jpg", to:'/dn', permission:'service dn' },
 ];
 const cardsNew = [
-    {id:10, title:'Заявки СМО', text:'', image:"/images/tfoms.png", to:'/smo-fin', permission:'service smo-fin' },
+    {id:10, title:'Заявки СМО', text:'', image:"/images/smoFin.png", to:'/smo-fin', permission:'service smo-fin' },
 ];
 const cards2 = [
     // {id:8, title:'Мониторинг', text:'Мониторинг приема реестров', image:"/images/monitoring.png", to:'/f1' }, 
