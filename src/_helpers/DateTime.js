@@ -29,6 +29,7 @@ export class DateTime
 
     /** Возвращает первое число предыдущего месяца */
     prevMonth() {
+        // .setDate(0); // 0 will result in the last day of the previous month
         if (this.getMonth() == 0) {
             return new DateTime(new Date(this.getFullYear() - 1, 11, 1));
         }

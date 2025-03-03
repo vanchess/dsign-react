@@ -20,15 +20,17 @@ import { MultipleAutocomplete } from '../FilterPanel/MultipleAutocomplete.js';
 import { Box } from '@mui/material';
 import { smoFinAdvanceMsgFetch } from '../../store/smo-fin/smoFinAdvanceMsgStore.js';
 import { smoFinPaymentMsgFetch } from '../../store/smo-fin/smoFinPaymentMsgStore.js';
+import { periodSortedListSelector } from '../../store/period/periodSelectors.js';
+import { DateTime } from '../../_helpers/DateTime.js';
 
 export default function SmoFinFilter(props) {
   const dispatch = useDispatch();
   
   const loading = useSelector(store => store.agreementReducer.incoming.loading);
-  const periodList = useSelector(store => store.periodReducer.items);
+  const periodList = useSelector(periodSortedListSelector);
   const statusList = useSelector(store => store.messageStatusReducer.items);
   const organizationList = useSelector(store => store.organizationReducer.items);
-  const filterPeriod = [];
+  const filterPeriod = useSelector(store => store.filtersReducer.bill.period);
   const filterStatus = useSelector(store => store.filtersReducer.bill.status);
   const filterOrganization = useSelector(store => store.filtersReducer.bill.organization);
 
@@ -49,7 +51,6 @@ export default function SmoFinFilter(props) {
   const setPeriod = (value) => {dispatch(billFilterPeriodSet(value));};
   const setStatus = (value) => {dispatch(billFilterStatusSet(value));};
   const setOrganization = (value) => {dispatch(billFilterOrganizationSet(value));};
-  
 
   const [expanded, setExpanded] = React.useState('filter');
 
@@ -69,7 +70,7 @@ export default function SmoFinFilter(props) {
       fp.map(item => item.id),
       filterOrganization.map(item => item.id),
     );
-}
+  }
   
   const handleButtonClick = (event) => {
       event.stopPropagation();
@@ -85,11 +86,37 @@ export default function SmoFinFilter(props) {
     e.preventDefault();
     setOrganization(newValue);
   };
+
+  const handleChangePeriod = (e, newValue) => {
+    e.preventDefault();
+    setPeriod(newValue);
+  };
+
+  useEffect( () => {
+    if(periodList.length) {
+      if(!filterPeriod.length) {
+        const previousMonth = DateTime.now().prevMonth();
+        const nextMonth = DateTime.now().nextMonth();
+        let newFilterPeriod = periodList.reduce((acc, cur) => {
+            let dtTo   = DateTime.fromISO(cur.attributes.to)
+            let dtFrom   = DateTime.fromISO(cur.attributes.from)
+            if (previousMonth <= dtTo && dtFrom <= nextMonth) {
+                acc.push(cur);
+            }
+            return acc;
+        }, [] );
+        setPeriod(newFilterPeriod);
+        
+        fetchMessages(props.msgType, {filterPeriod: newFilterPeriod});
+      } else {
+        fetchMessages(props.msgType);
+      }
+    }
+  },[props.msgType, periodList]);
   
   useEffect( () => {
       fetchPeriod();
       fetchOrganization();
-      fetchMessages(props.msgType);
   },[props.msgType]);
 
   const filterOrganizationOptions = createFilterOptions({
@@ -119,6 +146,14 @@ export default function SmoFinFilter(props) {
         <AccordionDetails sx={{alignItems: 'center'}}>
             <Grid container spacing={2}>
                 <Grid item xs={8}>
+                    <MultipleAutocomplete
+                        id="period"
+                        options={periodList}
+                        value={filterPeriod}
+                        groupBy={(option) => option.attributes.year}
+                        onChange={handleChangePeriod}
+                        label="Периоды"
+                      />
                     <MultipleAutocomplete
                           id="organization"
                           options={organizationList}
