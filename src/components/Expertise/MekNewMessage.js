@@ -46,6 +46,11 @@ const categoryPs = [
   {id:3, name:'mtr', title:'МТР'}
 ]
 
+const categoryMeeDocType = [
+  {id:15, name:'report', title:'Заключение'},	
+  {id:16, name:'protocol', title:'Протокол'},	
+]
+
 const titleByType = {
     'mek':'Отправка актов МЭК',
     'mee':'Отправка актов МЭЭ',
@@ -316,8 +321,13 @@ class MekNewMessage extends React.Component {
             });
             return;
         }
-        if(!this.state.msgCategoryPs && msgType == 'mek') {
-          alert("Выберите категорию (Астрамед/Капитал/МТР)");
+        if(!this.state.msgCategoryPs) {
+          if (msgType == 'mek') {
+            alert("Выберите категорию (Астрамед/Капитал/МТР)");
+          }
+          if (msgType == 'mee') {
+            alert("Выберите категорию");
+          }
           this.setState({
               msgSending: false
           });
@@ -354,8 +364,8 @@ class MekNewMessage extends React.Component {
         msg.toOrg   = [this.state.msgToOrg.id];
         msg.attach  = this.state.msgFiles.map(item => item.id);
         msg.type    = msgType;
+        msg.category = [this.state.msgCategoryPs]
         if (this.state.msgType == 'mek') {
-          msg.category = [this.state.msgCategoryPs]
           msg.period  = this.state.msgPeriod;
         }
         messageService.sendMsg(msg).then(
@@ -461,6 +471,17 @@ class MekNewMessage extends React.Component {
                               <FormControl variant="standard" component="fieldset">
                                   <RadioGroup aria-label="category" name="msgCategoryPs" value={ this.state.msgCategoryPs } onChange={ this.handleChangeMsgCategoryPs } row>
                                     { categoryPs && (categoryPs).map( (item) => (
+                                        <FormControlLabel key={ item.id } value={ item.id } control={<Radio />} label={ item.title } />
+                                    ))}
+                                  </RadioGroup>
+                              </FormControl>
+                              </Grid>
+                            ) : null }
+                            { this.state.msgType == 'mee' ? (
+                              <Grid item xs={12} sm={4}>
+                              <FormControl variant="standard" component="fieldset">
+                                  <RadioGroup aria-label="category" name="msgCategoryPs" value={ this.state.msgCategoryPs } onChange={ this.handleChangeMsgCategoryPs } row>
+                                    { categoryMeeDocType && (categoryMeeDocType).map( (item) => (
                                         <FormControlLabel key={ item.id } value={ item.id } control={<Radio />} label={ item.title } />
                                     ))}
                                   </RadioGroup>

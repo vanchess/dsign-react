@@ -28,8 +28,7 @@ export const createColumns = (statuses, onClick, msgType = 'mek') => {
     let columns = [];
     columns.push({ field: 'id', headerName: 'ID', width: 70, hide: true, type: 'number' });
     columns.push({ field: 'from', headerName: 'Отправитель', flex: 1 });
-    if (msgType === 'mek') {
-      columns.push(
+    columns.push(
         {
           field: 'category',
           headerName: 'Категория',
@@ -44,11 +43,13 @@ export const createColumns = (statuses, onClick, msgType = 'mek') => {
           }
           ,
           // filterOperators: [inOperator(statuses), notInOperator(statuses)],
-          width: 150,
+          width: 130,
           sortable: false,
           filterable: false
         }
       );
+    if (msgType === 'mek') {
+      
       columns.push({ field: 'period', headerName: 'Период', width: 80 });
     }
 
