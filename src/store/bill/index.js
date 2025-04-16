@@ -6,11 +6,13 @@ import { messageOutReducer } from './messageOutReducer';
 import { rejectedInReducer } from './rejectedInReducer';
 import { rejectedOutReducer } from './rejectedOutReducer';
 import { reconciliationActReducer } from './reconciliationActReducer';
+import { mtrRefusalReasonsReducer } from './mtrRefusalReasonsReducer';
 
 export const billReducer = combineReducers({
   incoming: messageInReducer,
   outgoing: messageOutReducer,
   rejectedIn: rejectedInReducer,
   rejectedOut: rejectedOutReducer,
-  reconciliationAct: reconciliationActReducer
+  reconciliationAct: reconciliationActReducer,
+  mtrRefusalReasons: mtrRefusalReasonsReducer,
 });
