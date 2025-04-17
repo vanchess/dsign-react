@@ -14,7 +14,7 @@ import { fileService } from '../../services';
 import { cadespluginService } from '../../services';
 import { messageService } from '../../services';
 
-import { InputLabel, MenuItem, Select, Typography } from '@mui/material';
+import { Autocomplete, createFilterOptions, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material';
 import { BackdropStyled } from '../Message/BackdropStyled.js';
 import { ContainerStyled } from '../Message/ContainerStyled.js';
 import { PaperStyled } from '../Message/PaperStyled.js';
@@ -27,10 +27,10 @@ import CertDialog from '../Dialog/CertDialog.js';
 import UploadFile from '../UploadFile/UploadFile.js';
 import { fileDownload, textFileDownload } from '../../_helpers';
 import { cadesSignFileIdsSelector, casesCertSelectionInProcessSelector, casesSignInProcessSelector } from '../../store/cadesplugin/cadespluginSelector.js';
-import { ComboboxFormControl } from '../Message/ComboboxFormControl.js';
 import { periodSortedListSelector } from '../../store/period/periodSelectors.js';
 import { periodFetch } from '../../store/period/periodAction.js';
 import { DateTime } from '../../_helpers/DateTime.js';
+import { organizationFetch } from '../../store/organization/organizationAction.js';
 
 export default function MtrRefusalReasonsNewMessage(props) {
   const users = useSelector(store => store.userReducer.items);
@@ -42,44 +42,40 @@ export default function MtrRefusalReasonsNewMessage(props) {
   const fetchUsers = (page, perPage) => {dispatch(userFetch(page, perPage));};
   const fetchCert = () => {dispatch(cadesCertFetch());};
   const fetchPeriod = () => {dispatch(periodFetch(0, -1));};
+  const fetchOrganization = () => {dispatch(organizationFetch(0, -1));};
 
   const match = useRouteMatch();
   const type = match.params.type;
 
   const certDialogOpen = useSelector(casesCertSelectionInProcessSelector);
   const signFileIds = useSelector(cadesSignFileIdsSelector);
-  const signInProcess = useSelector(casesSignInProcessSelector)
+  const signInProcess = useSelector(casesSignInProcessSelector);
+
+  const organizationList = useSelector(store => store.organizationReducer.items);
 
   const [fileSign, setFileSign] = useState({});  
   const [selectedMsgFilesIds, setSelectedMsgFilesIds] = useState([]);
 
-  const [msgSubject, setMsgSubject] = useState('Заявка');
+  const [msgSubject, setMsgSubject] = useState('Ведомость причин отказа');
   const [msgText, setMsgText] = useState('');
   const [msgPeriod, setMsgPeriod] = useState('');
   const [msgTo, setMsgTo] = useState([11]);
+  const [msgToOrg, setMsgToOrg] = useState('');
   const [msgSending, setMsgSending] = useState(false);
 
   const [msgFiles, setMsgFiles] = useState([]);
 
-  const [title, msgSubjectConf, msgPeriodConf, msgTextConf, SendButtonConf, msgFilesFieldConf] = useMemo(() => {
+  const [title, msgSubjectConf, msgPeriodConf, msgTextConf, SendButtonConf, msgFilesFieldConf, msgOrganizationConf] = useMemo(() => {
     switch (type) {
-      case 'smo-fin-advance':
+      case 'mtr-refusal-reasons':
         return [
-          `Новая заявка на аванс`,
+          `Ведомость причин отказа`,
           null,
           {label: 'Период', required: true}, 
           {label: 'Дополнительная информация (необязательно)', required: false}, 
-          {label: 'Отправить заявку', required: false},
-          {label: 'Прикрепленные файлы', 'required': true}
-        ];
-      case 'smo-fin-payment':
-        return [
-          `Новая заявка на расчет`,
-          null, 
-          {label: 'Период', required: true},
-          {label: 'Дополнительная информация (необязательно)', required: false}, 
-          {label: 'Отправить заявку', required: false},
-          {label: 'Прикрепленные файлы', 'required': true}
+          {label: 'Отправить', required: false},
+          {label: 'Прикрепленные файлы', 'required': true},
+          {label: 'Организация', 'required': true}
         ];
       default:
         return [
@@ -98,12 +94,17 @@ export default function MtrRefusalReasonsNewMessage(props) {
 
   useEffect(() => {
     fetchPeriod();
+    fetchOrganization();
   },[])
 
   useEffect(() => {
     props.setTitle(title);
     // setMsgSubject(c);
   }, [title]);
+
+  const filterOrganizationOptions = createFilterOptions({
+      stringify: (option) => option.attributes.short_name + option.attributes.name,
+  });
 
   const handleSelectItem = (event, id) => {
     setSelectedMsgFilesIds((selectedMsgFilesIds) => {
@@ -145,6 +146,11 @@ export default function MtrRefusalReasonsNewMessage(props) {
     e.preventDefault();
     setMsgSubject(e.target.value);
   }
+
+  const handleChangeMsgToOrg  = (e, newValue) => {
+    e.preventDefault();      
+    setMsgToOrg(newValue);
+}
 
   const handleChangePeriod = (e) => {
     e.preventDefault();
@@ -218,6 +224,9 @@ export default function MtrRefusalReasonsNewMessage(props) {
     if(msgPeriodConf?.required === true && !msgPeriod) {
       err.push(`Пожалуйста, заполните поле "${msgPeriodConf.label}"`);
     }
+    if(msgOrganizationConf?.required === true && !msgToOrg) {
+      err.push(`Пожалуйста, заполните поле "${msgOrganizationConf.label}"`);
+    }
     if(msgTextConf?.required === true && !msgText) {
       err.push(`Пожалуйста, заполните поле "${msgTextConf.label}"`);
     }
@@ -238,11 +247,12 @@ export default function MtrRefusalReasonsNewMessage(props) {
       to:msgTo,
       type:type,
       attach:msgFiles.map(item => item.id),
+      toOrg: [msgToOrg.id],
     };
 
     try {
       const data = await messageService.sendMsg(msg);
-      props.history.push(`/smo-fin/list/${type}/${data.id}`) 
+      props.history.push(`/bills/list/${type}/${data.id}`) 
     } 
     catch(err) {
       alert(err);
@@ -291,7 +301,7 @@ export default function MtrRefusalReasonsNewMessage(props) {
                         : null }
                         { msgPeriodConf ? 
                         <Grid item xs={12} sm={4}>
-                            <ComboboxFormControl variant="standard" fullWidth>
+                            <FormControl variant="standard" fullWidth >
                               <InputLabel id='msg-period-label' >{ msgPeriodConf.label }</InputLabel>
                               <Select
                                   variant="standard"
@@ -303,13 +313,38 @@ export default function MtrRefusalReasonsNewMessage(props) {
                                 { periodSortedList && (periodSortedList)
                                     .filter(p => {
                                       return DateTime.fromISO(p.attributes.to) >= DateTime.now().prevMonth()
-                                      && DateTime.fromISO(p.attributes.from) <= DateTime.now().nextMonth()
+                                      && DateTime.fromISO(p.attributes.from) < DateTime.now().nextMonth()
                                     })
                                     .map( (item) => (
                                   <MenuItem key={ item.id } value={ item.id }>{ item.attributes.name }</MenuItem>
                                 ))}
                               </Select>
-                            </ComboboxFormControl>
+                            </FormControl>
+                        </Grid>
+                        : null }
+                        { msgOrganizationConf ? 
+                        <Grid item xs={8}>
+                            <Autocomplete
+                              fullWidth
+                              required
+                              id="msg-to-org"
+                              options={organizationList}
+                              getOptionLabel={(option) => (option.attributes.short_name)}
+                              filterOptions={filterOrganizationOptions}
+                              onChange={handleChangeMsgToOrg}
+                              renderOption={({key, ...props}, option, { selected }) => (
+                                <li key={option.id} {...props}>
+                                  {option.attributes.short_name}
+                                </li>
+                              )}
+                              renderInput={(params) => (
+                                <TextField
+                                    variant="standard"
+                                    {...params}
+                                    label={msgOrganizationConf.label}
+                                    placeholder="Начните вводить название организации" />
+                              )}
+                            />
                         </Grid>
                         : null }
                         { msgTextConf ?

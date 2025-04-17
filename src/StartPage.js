@@ -71,9 +71,10 @@ const cards = [
     {id:8, title:'Подписать файлы ЭП', text:'', image:"/images/tfoms.png", to:'/eissoi', permission:'service file-dsign' },
     {id:9,  title:'Проф. мероприятия', text:'Списки сотрудников на проф.мероприятия', image:"/images/displist2.jpg", to:'/displist', permission:'service displist' },
     {id:10, title:'Диспансерное наблюдение', text:'Списки сотрудников на диспансерное наблюдение', image:"/images/dn.jpg", to:'/dn', permission:'service dn' },
+    {id:11, title:'Заявки СМО', text:'', image:"/images/smoFin.png", to:'/smo-fin', permission:'service smo-fin' },
 ];
 const cardsNew = [
-    {id:10, title:'Заявки СМО', text:'', image:"/images/smoFin.png", to:'/smo-fin', permission:'service smo-fin' },
+    
 ];
 const cards2 = [
     // {id:8, title:'Мониторинг', text:'Мониторинг приема реестров', image:"/images/monitoring.png", to:'/f1' }, 

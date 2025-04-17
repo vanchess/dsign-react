@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { messageStatusFetch } from '../../store/messageStatus/messageStatusAction.js'
-import { createColumns } from './columnsDataGrid.js'
+import { createColumns } from './columnsDataGridMtrRefusalReasons.js'
 import FullScreenDialog from '../Dialog/FullScreenDialog'
 import { PaperStyled } from '../Message/PaperStyled.js';
 import { ContainerStyled } from '../Message/ContainerStyled.js';
@@ -27,20 +27,15 @@ export default function MtrRefusalReasonsIn(props) {
 
   const [title, msgTitle] = useMemo(() => {
     switch (type) {
-      case 'smo-fin-advance':
+      case 'mtr-refusal-reasons':
         return [
-          `Заявки на аванс`,
-          'Заявка на аванс', 
-        ];
-      case 'smo-fin-payment':
-        return [
-          `Заявки на расчет`,
-          'Заявка на расчет', 
+          `Ведомости причин отказа`,
+          'Ведомость причин отказа', 
         ];
       default:
         return [
-          `Заявки`,
-          'Заявки', 
+          ``,
+          '', 
         ];
     }
   }, [type]);
@@ -58,11 +53,11 @@ export default function MtrRefusalReasonsIn(props) {
   }, [title]);
 
   const handleClickShowItem = (id) => {
-        props.history.push(`/smo-fin/list/${type}/${id}`);
+        props.history.push(`/bills/list/${type}/${id}`);
   }
 
   const handleCloseDialog = () => {
-        props.history.push(`/smo-fin/list/${type}`);
+        props.history.push(`/bills/list/${type}`);
         props.setTitle(title);
   };
 

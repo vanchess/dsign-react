@@ -25,6 +25,7 @@ class Routes extends React.Component {
               </Route>
               <PrivateRoute path={`${path}/msg/bill/new`} component={BillsNewMessage} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
               <PrivateRoute path={`${path}/msg/:type/new`} component={ReconciliationActNewMessage} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
+              <PrivateRoute path={`${path}/msg/:type/newmsg`} component={MtrRefusalReasonsNewMessage} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
               <PrivateRoute path={`${path}/msg/reconciliation-act`}  component={ReconciliationActMessage}  handleSetTitle={(title) => this.props.handleSetTitle(title)} />
               <PrivateRoute path={`${path}/msg/in/rejected`}  component={BillsInRejected}  handleSetTitle={(title) => this.props.handleSetTitle(title)} />
               
@@ -36,7 +37,7 @@ class Routes extends React.Component {
 
               <PrivateRoute path={`${path}/list/:type/:id`} component={MtrRefusalReasonsIn} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
               <PrivateRoute path={`${path}/list/:type`} component={MtrRefusalReasonsIn} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
-              <PrivateRoute path={`${path}/msg/:type/new`} component={MtrRefusalReasonsNewMessage} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
+              
             </Switch>
       );
     }

@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import MailIcon from '@mui/icons-material/Mail';
-import LabelImportantIcon from '@mui/icons-material/LabelImportant';
 import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
 import PlaylistAddCheckIcon from '@mui/icons-material/PlaylistAddCheck';
+import PlaylistRemoveIcon from '@mui/icons-material/PlaylistRemove';
 
 import BillsRoutes from './routes/BillsRoutes';
 import Home from './Home';
@@ -50,12 +50,16 @@ class BillsHome extends React.Component {
         if (this.props.permission.includes('send reconciliation-act')) {
             actions.push({'key':2, 'title':'Акты сверки','tooltip':'Создать новое сообщение для отправки актов сверки','to':`${path}msg/reconciliation-act/new`});
         }
+        if (this.props.permission.includes('send mtr-refusal-reasons')) {
+          actions.push({'key':3, 'title':'Ведомость причин отказа','tooltip':'Создать новое сообщение для отправки ведомости причин отказа','to':`${path}msg/mtr-refusal-reasons/newmsg`});
+        }
         
         //sidebarMainListItems.push({'key':1, 'title':'Счета',          'to':`${path}msg/in`, 'tooltip':'Счета', 'icon': <MailIcon />});
-        sidebarMainListItems.push({'key':2, 'title':'Счета',       'to':`${path}list/bill`,   'tooltip':'Счета', 'icon': <MailIcon />});
+        sidebarMainListItems.push({'key':4, 'title':'Счета',       'to':`${path}list/bill`,   'tooltip':'Счета', 'icon': <MailIcon />});
         //sidebarMainListItems.push({'key':3, 'title':'Акты сверки',    'to':`${path}msg/reconciliation-act`, 'tooltip':'Акты сверки', 'icon': <PlaylistAddCheckIcon />});
-        sidebarMainListItems.push({'key':4, 'title':'Акты сверки', 'to':`${path}list/reconciliation-act`, 'tooltip':'Акты сверки', 'icon': <PlaylistAddCheckIcon />});
-        sidebarMainListItems.push({'key':5, 'title':'Отклонено',      'to':`${path}msg/in/rejected`, 'tooltip':'Отклоненные счета', 'icon': <ThumbDownAltOutlinedIcon />});
+        sidebarMainListItems.push({'key':5, 'title':'Акты сверки', 'to':`${path}list/reconciliation-act`, 'tooltip':'Акты сверки', 'icon': <PlaylistAddCheckIcon />});
+        sidebarMainListItems.push({'key':6, 'title':'Ведомости причин отказа', 'to':`${path}list/mtr-refusal-reasons`, 'tooltip':'Ведомости причин отказа', 'icon': <PlaylistRemoveIcon />});
+        sidebarMainListItems.push({'key':7, 'title':'Отклонено',      'to':`${path}msg/in/rejected`, 'tooltip':'Отклоненные счета', 'icon': <ThumbDownAltOutlinedIcon />});
         
     }
 

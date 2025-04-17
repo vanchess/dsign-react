@@ -13,6 +13,9 @@ const msgByTypeSelector = (store, msgType) => {
     if (msgType === 'smo-fin-payment') {
         return store.smoFin.smoFinPaymentMsg;
     }
+    if (msgType === 'mtr-refusal-reasons') {
+        return store.billReducer.mtrRefusalReasons;
+    }
     return store.messageReducer;
 }
 
