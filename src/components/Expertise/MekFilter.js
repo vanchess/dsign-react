@@ -13,6 +13,7 @@ import Grid from '@mui/material/Grid';
 
 import { createFilterOptions } from '@mui/material/Autocomplete';
 
+import { messageFetch as rmeeFetch } from '../../store/expertise/rmeeMessageInAction'
 import { messageFetch as meeFetch } from '../../store/expertise/meeMessageInAction'
 import { messageFetch as mekFetch } from '../../store/expertise/messageInAction'
 
@@ -199,6 +200,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }
   if (type === 'mee') {
       f = meeFetch;
+  }
+  if (type === 'rmee') {
+      f = rmeeFetch;
   }
   return {
     fetchMessages: (page, perPage, status = [], period = [], org = []) => {

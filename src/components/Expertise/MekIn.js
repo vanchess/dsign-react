@@ -48,6 +48,10 @@ class MekInMessage extends React.Component {
             c = `Акты МЭК`;
             m = `Акты МЭК`;
         }
+        if (type === 'rmee') {
+            c = `Акты повторной МЭЭ(Р/Э)`;
+            m = `Акты повторной МЭЭ(Р/Э)`;
+        }
         
         this.setState({
             title: c,
@@ -76,6 +80,10 @@ class MekInMessage extends React.Component {
         if (type === 'mek') {
             c = `Акты МЭК`;
             m = `Акты МЭК`;
+        }
+        if (type === 'rmee') {
+            c = `Акты повторной МЭЭ(Р/Э)`;
+            m = `Акты повторной МЭЭ(Р/Э)`;
         }
         
         this.setState({
@@ -147,6 +155,9 @@ const mapStateToProps = function(store, ownProps) {
   }
   if (type === 'mee') {
       c = store.expertiseReducer.mee;
+  }
+  if (type === 'rmee') {
+      c = store.expertiseReducer.rmee;
   }
   return {
       items: c.items, 

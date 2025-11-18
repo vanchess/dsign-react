@@ -4,10 +4,12 @@ import { combineReducers } from 'redux';
 import { messageInReducer }  from './messageInReducer';
 import { messageOutReducer } from './messageOutReducer';
 import { meeMessageInReducer }  from './meeMessageInReducer';
+import { rmeeMessageInReducer } from './rmeeMessageInReducer';
 //import { alert } from './alert.reducer';
 
 export const expertiseReducer = combineReducers({
   incoming: messageInReducer,
   outgoing: messageOutReducer,
-  mee: meeMessageInReducer
+  mee: meeMessageInReducer,
+  rmee: rmeeMessageInReducer
 });

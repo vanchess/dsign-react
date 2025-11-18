@@ -16,6 +16,9 @@ const msgByTypeSelector = (store, msgType) => {
     if (msgType === 'mtr-refusal-reasons') {
         return store.billReducer.mtrRefusalReasons;
     }
+    if (msgType === 'rmee') {
+        return store.billReducer.mtrRefusalReasons;
+    }
     return store.messageReducer;
 }
 

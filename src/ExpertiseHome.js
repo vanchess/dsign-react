@@ -44,10 +44,14 @@ class ExpertiseHome extends React.Component {
         if(this.props.permission.includes('send mee')){
             actions.push({'key':2, 'title':'Отправка актов МЭЭ', 'tooltip':'Создать новое сообщение для актов МЭЭ', 'to':`${path}msg/mee/new`});
         }
+        if(this.props.permission.includes('send rmee')){
+            actions.push({'key':3, 'title':'Отправка МЭЭ (Р/Э)', 'tooltip':'Создать новое сообщение для актов повторной МЭЭ(Р/Э)', 'to':`${path}msg/rmee/new`});
+        }
     }
     let sidebarMainListItems = [
         {'key':1, 'title':'МЭК', 'to':`${path}list/mek`, 'tooltip':'Акты МЭК', 'icon': <MailIcon />},
         {'key':2, 'title':'МЭЭ', 'to':`${path}list/mee`, 'tooltip':'Акты МЭЭ', 'icon': <MailIcon />},
+        {'key':3, 'title':'МЭЭ (Р/Э)', 'to':`${path}list/rmee`, 'tooltip':'Акты повторной МЭЭ(Р/Э)', 'icon': <MailIcon />},
     ];
     
     return (  

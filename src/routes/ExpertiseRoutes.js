@@ -21,6 +21,7 @@ class Routes extends React.Component {
               </Route>
               <PrivateRoute path={`${path}/msg/:type/new`} component={MekNewMessage} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
               <PrivateRoute path={`${path}/msg/:type/:id`} component={MekShowMessage}  handleSetTitle={(title) => this.props.handleSetTitle(title)} />
+              <PrivateRoute path={`${path}/msg/rmee`} component={MeeInMessage} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
               <PrivateRoute path={`${path}/msg/mee`} component={MeeInMessage} handleSetTitle={(title) => this.props.handleSetTitle(title)} />
               <PrivateRoute path={`${path}/msg/mek`} component={MekInMessage}  handleSetTitle={(title) => this.props.handleSetTitle(title)} />
               <PrivateRoute path={`${path}/list/:type/:id`} component={MekIn} handleSetTitle={(title) => this.props.handleSetTitle(title)} />

@@ -54,11 +54,13 @@ const categoryMeeDocType = [
 const titleByType = {
     'mek':'Отправка актов МЭК',
     'mee':'Отправка актов МЭЭ',
+    'rmee':'Отправка повторной МЭЭ (Р/Э)',
 };
 
 const subjectByType = {
   'mek':'МЭК',
   'mee':'Акт МЭЭ №',
+  'rmee':'Акт повторной МЭЭ (Р/Э) №',
 }
 
 const filterOrganizationOptions = createFilterOptions({
@@ -83,6 +85,7 @@ class MekNewMessage extends React.Component {
         msgPeriod: '',
         msgText: '',
         msgCategoryPs: null,
+        msgCategory2: null,
         msgFiles: [],
         msgSending: false,
         loading: false,
@@ -96,6 +99,7 @@ class MekNewMessage extends React.Component {
       };
       
       this.handleChangeMsgCategoryPs = this.handleChangeMsgCategoryPs.bind(this);
+      this.handleChangeMsgCategory2  = this.handleChangeMsgCategory2.bind(this);
       this.handleChangePeriod = this.handleChangePeriod.bind(this);
       this.handleChangeMsgText = this.handleChangeMsgText.bind(this);
       this.handleChangeMsgSubject = this.handleChangeMsgSubject.bind(this);
@@ -161,6 +165,15 @@ class MekNewMessage extends React.Component {
       
       this.setState({
           msgCategoryPs: msgCategoryPs
+      });
+    };
+
+    handleChangeMsgCategory2(e) {
+      e.preventDefault();
+      let msgCategory2 = Number.parseInt(e.target.value)
+      
+      this.setState({
+          msgCategory2: msgCategory2
       });
     };
     
@@ -314,24 +327,32 @@ class MekNewMessage extends React.Component {
             msgSending: true
         });
         let msgType = this.state.msgType;
-        if(!this.state.msgSubject && msgType == 'mee') {
+        if(!this.state.msgSubject && (msgType == 'mee' || msgType == 'rmee')) {
             alert("Укажите тему сообщения");
             this.setState({
                 msgSending: false
             });
             return;
         }
-        if(!this.state.msgCategoryPs) {
-          if (msgType == 'mek') {
+
+        if (msgType == 'mek' || msgType == 'rmee') {
+          if(!this.state.msgCategoryPs) {
             alert("Выберите категорию (Астрамед/Капитал/МТР)");
+            this.setState({
+                msgSending: false
+            });
+            return;
           }
-          if (msgType == 'mee') {
+        }
+
+        if (msgType == 'mee' || msgType == 'rmee') {
+          if(!this.state.msgCategory2) {
             alert("Выберите категорию");
+            this.setState({
+                msgSending: false
+            });
+            return;
           }
-          this.setState({
-              msgSending: false
-          });
-          return;
         }
         if(!this.state.msgPeriod && msgType == 'mek') {
             alert("Укажите период");
@@ -364,7 +385,13 @@ class MekNewMessage extends React.Component {
         msg.toOrg   = [this.state.msgToOrg.id];
         msg.attach  = this.state.msgFiles.map(item => item.id);
         msg.type    = msgType;
-        msg.category = [this.state.msgCategoryPs]
+        msg.category = [];
+        if (this.state.msgType == 'rmee' || this.state.msgType == 'mek') {
+          msg.category.push(this.state.msgCategoryPs);
+        }
+        if (this.state.msgType == 'rmee' || this.state.msgType == 'mee') {
+          msg.category.push(this.state.msgCategory2);
+        }
         if (this.state.msgType == 'mek') {
           msg.period  = this.state.msgPeriod;
         }
@@ -452,7 +479,7 @@ class MekNewMessage extends React.Component {
                         <Grid item xs={12}>
                         <form onSubmit={(e)=>this._handleSubmit(e)}>
                           <Grid container>
-                            { this.state.msgType == 'mee' ? (
+                            { (this.state.msgType == 'mee' || this.state.msgType == 'rmee') ? (
                             <Grid item xs={12}>
                               <TextField
                                   variant="standard"
@@ -466,7 +493,7 @@ class MekNewMessage extends React.Component {
                                   margin="normal" />
                             </Grid>
                             ) : null }
-                            { this.state.msgType == 'mek' ? (
+                            { (this.state.msgType == 'mek' || this.state.msgType == 'rmee') ? (
                               <Grid item xs={12} sm={4}>
                               <FormControl variant="standard" component="fieldset">
                                   <RadioGroup aria-label="category" name="msgCategoryPs" value={ this.state.msgCategoryPs } onChange={ this.handleChangeMsgCategoryPs } row>
@@ -477,10 +504,10 @@ class MekNewMessage extends React.Component {
                               </FormControl>
                               </Grid>
                             ) : null }
-                            { this.state.msgType == 'mee' ? (
+                            { (this.state.msgType == 'mee' || this.state.msgType == 'rmee') ? (
                               <Grid item xs={12} sm={4}>
                               <FormControl variant="standard" component="fieldset">
-                                  <RadioGroup aria-label="category" name="msgCategoryPs" value={ this.state.msgCategoryPs } onChange={ this.handleChangeMsgCategoryPs } row>
+                                  <RadioGroup aria-label="category2" name="msgCategory2" value={ this.state.msgCategory2 } onChange={ this.handleChangeMsgCategory2 } row>
                                     { categoryMeeDocType && (categoryMeeDocType).map( (item) => (
                                         <FormControlLabel key={ item.id } value={ item.id } control={<Radio />} label={ item.title } />
                                     ))}
