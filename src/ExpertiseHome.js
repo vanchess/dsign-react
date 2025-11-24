@@ -51,7 +51,7 @@ class ExpertiseHome extends React.Component {
     let sidebarMainListItems = [
         {'key':1, 'title':'МЭК', 'to':`${path}list/mek`, 'tooltip':'Акты МЭК', 'icon': <MailIcon />},
         {'key':2, 'title':'МЭЭ', 'to':`${path}list/mee`, 'tooltip':'Акты МЭЭ', 'icon': <MailIcon />},
-        {'key':3, 'title':'МЭЭ (Р/Э)', 'to':`${path}list/rmee`, 'tooltip':'Акты повторной МЭЭ(Р/Э)', 'icon': <MailIcon />},
+        {'key':3, 'title':'Повторная МЭЭ (Р/Э)', 'to':`${path}list/rmee`, 'tooltip':'Акты повторной МЭЭ(Р/Э)', 'icon': <MailIcon />},
     ];
     
     return (  
