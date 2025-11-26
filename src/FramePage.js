@@ -1,69 +1,69 @@
-/*
 import React from 'react';
-import { connect } from 'react-redux';
+// import { useSelector } from 'react-redux';
+import { styled } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import withStyles from '@mui/styles/withStyles';
-import { Header } from './components/FrameHeader'; 
+import { Header } from './components/Header'; 
 import { authService } from './services';
 
-const styles = theme => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  appBarSpacer: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    height: '100vh',
-    overflow: 'auto',
-  },
-})
+const Root = styled('div')(() => ({
+  display: 'flex',
+  flexDirection: 'column'
+}));
 
-class FramePage extends React.Component {
-  
-    constructor(props) {
-      super(props);
-    }
-    render(){
-        const { classes } = this.props;
-        if(this.props.permission) {
-          if (this.props.permission.includes('monitor reg')) {
-                    return (
-                      <div className={classes.root}>
-                          <CssBaseline />
-                          <Header title={'Мониторинг. 1 этап (основные реестры)'} open={false} userName={''} handleDrawerOpen={() => {}} logout={authService.logout}  />
-                          <main className={classes.content}>
-                              <div className={classes.appBarSpacer} />
-                              
-                                      <div className={classes.content}>
-                                          <iframe src="http://192.168.12.18:4567/stage1" width="100%" height="100%">
-                                            Ваш браузер не поддерживает плавающие фреймы!
-                                          </iframe>
-                                      </div>
-                                
-                          </main>
-                      </div>
-                    );
-          }
-        }
-        return (<div className={classes.root}>
-                          <CssBaseline />
-                          <Header title={'Доступ запрещен'} open={false} userName={''} handleDrawerOpen={() => {}} logout={authService.logout} />
-                </div>);
-    }
-}
+const Content = styled('main')(({ theme }) => ({
+  flexGrow: 1,
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100vh',
+  overflow: 'auto'
+}));
 
-const mapStateToProps = function(store) {
-  return {
-        permission: store.authReducer.user.permissions,
-    };
-}
-const mapDispatchToProps = dispatch => {
-  return {
+const AppBarSpacer = styled('div')(({ theme }) => theme.mixins.toolbar);
+
+export default function FramePage() {
+  // const permissions = useSelector((state) => state.authReducer.user.permissions);
+
+  const allowed = true; // permissions?.includes('monitor reg');
+
+  if (!allowed) {
+    return (
+      <Root>
+        <CssBaseline />
+        <Header
+          title="Доступ запрещен"
+          open={false}
+          userName=""
+          handleDrawerOpen={() => {}}
+          logout={authService.logout}
+        />
+      </Root>
+    );
   }
-}
 
-export default connect(mapStateToProps,mapDispatchToProps)(withStyles(styles)(FramePage));
-*/
+  return (
+    <Root>
+      <CssBaseline />
+      <Header
+        title="Проверка прикрепления"
+        open={false}
+        userName=""
+        handleDrawerOpen={() => {}}
+        logout={authService.logout}
+      />
+      <Content>
+        <AppBarSpacer />
+        <div style={{ flexGrow: 1 }}>
+          <iframe
+            src="http://192.168.12.221:8092/oms-policy-check"
+            width="100%"
+            height="95%"
+            style={{ border: 0 }}
+            title="monitor-reg-frame"
+          >
+            Ваш браузер не поддерживает плавающие фреймы!
+          </iframe>
+        </div>
+      </Content>
+    </Root>
+  );
+}

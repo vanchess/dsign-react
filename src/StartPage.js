@@ -77,7 +77,7 @@ const cardsNew = [
     
 ];
 const cards2 = [
-    // {id:8, title:'Мониторинг', text:'Мониторинг приема реестров', image:"/images/monitoring.png", to:'/f1' }, 
+     {id:8, title:'Проверка прикрепления', text:'', image:"/images/checkAttachment.png", to:'/f1' }, 
 ];
 const cardsOut= [
     {id:3, title:'Учет направлений на госпитализацию', text:''/*'Персонифицированная база данных по учету направлений на госпитализацию и информирований о необходимости прохождения профессиональных осмотров'*/, image:"/images/doctor.jpg", to:'http://192.168.12.1:8080/iso/f?p=101' },
