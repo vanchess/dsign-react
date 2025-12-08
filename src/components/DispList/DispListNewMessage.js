@@ -255,6 +255,9 @@ class DispListNewMessage extends React.Component {
         return 0;
       });
 
+      let previousMonth = new Date();
+      previousMonth.setDate(0);
+
       return (
           <div>
               <BackdropStyled open={this.state.signInProcess}>
@@ -303,7 +306,7 @@ class DispListNewMessage extends React.Component {
                                           id="msg-period"
                                           value={ this.state.msgPeriod }
                                           onChange={ this.handleChangePeriod }>
-                                        { periodList && (periodList).filter(p => Date.parse(p.attributes.to) > Date.now()).map( (item) => (
+                                        { periodList && (periodList).filter(p => Date.parse(p.attributes.to) > previousMonth).map( (item) => (
                                           <MenuItem key={ item.id } value={ item.id }>{ item.attributes.name }</MenuItem>
                                         ))}
                                       </Select>
