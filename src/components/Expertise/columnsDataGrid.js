@@ -43,7 +43,7 @@ export const createColumns = (statuses, onClick, msgType = 'mek') => {
           }
           ,
           // filterOperators: [inOperator(statuses), notInOperator(statuses)],
-          width: 130,
+          width: (msgType === 'rmee') ? 210 : 130,
           sortable: false,
           filterable: false
         }
@@ -54,7 +54,7 @@ export const createColumns = (statuses, onClick, msgType = 'mek') => {
     }
 
     columns.push({ field: 'organization', headerName: 'Организация', width: 257 });
-    if (msgType === 'mee') {
+    if (msgType === 'mee' || msgType === 'rmee') {
       columns.push({ field: 'subject', headerName: 'Тема', width: 250 });
     }
     columns.push(
