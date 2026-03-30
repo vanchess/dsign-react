@@ -5,6 +5,7 @@ import Grid from '@mui/material/Grid';
 
 import MekList from './MekList';
 import MekShowMessage from '../Expertise/MekShowMessage';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
 
 import { connect } from 'react-redux';
 
@@ -14,85 +15,99 @@ import FullScreenDialog from '../Dialog/FullScreenDialog'
 import MekFilter from './MekFilter'
 import { ContainerStyled } from '../Message/ContainerStyled.js';
 import { PaperStyled } from '../Message/PaperStyled.js';
+import { ActionButtonWrapper } from '../ActionButtonWrapper.js';
+import { Button } from '@mui/material';
+import { bulkSignService } from '../../services/bulkSignService.js';
+import CertDialog from '../Dialog/CertDialog.js';
+import { cadesCertFetch } from '../../store/cadesplugin/cadespluginAction.js';
+import { CircularProgressStyled } from '../Message/CircularProgressStyled.js';
+import { messageService } from '../../services/index.js';
+
+import LinearProgress from '@mui/material/LinearProgress';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
 class MekInMessage extends React.Component {
     
+    certDialogSelectedValue = {};
+    bulkFileIds = [];
+    signCreate = null;
+
     constructor(props){
       super(props);
       
+      const { title, msgTitle } = this.getTitlesByType(props.match.params.type);
+
       this.state = {
         openMessageDialog: false,
-        title: 'Акты',
-        msgTitle: 'Акты',
+        title,
+        msgTitle,
+        selectedMessageIds: [],
+        certDialogOpen: false,
+        signInProcess: false,
+        signProgressCurrent: 0,
+        signProgressTotal: 0,
+        signProgressText: '',
       };
       
       this.handleClickShowItem   = this.handleClickShowItem.bind(this);
       this.handleCloseDialog     = this.handleCloseDialog.bind(this);
+      this.bulkSignMessagesCreate = this.bulkSignMessagesCreate.bind(this);
     }
-    
+
+    getTitlesByType = (type) => {
+        let title = 'Акты';
+        let msgTitle = 'Акты';
+
+        if (type === 'mee') {
+            title = 'Акты МЭЭ';
+            msgTitle = 'Акты МЭЭ';
+        }
+
+        if (type === 'mek') {
+            title = 'Акты МЭК';
+            msgTitle = 'Акты МЭК';
+        }
+
+        if (type === 'rmee') {
+            title = 'Акты повторной МЭЭ(Р/Э)';
+            msgTitle = 'Акты повторной МЭЭ(Р/Э)';
+        }
+
+        return { title, msgTitle };
+    };
+
     componentDidMount(){
         this.props.fetchMessageStatuses();
         
-        if (this.props.match.params.id) {
-            this.setState({openMessageDialog: true});
-        }
-        
-        const type = this.props.match.params.type;
-        let c = `Акты`;
-        let m = 'Акты';
-        if (type === 'mee') {
-            c = `Акты МЭЭ`;
-            m = 'Акты МЭЭ';
-        }
-        if (type === 'mek') {
-            c = `Акты МЭК`;
-            m = `Акты МЭК`;
-        }
-        if (type === 'rmee') {
-            c = `Акты повторной МЭЭ(Р/Э)`;
-            m = `Акты повторной МЭЭ(Р/Э)`;
-        }
-        
+        const openMessageDialog = !!this.props.match.params.id;
+        const { title, msgTitle } = this.getTitlesByType(this.props.match.params.type);
+
         this.setState({
-            title: c,
-            msgTitle: m
+            openMessageDialog,
+            title,
+            msgTitle
         });
         this.props.setTitle(this.state.title);
     }
     
     componentDidUpdate(prevProps, prevState) {
       if (prevProps.match.params.id !== this.props.match.params.id) {
-        if (this.props.match.params.id) {
-            this.setState({openMessageDialog: true});
-        } else {
-            this.setState({openMessageDialog: false});
-        }
+        this.setState({
+            openMessageDialog: !!this.props.match.params.id,
+        });
       }
       
       if (prevProps.match.params.type !== this.props.match.params.type) {
-        const type = this.props.match.params.type;
-        let c = `Акты`;
-        let m = 'Акты';
-        if (type === 'mee') {
-            c = `Акты МЭЭ`;
-            m = 'Акты МЭЭ';
-        }
-        if (type === 'mek') {
-            c = `Акты МЭК`;
-            m = `Акты МЭК`;
-        }
-        if (type === 'rmee') {
-            c = `Акты повторной МЭЭ(Р/Э)`;
-            m = `Акты повторной МЭЭ(Р/Э)`;
-        }
-        
+        const { title, msgTitle } = this.getTitlesByType(this.props.match.params.type);
+
         this.setState({
-            title: c,
-            msgTitle: m
+            title,
+            msgTitle,
+            selectedMessageIds: [],
         });
-      }
-      if (prevState.title !== this.state.title) {
-          this.props.setTitle(this.state.title);
+
+        this.props.setTitle(title);
       }
     }
   
@@ -104,20 +119,206 @@ class MekInMessage extends React.Component {
         this.props.history.push(`/expertise/list/${this.props.match.params.type}`);
         this.props.setTitle(this.state.title);
     };
-    
+
+    handleClickBulkSignMessagesCreate = async () => {
+        try {
+            this.setState({
+                signInProcess: true,
+                signProgressCurrent: 0,
+                signProgressTotal: 0,
+                signProgressText: 'Подготовка файлов к подписанию...',
+            });
+
+            const selectedMessageIds = this.state.selectedMessageIds || [];
+            if (!selectedMessageIds.length) {
+                this.setState({
+                    signInProcess: false,
+                    signProgressText: '',
+                });
+                return;
+            }
+
+            const filesResponses = await Promise.all(
+                selectedMessageIds.map((msgId) => messageService.getFiles(msgId))
+            );
+
+            const files = filesResponses
+                .flatMap((response) => response?.data || [])
+                .map((file) => ({
+                    id: file?.id,
+                    name: file?.attributes?.name || file?.name || `Файл ${file?.id}`
+                }))
+                .filter(f => f.id);
+
+            // убираем дубли по id
+            const uniqueMap = new Map();
+            files.forEach(f => {
+                if (!uniqueMap.has(f.id)) {
+                    uniqueMap.set(f.id, f);
+                }
+            });
+
+            this.bulkFiles = Array.from(uniqueMap.values());
+            this.bulkFileIds = this.bulkFiles.map(f => f.id);
+
+            if (!this.bulkFileIds.length) {
+                this.setState({
+                    signInProcess: false,
+                    signProgressCurrent: 0,
+                    signProgressTotal: 0,
+                    signProgressText: 'Нет файлов для подписания',
+                });
+                return;
+            }
+
+            this.certDialogSelectedValue = {};
+            this.signCreate = this.bulkSignMessagesCreate;
+
+            this.setState({
+                certDialogOpen: true,
+                signInProcess: false,
+                signProgressCurrent: 0,
+                signProgressTotal: this.bulkFileIds.length,
+                signProgressText: `Файлов к подписанию: ${this.bulkFileIds.length}`,
+            });
+
+            this.props.fetchCert();
+        } catch (error) {
+            console.log('Ошибка подготовки массового подписания:', error);
+            this.bulkFileIds = [];
+            this.setState({
+                signInProcess: false,
+                certDialogOpen: false,
+                signProgressCurrent: 0,
+                signProgressTotal: 0,
+                signProgressText: 'Ошибка подготовки подписания',
+            });
+        }
+    };
+
+    bulkSignMessagesCreate = async () => {
+        try {
+            this.setState({
+                signInProcess: true,
+                signProgressCurrent: 0,
+                signProgressTotal: this.bulkFileIds.length,
+                signProgressText: `Подписание 0 из ${this.bulkFileIds.length}`,
+            });
+
+            const result = await bulkSignService.signFiles({
+                files: this.bulkFiles,
+                cert: this.certDialogSelectedValue.cert,
+                onProgress: ({ current, total, fileName }) => {
+                    const shortName = fileName.length > 40
+                        ? fileName.slice(0, 37) + '...'
+                        : fileName;
+
+                    this.setState({
+                        signProgressCurrent: current,
+                        signProgressTotal: total,
+                        signProgressText: `Подписание ${current} из ${total} (файл ID ${shortName})`,
+                    });
+                },
+                onError: (fileId, error) => {
+                    console.log(`Ошибка подписи файла ${fileId}:`, error);
+                },
+            });
+
+            this.setState({
+                signProgressCurrent: this.bulkFileIds.length,
+                signProgressTotal: this.bulkFileIds.length,
+                signProgressText: `Подписано: ${result.success.length}, ошибок: ${result.failed.length}`,
+            });
+        } finally {
+            this.bulkFileIds = [];
+            this.setState({ signInProcess: false });
+        }
+    };
+
+    handleCloseCertDialog = (value) => {
+        this.certDialogSelectedValue = value
+        
+        this.setState({
+            certDialogOpen: false,
+        });
+        
+        if(!this.certDialogSelectedValue || !this.certDialogSelectedValue.cert) {
+            this.bulkFileIds = [];
+            this.setState({
+                signInProcess: false,
+                signProgressCurrent: 0,
+                signProgressTotal: 0,
+                signProgressText: '',
+            });
+            return;
+        }
+        
+        this.signCreate();
+    };
+
     render() {
       const type = this.props.match.params.type;
-      
       let columns = createColumns(this.props.statuses, this.handleClickShowItem, type);
       
       return (
           <div>
             <ContainerStyled maxWidth="lg">
               <Grid container spacing={3}>
-                {/* Recent Orders */}
                 <Grid item xs={12}>
                   <PaperStyled >
                     <MekFilter msgType={type} />
+
+                    
+                    <Box sx={{ width: '100%' }}>
+                        <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: 2,
+                            flexWrap: 'wrap',
+                        }}
+                        >
+
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                disabled={
+                                !this.state.selectedMessageIds.length ||
+                                this.state.signInProcess ||
+                                this.state.certDialogOpen
+                                }
+                                startIcon={<HowToRegIcon />}
+                                onClick={this.handleClickBulkSignMessagesCreate}
+                            >
+                                Подписать ЭП
+                            </Button>
+
+                        {(this.state.signInProcess || this.state.certDialogOpen) && (
+                            <CircularProgressStyled size={24} />
+                        )}
+
+                        {!!this.state.signProgressText && (
+                            <Typography variant="body2">
+                            {this.state.signProgressText}
+                            </Typography>
+                        )}
+                        </Box>
+
+                        {!!this.state.signProgressTotal && (
+                        <Box sx={{ mt: 1, width: '100%' }}>
+                            <LinearProgress
+                            variant="determinate"
+                            value={
+                                this.state.signProgressTotal
+                                ? (this.state.signProgressCurrent / this.state.signProgressTotal) * 100
+                                : 0
+                            }
+                            />
+                        </Box>
+                        )}
+                    </Box>
+                    
+
                     <MekList 
                         rowsPerPageOptions={[10, 15, 20, 50, 100]}
                         pageSize={this.props.perPage}
@@ -125,7 +326,11 @@ class MekInMessage extends React.Component {
                         columns = {columns}
                         statuses = {this.props.statuses}
                         loading = {this.props.loading}
-                        
+
+                        rowSelectionModel={this.state.selectedMessageIds}
+                        onRowSelectionModelChange={(ids) => 
+                            this.setState({ selectedMessageIds: ids })
+                        }
                         
                         page={this.props.page}
                            backIconButtonProps={{
@@ -139,7 +344,17 @@ class MekInMessage extends React.Component {
                 </Grid>
               </Grid>
             </ContainerStyled>
-            <FullScreenDialog title={this.state.msgTitle} open={this.state.openMessageDialog} onClose={this.handleCloseDialog}>
+            <CertDialog 
+                selectedValue={this.certDialogSelectedValue} 
+                open={this.state.certDialogOpen} 
+                onClose={this.handleCloseCertDialog} 
+            />
+
+            <FullScreenDialog 
+                title={this.state.msgTitle} 
+                open={this.state.openMessageDialog} 
+                onClose={this.handleCloseDialog}
+            >
                 <MekShowMessage setTitle={this.props.setTitle}/>
             </FullScreenDialog>
           </div>
@@ -170,6 +385,9 @@ const mapDispatchToProps = dispatch => {
     fetchMessageStatuses: () => {
         dispatch(messageStatusFetch(0, -1));
     },
+    fetchCert: () => {
+        dispatch(cadesCertFetch());
+    }
   }
 }
 

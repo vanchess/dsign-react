@@ -32,6 +32,8 @@ import { ActionButtonWrapper } from './ActionButtonWrapper.js';
 import { BackdropStyled } from './BackdropStyled.js';
 import { CircularProgressStyled } from './CircularProgressStyled.js';
 
+import { bulkSignService } from '../../services/bulkSignService';
+
 class ShowMessage extends React.Component {
     
     certDialogSelectedValue = {};
@@ -154,23 +156,22 @@ class ShowMessage extends React.Component {
     fileSignMultipleCreate = async () => {
         this.setState({ signInProcess: true });
         
-        let cert = this.certDialogSelectedValue.cert;
-        let len = this.state.selectedMsgFilesIds.length;
-        for(let i = 0; i < len; i++) {
-          try {
-            let fileId = this.state.selectedMsgFilesIds[i];
-            let fileBlob = await fileService.getFileById(fileId);
-            let signBase64String = await cadespluginService.FileSignCreate(cert, fileBlob);
-            // Сохраняем подпись на сервере
-            let sign = await fileService.saveFileSign(fileId, {'base64':signBase64String});
-            
-            this.addFileSign(fileId, sign);
-          } catch(err) {
-            console.log(`Error: ${err}`);
-          }
+        try {
+            let cert = this.certDialogSelectedValue.cert;
+
+            await bulkSignService.signFiles({
+                fileIds: this.state.selectedMsgFilesIds,
+                cert,
+                onSigned: (fileId, sign) => {
+                    this.addFileSign(fileId, sign);
+                },
+                onError: (fileId, error) => {
+                    console.log(`Ошибка подписи файла ${fileId}:`, error);
+                },
+            });  
+        } finally {
+            this.setState({ signInProcess: false });
         }
-        
-        this.setState({ signInProcess: false });
     }
     
     handleClickSign = (file) => {

@@ -14,6 +14,10 @@ export default function MekList(props) {
     <div style={{ minHeight: '400px', height: 'calc(100vh - 128px)',width: '100%' }}>
       
       <DataGrid 
+        checkboxSelection
+        disableRowSelectionOnClick
+        rowSelectionModel={props.rowSelectionModel}
+        onRowSelectionModelChange={props.onRowSelectionModelChange}
         pagination 
         initialState={{ 
           density: "compact",
