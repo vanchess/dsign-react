@@ -24,6 +24,7 @@ export class bulkSignService {
           total: files.length,
           fileId,
           fileName: file.name,
+          file,
         });
 
         const fileBlob = await fileService.getFileById(fileId);
@@ -31,10 +32,10 @@ export class bulkSignService {
         const sign = await fileService.saveFileSign(fileId, { base64: signBase64 });
 
         result.success.push({ fileId, sign });
-        onSigned?.(fileId, sign);
+        onSigned?.(file, sign);
       } catch (error) {
-        result.failed.push({ fileId, error });
-        onError?.(fileId, error);
+        result.failed.push({ file, error });
+        onError?.(file, error);
       }
     }
 

@@ -162,11 +162,11 @@ class ShowMessage extends React.Component {
             await bulkSignService.signFiles({
                 fileIds: this.state.selectedMsgFilesIds,
                 cert,
-                onSigned: (fileId, sign) => {
-                    this.addFileSign(fileId, sign);
+                onSigned: (file, sign) => {
+                    this.addFileSign(file.id, sign);
                 },
-                onError: (fileId, error) => {
-                    console.log(`Ошибка подписи файла ${fileId}:`, error);
+                onError: (file, error) => {
+                    console.log(`Ошибка подписи файла ${file?.name || file?.id || 'без имени'}:`, error);
                 },
             });  
         } finally {
