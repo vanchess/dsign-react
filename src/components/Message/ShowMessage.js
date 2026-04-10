@@ -159,8 +159,16 @@ class ShowMessage extends React.Component {
         try {
             let cert = this.certDialogSelectedValue.cert;
 
+            const selectedFiles = this.state.msgFiles
+                .filter((file) => this.state.selectedMsgFilesIds.includes(file.id))
+                .map((file) => ({
+                    id: file.id,
+                    name:
+                        file?.attributes?.name || `Файл ${file.id}`,
+                }));
+
             await bulkSignService.signFiles({
-                fileIds: this.state.selectedMsgFilesIds,
+                files: selectedFiles,
                 cert,
                 onSigned: (file, sign) => {
                     this.addFileSign(file.id, sign);
@@ -403,7 +411,7 @@ class ShowMessage extends React.Component {
                       </Grid>
                   </PaperStyled>
             </ContainerStyled>
-            <CertDialog selectedValue={this.state.certDialogSelectedValue} open={this.state.certDialogOpen} onClose={this.handleCloseCertDialog} />
+            <CertDialog selectedValue={this.certDialogSelectedValue} open={this.state.certDialogOpen} onClose={this.handleCloseCertDialog} />
           </div>
       );
   }

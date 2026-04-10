@@ -541,6 +541,7 @@ class MekInMessage extends React.Component {
                 selectedValue={this.certDialogSelectedValue} 
                 open={this.state.certDialogOpen} 
                 onClose={this.handleCloseCertDialog} 
+                selectedCount={this.state.selectedMessageIds.length}
             />
 
             <FullScreenDialog 
