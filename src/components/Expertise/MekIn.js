@@ -15,11 +15,10 @@ import FullScreenDialog from '../Dialog/FullScreenDialog'
 import MekFilter from './MekFilter'
 import { ContainerStyled } from '../Message/ContainerStyled.js';
 import { PaperStyled } from '../Message/PaperStyled.js';
-import { Button } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 import { bulkSignService } from '../../services/bulkSignService.js';
 import CertDialog from '../Dialog/CertDialog.js';
 import { cadesCertFetch } from '../../store/cadesplugin/cadespluginAction.js';
-import { CircularProgressStyled } from '../Message/CircularProgressStyled.js';
 import { messageService } from '../../services/index.js';
 
 import LinearProgress from '@mui/material/LinearProgress';
@@ -67,7 +66,6 @@ class MekInMessage extends React.Component {
         toastOpen: false,
         toastSeverity: 'success',
         toastMessage: '',
-        signErrors: [],
         showSignErrors: false,
       };
       
@@ -405,19 +403,19 @@ class MekInMessage extends React.Component {
                                 variant="contained"
                                 color="primary"
                                 disabled={
-                                !this.state.selectedMessageIds.length ||
-                                this.state.signInProcess ||
-                                this.state.certDialogOpen
+                                    !this.state.selectedMessageIds.length ||
+                                    this.state.signInProcess ||
+                                    this.state.certDialogOpen
                                 }
-                                startIcon={<HowToRegIcon />}
+                                startIcon={
+                                    this.state.signInProcess || this.state.certDialogOpen
+                                    ? <CircularProgress size={18} color="inherit" />
+                                    : <HowToRegIcon />
+                                }
                                 onClick={this.handleClickBulkSignMessagesCreate}
                             >
                                 Подписать ЭП
                             </Button>
-
-                        {(this.state.signInProcess || this.state.certDialogOpen) && (
-                            <CircularProgressStyled size={24} />
-                        )}
 
                         {!!this.state.signProgressText && (
                             <Typography variant="body2">

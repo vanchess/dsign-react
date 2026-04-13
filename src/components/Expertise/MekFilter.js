@@ -71,17 +71,19 @@ function MekFilter(props) {
   useEffect( () => {
       props.fetchPeriod();  
       props.fetchOrganization();
-      fetchMessages();
   },[props.msgType]);
   
   useEffect( () => {
-    if(props.periodList.length && !props.filterPeriod.length) {
+    if (!props.periodList.length) return;
+
+    if(!props.filterPeriod.length) {
       let now = Date.now();
       let previousMonth = new Date();
       previousMonth.setDate(0); // 0 will result in the last day of the previous month
       let newFilterPeriod = props.periodList.reduce((acc, cur) => {
           let dtFrom = new Date(cur.attributes.from);
-          let dtTo   = new Date(cur.attributes.to)
+          let dtTo   = new Date(cur.attributes.to);
+
           if (
               (dtFrom <= previousMonth && previousMonth <= dtTo)
               || (dtFrom <= now && now <= dtTo)
@@ -90,8 +92,13 @@ function MekFilter(props) {
           }
           return acc;
       }, [] );
-      props.setPeriod(newFilterPeriod);
-      fetchMessages({filterPeriod: newFilterPeriod});
+
+      if (newFilterPeriod.length) {
+        props.setPeriod(newFilterPeriod);
+        fetchMessages({ filterPeriod: newFilterPeriod });
+      }
+    } else {
+      fetchMessages();
     }
 },[props.periodList]);
 
