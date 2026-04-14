@@ -8,11 +8,13 @@ import DispListShowMessage from '../DispList/DispListShowMessage';
 import { connect } from 'react-redux';
 
 import { messageStatusFetch } from '../../store/messageStatus/messageStatusAction.js'
+import { cadesCertFetch } from '../../store/cadesplugin/cadespluginAction.js'
 import { createColumns } from './columnsDataGrid.js'
 import FullScreenDialog from '../Dialog/FullScreenDialog'
 import DispListFilter from './DispListFilter'
 import { PaperStyled } from '../Message/PaperStyled.js';
 import { ContainerStyled } from '../Message/ContainerStyled.js';
+import BulkSignMessagesControl from '../Message/BulkSignMessagesControl.js';
 
 class DispListIn extends React.Component {
     
@@ -23,6 +25,7 @@ class DispListIn extends React.Component {
         openMessageDialog: false,
         title: 'Списки сотрудников на проф.мероприятия',
         msgTitle: 'Список сотрудников на проф.мероприятия',
+        selectedMessageIds: [],
       };
       
       this.handleClickShowItem   = this.handleClickShowItem.bind(this);
@@ -46,7 +49,8 @@ class DispListIn extends React.Component {
         
         this.setState({
             title: c,
-            msgTitle: m
+            msgTitle: m,
+            selectedMessageIds: [],
         });
         this.props.setTitle(this.state.title);
     }
@@ -71,7 +75,8 @@ class DispListIn extends React.Component {
         
         this.setState({
             title: c,
-            msgTitle: m
+            msgTitle: m,
+            selectedMessageIds: [],
         });
       }
       if (prevState.title !== this.state.title) {
@@ -97,10 +102,14 @@ class DispListIn extends React.Component {
           <div>
             <ContainerStyled maxWidth="lg">
               <Grid container spacing={3}>
-                {/* Recent Orders */}
                 <Grid item xs={12}>
                   <PaperStyled>
                     <DispListFilter msgType={type} />
+                    <BulkSignMessagesControl
+                        selectedMessageIds={this.state.selectedMessageIds}
+                        fetchCert={this.props.fetchCert}
+                        onSignedSuccess={() => this.setState({ selectedMessageIds: [] })}
+                    />
                     <DispListList 
                         rowsPerPageOptions={[10, 15, 20, 50, 100]}
                         pageSize={this.props.perPage}
@@ -108,8 +117,9 @@ class DispListIn extends React.Component {
                         columns = {columns}
                         statuses = {this.props.statuses}
                         loading = {this.props.loading}
-                        
-                        
+                        checkboxSelection
+                        rowSelectionModel={this.state.selectedMessageIds}
+                        onRowSelectionModelChange={(ids) => this.setState({ selectedMessageIds: ids })}
                         page={this.props.page}
                            backIconButtonProps={{
                              'aria-label': 'Previous Page',
@@ -146,6 +156,9 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchMessageStatuses: () => {
         dispatch(messageStatusFetch(0, -1));
+    },
+    fetchCert: () => {
+        dispatch(cadesCertFetch());
     },
   }
 }

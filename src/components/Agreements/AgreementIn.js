@@ -14,6 +14,8 @@ import FullScreenDialog from '../Dialog/FullScreenDialog'
 import AgreementFilter from './AgreementFilter'
 import { ContainerStyled } from '../Message/ContainerStyled.js';
 import { PaperStyled } from '../Message/PaperStyled.js';
+import BulkSignMessagesControl from '../Message/BulkSignMessagesControl.js';
+import { cadesCertFetch } from '../../store/cadesplugin/cadespluginAction.js';
 
 class AgreementsInMessage extends React.Component {
     
@@ -24,6 +26,7 @@ class AgreementsInMessage extends React.Component {
         openMessageDialog: false,
         title: 'Соглашения',
         msgTitle: 'Соглашение',
+        selectedMessageIds: [],
       };
       
       this.handleClickShowItem   = this.handleClickShowItem.bind(this);
@@ -59,7 +62,8 @@ class AgreementsInMessage extends React.Component {
         
         this.setState({
             title: c,
-            msgTitle: m
+            msgTitle: m,
+            selectedMessageIds: []
         });
         this.props.setTitle(this.state.title);
     }
@@ -96,7 +100,8 @@ class AgreementsInMessage extends React.Component {
         
         this.setState({
             title: c,
-            msgTitle: m
+            msgTitle: m,
+            selectedMessageIds: []
         });
       }
       if (prevState.title !== this.state.title) {
@@ -126,6 +131,11 @@ class AgreementsInMessage extends React.Component {
                 <Grid item xs={12}>
                   <PaperStyled>
                     <AgreementFilter msgType={type} />
+                    <BulkSignMessagesControl
+                        selectedMessageIds={this.state.selectedMessageIds}
+                        fetchCert={this.props.fetchCert}
+                        onSignedSuccess={() => this.setState({ selectedMessageIds: [] })}
+                    />
                     <AgreementList 
                         rowsPerPageOptions={[10, 15, 20, 50, 100]}
                         pageSize={this.props.perPage}
@@ -133,6 +143,9 @@ class AgreementsInMessage extends React.Component {
                         columns = {columns}
                         statuses = {this.props.statuses}
                         loading = {this.props.loading}
+                        checkboxSelection
+                        rowSelectionModel={this.state.selectedMessageIds}
+                        onRowSelectionModelChange={(ids) => this.setState({ selectedMessageIds: ids })}
                         
                         
                         page={this.props.page}
@@ -180,6 +193,9 @@ const mapDispatchToProps = dispatch => {
   return {
     fetchMessageStatuses: () => {
         dispatch(messageStatusFetch(0, -1));
+    },
+    fetchCert: () => {
+        dispatch(cadesCertFetch());
     },
   }
 }

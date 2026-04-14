@@ -1,10 +1,11 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import Grid from '@mui/material/Grid';
 
 import { useDispatch, useSelector } from 'react-redux';
 
 import { messageStatusFetch } from '../../store/messageStatus/messageStatusAction.js'
+import { cadesCertFetch } from '../../store/cadesplugin/cadespluginAction.js'
 import { createColumns } from './columnsDataGrid.js'
 import FullScreenDialog from '../Dialog/FullScreenDialog'
 import { PaperStyled } from '../Message/PaperStyled.js';
@@ -14,6 +15,7 @@ import DnList from './DnList.js';
 import DnShowMessage from './DnShowMessage.js';
 import { useRouteMatch } from 'react-router-dom';
 import { msgItemsByTypeSelector, msgLoadingByTypeSelector } from '../../store/message/messageSelectors.js';
+import BulkSignMessagesControl from '../Message/BulkSignMessagesControl.js';
 
 export default function DnIn(props) {
   const dispatch = useDispatch();
@@ -23,6 +25,7 @@ export default function DnIn(props) {
   const items = useSelector(store => msgItemsByTypeSelector(store, type)); 
   const loading = useSelector(store => msgLoadingByTypeSelector(store, type));
   const statuses = useSelector(store => store.messageStatusReducer.items); 
+  const [selectedMessageIds, setSelectedMessageIds] = useState([]);
 
   const [title, msgTitle] = useMemo(() => {
     switch (type) {
@@ -56,6 +59,10 @@ export default function DnIn(props) {
     props.setTitle(title)
   }, [title]);
 
+  useEffect(() => {
+    setSelectedMessageIds([]);
+  }, [type]);
+
   const handleClickShowItem = (id) => {
         props.history.push(`/dn/list/${type}/${id}`);
   }
@@ -71,10 +78,14 @@ export default function DnIn(props) {
     <div>
       <ContainerStyled maxWidth="lg">
         <Grid container spacing={3}>
-          {/* Recent Orders */}
           <Grid item xs={12}>
             <PaperStyled>
               <DnFilter msgType={type} />
+              <BulkSignMessagesControl
+                  selectedMessageIds={selectedMessageIds}
+                  fetchCert={() => dispatch(cadesCertFetch())}
+                  onSignedSuccess={() => setSelectedMessageIds([])}
+              />
               <DnList 
                   rowsPerPageOptions={[10, 15, 20, 50, 100]}
                   pageSize={props.perPage}
@@ -82,8 +93,9 @@ export default function DnIn(props) {
                   columns = {columns}
                   statuses = {props.statuses}
                   loading = {loading}
-                  
-                  
+                  checkboxSelection
+                  rowSelectionModel={selectedMessageIds}
+                  onRowSelectionModelChange={(ids) => setSelectedMessageIds(ids)}
                   page={props.page}
                       backIconButtonProps={{
                         'aria-label': 'Previous Page',

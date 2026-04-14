@@ -1,10 +1,11 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import Grid from '@mui/material/Grid';
 
 import { useDispatch, useSelector } from 'react-redux';
 
 import { messageStatusFetch } from '../../store/messageStatus/messageStatusAction.js'
+import { cadesCertFetch } from '../../store/cadesplugin/cadespluginAction.js'
 import { createColumns } from './columnsDataGridMtrRefusalReasons.js'
 import FullScreenDialog from '../Dialog/FullScreenDialog'
 import { PaperStyled } from '../Message/PaperStyled.js';
@@ -12,6 +13,7 @@ import { ContainerStyled } from '../Message/ContainerStyled.js';
 
 import { useRouteMatch } from 'react-router-dom';
 import { msgItemsByTypeSelector, msgLoadingByTypeSelector } from '../../store/message/messageSelectors.js';
+import BulkSignMessagesControl from '../Message/BulkSignMessagesControl.js';
 import MtrRefusalReasonsFilter from './MtrRefusalReasonsFilter.js';
 import MtrRefusalReasonsList from './MtrRefusalReasonsList.js';
 import MtrRefusalReasonsShowMessage from './MtrRefusalReasonsShowMessage.js';
@@ -24,6 +26,7 @@ export default function MtrRefusalReasonsIn(props) {
   const items = useSelector(store => msgItemsByTypeSelector(store, type)); 
   const loading = useSelector(store => msgLoadingByTypeSelector(store, type));
   const statuses = useSelector(store => store.messageStatusReducer.items); 
+  const [selectedMessageIds, setSelectedMessageIds] = useState([]);
 
   const [title, msgTitle] = useMemo(() => {
     switch (type) {
@@ -52,6 +55,10 @@ export default function MtrRefusalReasonsIn(props) {
     props.setTitle(title)
   }, [title]);
 
+  useEffect(() => {
+    setSelectedMessageIds([]);
+  }, [type]);
+
   const handleClickShowItem = (id) => {
         props.history.push(`/bills/list/${type}/${id}`);
   }
@@ -67,10 +74,14 @@ export default function MtrRefusalReasonsIn(props) {
     <div>
       <ContainerStyled maxWidth="lg">
         <Grid container spacing={3}>
-          {/* Recent Orders */}
           <Grid item xs={12}>
             <PaperStyled>
               <MtrRefusalReasonsFilter msgType={type} />
+              <BulkSignMessagesControl
+                  selectedMessageIds={selectedMessageIds}
+                  fetchCert={() => dispatch(cadesCertFetch())}
+                  onSignedSuccess={() => setSelectedMessageIds([])}
+              />
               <MtrRefusalReasonsList 
                   rowsPerPageOptions={[10, 15, 20, 50, 100]}
                   pageSize={props.perPage}
@@ -78,8 +89,9 @@ export default function MtrRefusalReasonsIn(props) {
                   columns = {columns}
                   statuses = {props.statuses}
                   loading = {loading}
-                  
-                  
+                  checkboxSelection
+                  rowSelectionModel={selectedMessageIds}
+                  onRowSelectionModelChange={(ids) => setSelectedMessageIds(ids)}
                   page={props.page}
                       backIconButtonProps={{
                         'aria-label': 'Previous Page',
