@@ -15,6 +15,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { authPermissionsSelector } from './store/auth/authSelectors';
 import { styled } from '@mui/material';
+import FerzlAccountFeature from './components/FerzlAccount/FerzlAccountFeature';
 
 function Copyright() {
   return (
@@ -107,6 +108,7 @@ export default function StartPage() {
       <main>
         <StartPageContainer maxWidth="md">
           <Grid container spacing={4}>
+            <FerzlAccountFeature />
             {cards.map((card) => {
               if(card.permission && !permissions.includes(card.permission)) {
                 return null;

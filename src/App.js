@@ -17,6 +17,7 @@ import Eissoi from './eissoi/Eissoi'
 import DnHome from './DnHome.js';
 import SmoFinHome from './SmoFinHome.js';
 import FramePage from './FramePage.js';
+import FerzlAccountHome from './FerzlAccountHome.js';
 
 export default function App(props) {
   return (
@@ -32,6 +33,7 @@ export default function App(props) {
           <PrivateRoute path='/dn'         component={DnHome}/>
           <PrivateRoute path='/smo-fin'    component={SmoFinHome}/>
           <PrivateRoute path='/f1'    component={FramePage}/>
+          <PrivateRoute path='/ferzl-accounts' component={FerzlAccountHome}/>
           <Route exact path='/sign-up/:invite' component={SignUp}/>
           <Route exact path='/eissoi' component={Eissoi}/>
           <Route exact path='/pd/:invite' component={PD}/>
