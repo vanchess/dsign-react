@@ -18,10 +18,12 @@ import DnHome from './DnHome.js';
 import SmoFinHome from './SmoFinHome.js';
 import FramePage from './FramePage.js';
 import FerzlAccountHome from './FerzlAccountHome.js';
+import {FerzlAccountPrompt} from './components/FerzlAccount/FerzlAccountFeature';
 
 export default function App(props) {
   return (
     <div className="App">
+        <FerzlAccountPrompt />
         <Switch>
           <PrivateRoute path='/mail'       component={MailHome}/>
           <PrivateRoute path='/bills'      component={BillsHome}/>

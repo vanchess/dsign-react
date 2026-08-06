@@ -36,6 +36,16 @@ function statusLabel(value) {
     return 'Сведения не предоставлены';
 }
 
+function accessLabel(value) {
+    if (value === true) {
+        return 'Есть';
+    }
+    if (value === false) {
+        return 'Нет';
+    }
+    return 'Сведения не предоставлены';
+}
+
 function apiErrorMessage(error) {
     const data = error && error.error && error.error.data;
     return (data && data.message) || 'Не удалось загрузить сводные сведения.';
@@ -76,6 +86,18 @@ export default function FerzlAccountSummary() {
             headerName: 'Дата получения',
             width: 150,
             valueGetter: (value, row) => formatDate(row.received_at),
+        },
+        {
+            field: 'not_received_reason',
+            headerName: 'Причина неполучения',
+            minWidth: 240,
+            flex: 0.8,
+        },
+        {
+            field: 'access_status',
+            headerName: 'Доступ к подсистеме',
+            width: 210,
+            valueGetter: (value, row) => accessLabel(row.has_access),
         },
         {field: 'responsible_phone', headerName: 'Телефон ответственного', width: 210},
         {field: 'note', headerName: 'Примечание', minWidth: 220, flex: 0.7},
